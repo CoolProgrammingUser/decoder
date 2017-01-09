@@ -5,13 +5,30 @@
             Decoder
         </title>
         <script>
+            window.addEventListener("load", function() {
+                var file = new XMLHttpRequest();
+                file.open("GET", "word list.txt");
+                file.onreadystatechange = function () {
+                    if(file.readyState === 4) {
+                        if(file.status === 200 || file.status == 0) {
+                            var words = file.responseText;  // sets words to a single string of the whole file
+                            words = words.split(/\r\n|\n/);  // sets words to an array of lines of text
+                        }
+                    }
+                }
+                file.send();
+            });
         </script>
         <style>
         </style>
     </head>
     <body>
+        <h1>
+            Decoder
+        </h1>
         <p>
             Trial number = 0
         </p>
+        <textarea cols="60" rows="10" placeholder="Type the code here."></textarea>
     </body>
 </html>
