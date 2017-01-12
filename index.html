@@ -19,7 +19,8 @@
                 }
                 file.send();
             });
-            document.getElementById("decode").addEventListener("click", function() {
+            var button = document.getElementById("decode");
+            button.addEventListener("click", function() {
                 document.getElementById("before").style.display = "none";
                 document.getElementById("during").style.display = "block";
                 decode();
@@ -57,7 +58,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 0
+            Trial number = 1
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here."></textarea>
