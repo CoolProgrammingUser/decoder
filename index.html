@@ -18,15 +18,15 @@
                     }
                 }
                 file.send();
-            });
-            document.getElementById("decode").addEventListener("click", function() {
-                document.getElementById("before").style.display = "none";
-                document.getElementById("during").style.display = "block";
-                decode();
-            });
-            document.getElementById("newCode").addEventListener("click", function() {
-                document.getElementById("after").style.display = "none";
-                document.getElementById("before").style.display = "block";
+                document.getElementById("decode").addEventListener("click", function() {
+                    document.getElementById("before").style.display = "none";
+                    document.getElementById("during").style.display = "block";
+                    decode();
+                });
+                document.getElementById("newCode").addEventListener("click", function() {
+                    document.getElementById("after").style.display = "none";
+                    document.getElementById("before").style.display = "block";
+                });
             });
             function decode() {
                 setTimeout(function() {
@@ -57,7 +57,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 2
+            Trial number = 3
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here."></textarea>
