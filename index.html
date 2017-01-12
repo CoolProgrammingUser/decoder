@@ -7,6 +7,7 @@
         <script>
             var words;
             window.addEventListener("load", function() {
+                // sets "words" to a list of English words
                 var file = new XMLHttpRequest();
                 file.open("GET", "word list.txt");
                 file.onreadystatechange = function () {
@@ -18,11 +19,13 @@
                     }
                 }
                 file.send();
+                // gives the decode button functionality
                 document.getElementById("decode").addEventListener("click", function() {
                     document.getElementById("before").style.display = "none";
                     document.getElementById("during").style.display = "block";
                     decode();
                 });
+                // gives the newCode button functionality
                 document.getElementById("newCode").addEventListener("click", function() {
                     document.getElementById("after").style.display = "none";
                     document.getElementById("before").style.display = "block";
@@ -38,6 +41,9 @@
         <style>
             body {
                 text-align: center;
+            }
+            div {
+                margin: auto;
             }
             #during {
                 display: none;
@@ -57,7 +63,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 3
+            Trial number = 4
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here."></textarea>
