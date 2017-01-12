@@ -19,8 +19,7 @@
                 }
                 file.send();
             });
-            var button = document.getElementById("decode");
-            button.addEventListener("click", function() {
+            document.getElementById("decode").addEventListener("click", function() {
                 document.getElementById("before").style.display = "none";
                 document.getElementById("during").style.display = "block";
                 decode();
@@ -30,7 +29,7 @@
                 document.getElementById("before").style.display = "block";
             });
             function decode() {
-                setTimeOut(function() {
+                setTimeout(function() {
                     document.getElementById("during").style.display = "none";
                     document.getElementById("after").style.display = "block";
                 }, 3000);
@@ -58,7 +57,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 1
+            Trial number = 2
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here."></textarea>
@@ -72,7 +71,7 @@
             <h3>
                 Working...
             </h3>
-            <div style="width:50em; height:5em; background:#fff; border:.1em solid black;">
+            <div style="width:30em; height:1em; background:#fff; border:.1em solid black;">
             <div id="progress">
             </div>
             </div>
