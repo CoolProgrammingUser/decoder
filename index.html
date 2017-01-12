@@ -5,21 +5,51 @@
             Decoder
         </title>
         <script>
+            var words;
             window.addEventListener("load", function() {
                 var file = new XMLHttpRequest();
                 file.open("GET", "word list.txt");
                 file.onreadystatechange = function () {
                     if(file.readyState === 4) {
                         if(file.status === 200 || file.status == 0) {
-                            var words = file.responseText;  // sets words to a single string of the whole file
+                            words = file.responseText;  // sets words to a single string of the whole file
                             words = words.split(/\r\n|\n/);  // sets words to an array of lines of text
                         }
                     }
                 }
                 file.send();
             });
+            document.getElementById("decode").addEventListener("click", function() {
+                document.getElementById("before").style.display = "none";
+                document.getElementById("during").style.display = "block";
+                decode();
+            });
+            document.getElementById("newCode").addEventListener("click", function() {
+                document.getElementById("after").style.display = "none";
+                document.getElementById("before").style.display = "block";
+            });
+            function decode() {
+                setTimeOut(function() {
+                    document.getElementById("during").style.display = "none";
+                    document.getElementById("after").style.display = "block";
+                }, 3000);
+            }
         </script>
         <style>
+            body {
+                text-align: center;
+            }
+            #during {
+                display: none;
+            }
+            #progress {
+                width: 0%;
+                height: 100%;
+                background: #00e;
+            }
+            #after {
+                display: none;
+            }
         </style>
     </head>
     <body>
@@ -29,6 +59,28 @@
         <p>
             Trial number = 0
         </p>
-        <textarea cols="60" rows="10" placeholder="Type the code here."></textarea>
+        <div id="before">
+            <textarea cols="60" rows="10" placeholder="Type the code here."></textarea>
+            <button type="button" id="decode">
+                Decode
+            </button>
+        </div>
+        <div id="during">
+            <h3>
+                Working...
+            </h3>
+            <div style="width:50em; height:5em; background:#fff; border:.1em solid black;">
+            <div id="progress">
+            </div>
+            </div>
+        </div>
+        <div id="after">
+            <textarea cols="60" rows="10" id="solution"></textarea>
+            <p id="solutionNumber"></p>
+            <button type="button" id="newCode">
+                Try a new<br>
+                code
+            </button>
+        </div>
     </body>
 </html>
