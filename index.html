@@ -20,7 +20,7 @@
                             alert(words.length);
                             for (var index in wordList) {
                                 while (wordList[index].length > words.length) {
-                                    words.push(null);
+                                    words.push([null]);
                                     alert(wordList[index].length+" "+words.length+" "+wordList[index].length > words.length);
                                 }
                                 words[wordList[index].length].push(wordList[index]);
