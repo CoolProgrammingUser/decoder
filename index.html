@@ -21,6 +21,7 @@
                             for (var index in wordList) {
                                 while (wordList[index].length > words.length) {
                                     words.push(null);
+                                    alert(wordList[index].length, words.length, wordList[index].length > words.length);
                                 }
                                 words[wordList[index].length].push(wordList[index]);
                             }
@@ -74,7 +75,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 19
+            Trial number = 20
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here."></textarea>
