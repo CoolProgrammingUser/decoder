@@ -9,16 +9,21 @@
             window.addEventListener("load", function() {
                 // sets "words" to a list of English words
                 var file = new XMLHttpRequest();
+                var wordList;
                 file.open("GET", "word list.txt");
                 file.onreadystatechange = function () {
                     if(file.readyState === 4) {
                         if(file.status === 200 || file.status == 0) {
-                            words = file.responseText;  // sets words to a single string of the whole file
-                            words = words.split(/\r\n|\n/);  // sets words to an array of lines of text
+                            wordList = file.responseText;  // sets words to a single string of the whole file
+                            wordList = wordList.split(/\r\n|\n/);  // sets words to an array of lines of text
                         }
                     }
                 }
                 file.send();
+                for (var word in wordList) {
+                    word = wordList[word];
+                    words[word.length].push(word);
+                }
                 // gives the decode button functionality
                 document.getElementById("decode").addEventListener("click", function() {
                     document.getElementById("before").style.display = "none";
@@ -32,6 +37,7 @@
                 });
             });
             function decode() {
+                document.getElementById("solution").innerHTML = words;
                 setTimeout(function() {
                     document.getElementById("during").style.display = "none";
                     document.getElementById("after").style.display = "block";
@@ -63,7 +69,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 4
+            Trial number = 5
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here."></textarea>
