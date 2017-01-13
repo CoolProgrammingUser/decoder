@@ -39,11 +39,17 @@
                 });
             });
             function decode() {
-                document.getElementById("solution").innerHTML = words;
-                setTimeout(function() {
-                    document.getElementById("during").style.display = "none";
-                    document.getElementById("after").style.display = "block";
-                }, 3000);
+                var codeText = document.getElementById("code").value.toLowerCase().split(" ");
+                var solution = document.getElementById("solution").value;
+                var progress = document.getElementById("progress").style.width;
+                for (var text in codeText) {
+                    text = codeText[text];
+                    for (var word in words[text.length-1]) {
+                        word = words[word];
+                        solution += word + " ";
+                    }
+                    progress = (codeText.indexOf(text)+1)/codeText.length + "%";
+                }
             }
         </script>
         <style>
@@ -71,7 +77,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 28
+            Trial number = 29
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
