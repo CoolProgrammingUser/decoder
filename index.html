@@ -20,10 +20,13 @@
                     }
                 }
                 file.send();
+                words = wordList;
+                /*
                 for (var word in wordList) {
                     word = wordList[word];
                     words[word.length].push(word);
                 }
+                */
                 // gives the decode button functionality
                 document.getElementById("decode").addEventListener("click", function() {
                     document.getElementById("before").style.display = "none";
@@ -69,7 +72,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 5
+            Trial number = 6
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here."></textarea>
