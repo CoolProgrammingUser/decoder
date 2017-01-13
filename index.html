@@ -15,11 +15,12 @@
                         if(file.status === 200 || file.status == 0) {
                             var wordList = file.responseText;  // sets words to a single string of the whole file
                             wordList = wordList.split(/\r\n|\n/);  // sets words to an array of lines of text
-                            for (var index in wordList) {
-                                while (wordList[index].length > words.length) {
+                            for (var word in wordList) {
+                                word = wordList[word];
+                                while (word.length > words.length) {
                                     words.push([]);
                                 }
-                                words[wordList[index].length-1].push(wordList[index]);
+                                words[word.length-1].push(word);
                             }
                         }
                     }
@@ -70,10 +71,10 @@
             Decoder
         </h1>
         <p>
-            Trial number = 27
+            Trial number = 28
         </p>
         <div id="before">
-            <textarea cols="60" rows="10" placeholder="Type the code here."></textarea>
+            <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
             <br>
             <br>
             <button type="button" id="decode">
