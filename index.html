@@ -5,28 +5,24 @@
             Decoder
         </title>
         <script>
-            var words = [1, 2, 3];
+            var words;
             window.addEventListener("load", function() {
                 // sets "words" to a list of English words
                 var file = new XMLHttpRequest();
-                var wordList;
                 file.open("GET", "word list.txt");
                 file.onreadystatechange = function () {
                     if(file.readyState === 4) {
                         if(file.status === 200 || file.status == 0) {
-                            wordList = file.responseText;  // sets words to a single string of the whole file
+                            var wordList = file.responseText;  // sets words to a single string of the whole file
                             wordList = wordList.split(/\r\n|\n/);  // sets words to an array of lines of text
+                            for (var word in wordList) {
+                                word = wordList[word];
+                                words[word.length].push(word);
+                            }
                         }
                     }
                 }
                 file.send();
-                alert(wordList);
-                /*
-                for (var word in wordList) {
-                    word = wordList[word];
-                    words[word.length].push(word);
-                }
-                */
                 // gives the decode button functionality
                 document.getElementById("decode").addEventListener("click", function() {
                     document.getElementById("before").style.display = "none";
