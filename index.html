@@ -40,7 +40,7 @@
             });
             function decode() {
                 var codeText = document.getElementById("code").value.toLowerCase().split(" ");
-                var solution = document.getElementById("solution").value;
+                var solution = document.getElementById("solution").innerHTML;
                 var progress = document.getElementById("progress").style.width;
                 for (var text in codeText) {
                     text = codeText[text];
@@ -80,7 +80,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 31
+            Trial number = 32
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
