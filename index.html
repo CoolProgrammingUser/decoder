@@ -5,7 +5,7 @@
             Decoder
         </title>
         <script>
-            var words = [];
+            var words = [undefined];
             window.addEventListener("load", function() {
                 // sets "words" to a list of English words
                 var file = new XMLHttpRequest();
@@ -20,7 +20,7 @@
                             alert(words.length);
                             for (var index in wordList) {
                                 while (wordList[index].length > words.length) {
-                                    words.push([]);
+                                    words.push([undefined]);
                                 }
                                 words[wordList[index].length].push(wordList[index]);
                             }
@@ -74,7 +74,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 17
+            Trial number = 18
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here."></textarea>
