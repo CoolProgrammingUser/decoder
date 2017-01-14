@@ -52,6 +52,7 @@
                     progress = (codeText.indexOf(text)+1)/codeText.length + "%";
                 }
                 solution = "testing";
+                document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
                 document.getElementById("after").style.display = "block";
             }
@@ -81,7 +82,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 37
+            Trial number = 38
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
