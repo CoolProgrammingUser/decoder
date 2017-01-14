@@ -1,5 +1,6 @@
 ac
 apr
+asap
 aug
 ave
 bc
@@ -13,6 +14,7 @@ eg
 etc
 feb
 fri
+g
 gov
 ie
 im
@@ -20,10 +22,14 @@ inc
 ip
 jan
 jr
+kg
+kl
 km
 lb
 m
 mar
+mg
+ml
 mm
 mo
 mon
