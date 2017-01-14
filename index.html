@@ -15,16 +15,13 @@
                         if(file.status === 200 || file.status == 0) {
                             var wordList = file.responseText;  // sets words to a single string of the whole file
                             wordList = wordList.split(/\r\n|\n/);  // sets words to an array of lines of text
-                            wordList.pop();
+                            wordList.pop();  // For some reason, there's an empty item at the end of the list that I need to get rid of.
                             for (var word in wordList) {
                                 word = wordList[word];
                                 while (word.length > words.length) {
                                     words.push([]);
                                 }
-                                document.getElementById("solution").value += word.length-1 + " " + word + "\n";
-                                if (word.length-1 >= 0) {
-                                    words[word.length-1].push(word);
-                                }
+                                words[word.length-1].push(word);
                             }
                         }
                     }
@@ -43,7 +40,6 @@
                 });
             });
             function decode() {
-                /*
                 var codeText = document.getElementById("code").value.toLowerCase().split(" ");
                 var solution = document.getElementById("solution").value;
                 var progress = document.getElementById("progress").style.width;
@@ -56,7 +52,6 @@
                     progress = (codeText.indexOf(text)+1)/codeText.length + "%";
                 }
                 solution = "testing";
-                */
                 document.getElementById("during").style.display = "none";
                 document.getElementById("after").style.display = "block";
             }
@@ -86,7 +81,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 36
+            Trial number = 37
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
