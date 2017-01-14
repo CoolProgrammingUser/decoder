@@ -1,7 +1,10 @@
+ac
 apr
 aug
 ave
+bc
 blvd
+cm
 com
 ct
 dec
@@ -12,10 +15,16 @@ feb
 fri
 gov
 ie
+im
 inc
+ip
 jan
 jr
+km
+lb
+m
 mar
+mm
 mo
 mon
 mr
@@ -25,7 +34,11 @@ no
 nov
 oct
 org
+oz
+ps
 rd
+rsvp
+rv
 sat
 sep
 sqrt
@@ -36,5 +49,6 @@ thu
 thurs
 tue
 tues
+uv
 wed
 yr
