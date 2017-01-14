@@ -54,7 +54,9 @@
                         document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
                         alert((codeText.indexOf(text)+1)/codeText.length*100+"%\n\n"+(codeText.indexOf(text)+1)+"\n\n"+codeText.length);
                     }, 0);
-                    for (var word in words) {
+                    var filler;
+                    for (var list in words) {
+                        filler = list;
                     }
                 }
                 document.getElementById("solution").value = solution;
@@ -88,7 +90,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 50
+            Trial number = 51
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
