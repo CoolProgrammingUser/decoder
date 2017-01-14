@@ -20,8 +20,10 @@
                                 while (word.length > words.length) {
                                     words.push([]);
                                 }
-                                document.getElementById("solution").value += word.length-1 + " " + word;
-                                words[word.length-1].push(word);
+                                document.getElementById("solution").value += word.length-1 + " " + word + "\n";
+                                if (word.length-1 >= 0) {
+                                    words[word.length-1].push(word);
+                                }
                             }
                         }
                     }
@@ -83,7 +85,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 34
+            Trial number = 35
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
