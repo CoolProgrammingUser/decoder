@@ -56,7 +56,8 @@
                     }, 0);
                     var filler;
                     for (var list in words) {
-                        filler = list;
+                        for (var word in list) {
+                            filler += word;
                     }
                 }
                 document.getElementById("solution").value = solution;
@@ -90,7 +91,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 51
+            Trial number = 52
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
