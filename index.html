@@ -38,6 +38,7 @@
                 document.getElementById("newCode").addEventListener("click", function() {
                     document.getElementById("after").style.display = "none";
                     document.getElementById("before").style.display = "block";
+                    document.getElementById("solution").value = "";
                 });
             });
             function decode() {
@@ -46,6 +47,7 @@
                 // var progress = document.getElementById("progress").style.width;
                 for (var text in codeText) {
                     text = standardize(codeText[text]);
+                    alert(text);
                     for (var word in words[text.length-1]) {
                         word = standardize(words[text.length-1][word]);
                         if (text == word) {
@@ -99,7 +101,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 57
+            Trial number = 58
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
