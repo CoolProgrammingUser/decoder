@@ -45,6 +45,10 @@
                 // var progress = document.getElementById("progress").style.width;
                 for (var text in codeText) {
                     text = codeText[text];
+                    setTimeout(function() {
+                        test(codeText, text);
+                    }, 0);
+                    /*
                     for (var word in words[text.length-1]) {
                         word = words[text.length-1][word];
                         solution += word + " ";
@@ -52,11 +56,21 @@
                     solution += "\n\n";
                     document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
                     alert((codeText.indexOf(text)+1)/codeText.length*100+"%\n\n"+(codeText.indexOf(text)+1)+"\n\n"+codeText.length);
+                    */
                 }
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
                 document.getElementById("progress").style.width = "0%";
                 document.getElementById("after").style.display = "block";
+            }
+            function test(codeText, text) {
+                for (var word in words[text.length-1]) {
+                    word = words[text.length-1][word];
+                    solution += word + " ";
+                }
+                solution += "\n\n";
+                document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
+                alert((codeText.indexOf(text)+1)/codeText.length*100+"%\n\n"+(codeText.indexOf(text)+1)+"\n\n"+codeText.length);
             }
         </script>
         <style>
@@ -84,7 +98,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 54
+            Trial number = 55
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
