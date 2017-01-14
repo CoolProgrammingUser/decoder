@@ -52,11 +52,14 @@
                     solution += "\n\n";
                     setTimeout(function() {
                         document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
-                        alert((codeText.indexOf(text)+1)/codeText.length + "%\n\n" + (codeText.indexOf(text)+1)+"\n\n"+codeText.length);
+                        alert((codeText.indexOf(text)+1)/codeText.length*100+"%\n\n"+(codeText.indexOf(text)+1)+"\n\n"+codeText.length);
                     }, 0);
+                    for (var word in words) {
+                    }
                 }
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
+                document.getElementById("progress").style.width = "0%";
                 document.getElementById("after").style.display = "block";
             }
         </script>
@@ -85,7 +88,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 49
+            Trial number = 50
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
