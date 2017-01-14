@@ -47,9 +47,8 @@
                 // var progress = document.getElementById("progress").style.width;
                 for (var text in codeText) {
                     text = standardize(codeText[text]);
-                    alert(text + "\n\n" + standardize(codeText[0]) + "\n\n" + standardize(codeText[1]));
                     for (var word in words[text.length-1]) {
-                        word = standardize(words[text.length-1][word]);
+                        // word = standardize(words[text.length-1][word]);
                         if (text == word) {
                             solution += word + " ";
                         }
@@ -70,6 +69,7 @@
                         uniqueLetters += word[index];
                     }
                 }
+                alert(uniqueLetters);
                 for (var index in uniqueLetters) {
                     word.replace(new RegExp(word[index], "g"), ALPHABET[index]);
                 }
@@ -101,7 +101,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 59
+            Trial number = 60
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
