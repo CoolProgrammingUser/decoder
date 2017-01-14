@@ -46,7 +46,7 @@
                 for (var text in codeText) {
                     text = codeText[text];
                     for (var word in words[text.length-1]) {
-                        word = words[word];
+                        word = words[text.length-1][word];
                         solution += word + " ";
                     }
                     solution += "\n\n";
@@ -85,7 +85,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 42
+            Trial number = 43
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
