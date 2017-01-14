@@ -48,7 +48,8 @@
                 for (var text in codeText) {
                     text = standardize(codeText[text]);
                     for (var word in words[text.length-1]) {
-                        if (text == standardize(words[text.length-1][word])) {
+                        word = words[text.length-1][word];
+                        if (text == standardize(word)) {
                             solution += word + " ";
                         }
                     }
@@ -100,7 +101,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 2
+            Trial number = 3
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
