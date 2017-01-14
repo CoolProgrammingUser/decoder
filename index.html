@@ -49,9 +49,10 @@
                         word = words[word];
                         solution += word + " ";
                     }
+                    solution += "\n\n";
                     progress = (codeText.indexOf(text)+1)/codeText.length + "%";
+                    alert("stop");
                 }
-                solution = "testing";
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
                 document.getElementById("after").style.display = "block";
@@ -82,7 +83,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 38
+            Trial number = 39
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
