@@ -50,16 +50,8 @@
                         solution += word + " ";
                     }
                     solution += "\n\n";
-                    setTimeout(function() {
-                        document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
-                        alert((codeText.indexOf(text)+1)/codeText.length*100+"%\n\n"+(codeText.indexOf(text)+1)+"\n\n"+codeText.length);
-                    }, 0);
-                    var filler;
-                    for (var list in words) {
-                        for (var word in list) {
-                            filler += word;
-                        }
-                    }
+                    document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
+                    alert((codeText.indexOf(text)+1)/codeText.length*100+"%\n\n"+(codeText.indexOf(text)+1)+"\n\n"+codeText.length);
                 }
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
@@ -92,7 +84,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 53
+            Trial number = 54
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
