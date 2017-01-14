@@ -52,7 +52,7 @@
                     solution += "\n\n";
                     setTimeout(function() {
                         document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
-                        alert("stop");
+                        alert(codeText.indexOf(text)+1)/codeText.length*100 + "%");
                     }, 0);
                 }
                 document.getElementById("solution").value = solution;
@@ -85,7 +85,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 43
+            Trial number = 44
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
