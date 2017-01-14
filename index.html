@@ -64,18 +64,17 @@
             }
             function standardize(word) {
                 var uniqueLetters = "";
-                var word2 = ""
                 for (var index in word) {
                     if (word.substring(0, index).indexOf(word[index]) == -1) {  // can also use .includes() (it's pretty new)
                         uniqueLetters += word[index];
                     }
                 }
                 for (var index in uniqueLetters) {
-                    word2.replace(new RegExp(uniqueLetters[index], "g"), ALPHABET[index]);
+                    word = word.replace(new RegExp(uniqueLetters[index], "g"), ALPHABET[index]);
                     alert(word+"\n\n"+uniqueLetters[index]+"\n\n"+new RegExp(uniqueLetters[index],"g")+"\n\n"+ALPHABET[index]);
                 }
-                alert(word2);
-                return word2;
+                alert(word);
+                return word;
             }
         </script>
         <style>
@@ -103,7 +102,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 65
+            Trial number = 66
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
