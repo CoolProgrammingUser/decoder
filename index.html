@@ -47,7 +47,7 @@
                 // var progress = document.getElementById("progress").style.width;
                 for (var text in codeText) {
                     text = standardize(codeText[text]);
-                    alert(text);
+                    alert(text + "\n\n" + standardize(codeText[0]) + "\n\n" + standardize(codeText[1]));
                     for (var word in words[text.length-1]) {
                         word = standardize(words[text.length-1][word]);
                         if (text == word) {
@@ -101,7 +101,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 58
+            Trial number = 59
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
