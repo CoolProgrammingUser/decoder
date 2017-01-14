@@ -48,7 +48,7 @@
                 for (var text in codeText) {
                     text = standardize(codeText[text]);
                     for (var word in words[text.length-1]) {
-                        // word = standardize(words[text.length-1][word]);
+                        word = standardize(words[text.length-1][word]);
                         if (text == word) {
                             solution += word + " ";
                         }
@@ -63,13 +63,13 @@
                 document.getElementById("after").style.display = "block";
             }
             function standardize(word) {
-                var uniqueLetters = "";
+                var uniqueLetters = [];
                 for (var index in word) {
                     if (word.substring(0, index).indexOf(word[index]) == -1) {  // can also use .includes() (it's pretty new)
-                        uniqueLetters += word[index];
+                        uniqueLetters.push(word[index]);
                     }
                 }
-                // uniqueLetters needs to be ordered alphabetically
+                uniqueLetters.sort();  // alphabetizes uniqueLetters
                 for (var index in uniqueLetters) {
                     word = word.replace(new RegExp(uniqueLetters[index], "g"), ALPHABET[index]);
                 }
@@ -101,7 +101,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 0
+            Trial number = 1
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
