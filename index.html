@@ -65,9 +65,11 @@
                     text = standardize(codeText[text]);
                     for (var word in words[text.length-1]) {
                         word = words[text.length-1][word];
+                        /*
                         if (text == standardize(word)) {
                             solution += word + " ";
                         }
+                        */
                     }
                     solution += "\n\n";
                     document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
@@ -127,7 +129,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 13
+            Trial number = 14
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
