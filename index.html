@@ -66,6 +66,7 @@
                     for (var word in words[text.length-1]) {
                         word = words[text.length-1][word];
                         if (text == standardize(word)) {
+                            alert(text + "\n\n" + standardize(word));
                             solution += word + " ";
                         }
                     }
@@ -116,7 +117,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 7
+            Trial number = 8
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
