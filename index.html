@@ -87,12 +87,15 @@
                         uniqueLetters[word[index]] = [index];
                     }
                 }
-                var index = 0;
+                var letters = word.split("");
                 for (var letter in uniqueLetters) {
-                    for (var number in uniqueLetters[letter]) {
-                        word.splice(number, 1, ALPHABET[index]);
+                    for (var index in uniqueLetters[letter]) {
+                        letters.splice(index, 1, ALPHABET[ALPHABET.indexOf(letter)]);
                     }
-                    index++;
+                }
+                word = "";
+                for (var index in letters) {
+                    word += letters[index];
                 }
                 return word;
             }
@@ -122,7 +125,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 9
+            Trial number = 10
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
