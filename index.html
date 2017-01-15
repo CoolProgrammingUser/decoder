@@ -65,11 +65,9 @@
                     text = standardize(codeText[text]);
                     for (var word in words[text.length-1]) {
                         word = words[text.length-1][word];
-                        /*
                         if (text == standardize(word)) {
                             solution += word + " ";
                         }
-                        */
                     }
                     solution += "\n\n";
                     document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
@@ -89,13 +87,10 @@
                     }
                 }
                 var letters = word.split("");
-                alert(letters);
                 var index = 0;
                 for (var letter in uniqueLetters) {
                     for (var number in uniqueLetters[letter]) {
-                        alert(letters + "\n\n" + uniqueLetters[letter][number] + "\n\n" + ALPHABET[index]);
                         letters.splice(uniqueLetters[letter][number], 1, ALPHABET[index]);
-                        alert(letters);
                     }
                     index++;
                 }
@@ -131,7 +126,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 1
+            Trial number = 2
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
