@@ -89,6 +89,7 @@
                 var letters = word.split("");
                 var index = 0;
                 for (var letter in uniqueLetters) {
+                    alert(letter + ": " + uniqueLetters[letter]);
                     for (var number in uniqueLetters[letter]) {
                         letters.splice(number, 1, ALPHABET[index]);
                     }
@@ -98,7 +99,6 @@
                 for (var index in letters) {
                     word += letters[index];
                 }
-                alert(uniqueLetters + "\n\n" + letters + "\n\n" + word);
                 return word;
             }
         </script>
@@ -127,7 +127,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 12
+            Trial number = 13
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
