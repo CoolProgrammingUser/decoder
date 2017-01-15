@@ -93,8 +93,8 @@
                 var index = 0;
                 for (var letter in uniqueLetters) {
                     for (var number in uniqueLetters[letter]) {
-                        alert(letters + "\n\n" + number + "\n\n" + ALPHABET[index]);
-                        letters.splice(number, 1, ALPHABET[index]);
+                        alert(letters + "\n\n" + uniqueLetters[letter][number] + "\n\n" + ALPHABET[index]);
+                        letters.splice(uniqueLetters[letter][number], 1, ALPHABET[index]);
                         alert(letters);
                     }
                     index++;
@@ -131,7 +131,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 0
+            Trial number = 1
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
