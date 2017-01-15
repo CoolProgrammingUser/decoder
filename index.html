@@ -79,15 +79,20 @@
                 document.getElementById("after").style.display = "block";
             }
             function standardize(word) {
-                var uniqueLetters = [];
+                var uniqueLetters = {};
                 for (var index in word) {
-                    if (word.substring(0, index).indexOf(word[index]) == -1) {  // can also use .includes() (it's pretty new)
-                        uniqueLetters.push(word[index]);
+                    if (uniqueLetters[word[index]]) {
+                        uniqueLetters[word[index]].push(index);
+                    } else {
+                        uniqueLetters[word[index]] = [index];
                     }
                 }
-                uniqueLetters.sort();  // alphabetizes uniqueLetters
-                for (var index in uniqueLetters) {
-                    word = word.replace(new RegExp(uniqueLetters[index], "g"), ALPHABET[index]);
+                var index = 0;
+                for (var letter in uniqueLetters) {
+                    for (var number in uniqueLetters[letter]) {
+                        word.splice(number, 1, ALPHABET[index]);
+                    }
+                    index++;
                 }
                 return word;
             }
@@ -117,7 +122,7 @@
             Decoder
         </h1>
         <p>
-            Trial number = 8
+            Trial number = 9
         </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
