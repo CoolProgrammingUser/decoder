@@ -22,24 +22,21 @@
                             //////////
                             // This isn't necessary if I modify the lists.
                             var remove = ['b','c','d','e','f','g','h','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','aa','ab','ac','ah','au','av','aw','ba','bb','bc','bd','bg','bi','bk','bl','bm','bo','bp','br','bs','bt','bw','ca','cc','cb','ce','cf','cg','ch','ci','cl','cm','cn','co','cp','cr','cs','ct','cu','cv','cw','cz','da','db','dc','dd','de','df','dg','dh','di','dk','dl','dm','dp','dr','ds','dt','du','dv','dx','ea','ec','ee','ef','eg','eh','el','em','en','ep','eq','er','es','et','eu','ev','ex','ez','fa','fc','fd','fe','ff','fg','fi','fl','fm','fo','fp','fr','fs','ft','fu','fw','fx','fy','ga','gb','gc','gd','ge','gg','gi','gl','gm','gp','gr','gs','gt','ha','hb','hc','hd','hh','hk','hl','ho','hp','hq','hr','hs','ht','hu','hz','ia','ic','ie','ii','il','im','io','ip','ir','iv','ix','ja','jc','jd','je','jj','jm','jp','jr','js','ka','kb','kg','km','ko','ks','kw','ky','la','lb','lc','ld','le','lf','lg','li','ll','lm','ln','lo','lp','ls','lt','lu','mb','mc','md','mf','mg','mh','mi','mj','ml','mm','mn','mo','mp','mr','mrs','ms','mt','mu','mv','mw','mx','na','nb','nc','nd','ne','ng','nh','ni','nj','nl','nm','nn','np','nr','ns','nt','nu','nv','nw','ny','nz','ob','oc','oe','og','oh','ol','om','oo','op','os','ot','ou','oz','pb','pc','pd','pe','pf','pg','ph','pk','pl','pn','po','pp','pr','ps','pt','qc','qt','ra','rb','rc','rd','re','rf','rg','rh','ri','rl','rm','rn','ro','rp','rr','rs','rt','ru','rv','rw','rx','sa','sb','sc','sd','se','sf','sg','sh','si','sk','sl','sm','sn','sp','sq','sr','ss','st','su','sv','sw','ta','tb','tc','td','te','tf','th','ti','tm','tn','tp','tr','ts','tt','tu','tx','uc','uh','ui','uk','ul','um','un','ur','ut','uv','uw','va','vb','vc','ve','vg','vi','vp','vs','vt','wa','wb','wc','wi','wm','wn','wp','wr','ws','wt','wu','wv','ww','wx','wy','xi','xl','xp','xx','ye','yn','yr','yu','za','zu','aaa','abc','abu','acc','acm','ada','adsl','ae','af','ag','ai','ak','ala','amazoncom','amazoncouk','amd','ap','apr','ar','asn','ata','ati','aud','aus','ave','avg','avi','az'];
-                            for (var word in remove) {
-                                word = remove[word];
+                            remove.forEach(function(word) {
                                 wordList.splice(wordList.indexOf(word), 1);
-                            }
+                            });
                             var add = ['benson','zane','amps','auger','foe','ike'];
-                            for (var word in add) {
-                                word = add[word];
+                            add.forEach(function(word) {
                                 wordList.push(word);
-                            }
+                            });
                             wordList.sort();  // alphabetizes wordList
                             //////////
-                            for (var word in wordList) {
-                                word = wordList[word];
+                            wordList.forEach(function(word) {
                                 while (word.length > words.length) {
                                     words.push([]);
                                 }
                                 words[word.length-1].push(word);
-                            }
+                            });
                         }
                     }
                 }
@@ -62,8 +59,8 @@
                 var codeText = document.getElementById("code").value.toLowerCase().split(" ");
                 var solution = document.getElementById("solution").value;
                 // var progress = document.getElementById("progress").style.width;
-                for (var text in codeText) {
-                    text = standardize(codeText[text]);
+                codeText.forEach(function(text) {
+                    text = standardize(text);
                     for (var word in words[text.length-1]) {
                         word = words[text.length-1][word];
                         if (text == standardize(word)) {
@@ -72,7 +69,7 @@
                     }
                     solution += "\n\n";
                     document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
-                }
+                });
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
                 document.getElementById("progress").style.width = "0%";
@@ -80,25 +77,25 @@
             }
             function standardize(word) {
                 var uniqueLetters = {};
-                for (var index in word) {
-                    if (uniqueLetters[word[index]]) {
-                        uniqueLetters[word[index]].push(index);
+                word.forEach(function(letter, index) {
+                    if (uniqueLetters[letter]) {
+                        uniqueLetters[letter].push(index);
                     } else {
-                        uniqueLetters[word[index]] = [index];
+                        uniqueLetters[letter] = [index];
                     }
-                }
+                });
                 var letters = word.split("");
                 var index = 0;
-                for (var letter in uniqueLetters) {
-                    for (var number in uniqueLetters[letter]) {
-                        letters.splice(uniqueLetters[letter][number], 1, ALPHABET[index]);
-                    }
+                uniqueLetters.forEach(function(numbers) {
+                    numbers.forEach(function(number) {
+                        letters.splice(number, 1, ALPHABET[index]);
+                    });
                     index++;
-                }
+                });
                 word = "";
-                for (var index in letters) {
-                    word += letters[index];
-                }
+                letters.forEach(function(letter) {
+                    word += letter;
+                });
                 return word;
             }
         </script>
