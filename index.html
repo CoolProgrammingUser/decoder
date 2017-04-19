@@ -61,12 +61,11 @@
                 // var progress = document.getElementById("progress").style.width;
                 codeText.forEach(function(text) {
                     text = standardize(text);
-                    for (var word in words[text.length-1]) {
-                        word = words[text.length-1][word];
+                    words[text.length-1].forEach(function(word) {
                         if (text == standardize(word)) {
                             solution += word + " ";
                         }
-                    }
+                    });
                     solution += "\n\n";
                     document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
                 });
