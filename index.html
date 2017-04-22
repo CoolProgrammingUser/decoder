@@ -67,7 +67,7 @@
                         }
                     });
                     solution += "\n\n";
-                    console.log("{0} -- {1} -- {2}".format((codeText, codeText.indexOf(text)+1), codeText.length));
+                    console.log("{0} -- {1} -- {2}".format(codeText, codeText.indexOf(text)+1), codeText.length));
                     document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
                 });
                 document.getElementById("solution").value = solution;
