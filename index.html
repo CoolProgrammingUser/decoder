@@ -115,16 +115,16 @@
                             if (index < 26) {
                                 letters.splice(number+shift, 1, ALPHABET[index]);
                             } else {  // This should never happen
-                                letters.splice(number+shift, 1, "{"+(index-26)+"}");
                                 shift += "{{0}".format(index-26).length;
+                                letters.splice(number+shift, 1, "{"+(index-26)+"}");
                             }
                         } else if (letters[number+shift] == "{") {
                             if (index < 26) {
+                                shift -= letters.indexOf("}", number+shift) - (number+shift);  // This needs to happen first or else the splice changes things.
                                 letters.splice(number+shift, letters.indexOf("}",number+shift)-(number+shift)+1, ALPHABET[index]);
-                                shift -= letters.indexOf("}", number+shift) - (number+shift);
                             } else {
-                                letters.splice(number+shift, letters.indexOf("}",number+shift)-(number+shift)+1, "{"+(index-26)+"}");
                                 shift += "{{0}".format(index-26).length - letters.indexOf("}",number+shift) + (number+shift);
+                                letters.splice(number+shift, letters.indexOf("}",number+shift)-(number+shift)+1, "{"+(index-26)+"}");
                             }
                         }
                     });
