@@ -58,7 +58,6 @@
             function decode() {
                 var codeText = document.getElementById("code").value.toLowerCase().split(" ");
                 var solution = document.getElementById("solution").value;
-                getId("progress").max = codeText.length;
                 codeText.forEach(function(text, index) {
                     text = standardize(text);
                     words[text.length-1].forEach(function(word) {
@@ -67,12 +66,9 @@
                         }
                     });
                     solution += "\n\n";
-                    getId("progress").value = index
-                    alert(index + "\n" + codeText.length);
                 });
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
-                document.getElementById("progress").value = 0;
                 document.getElementById("after").style.display = "block";
             }
             function standardize(characters) {
