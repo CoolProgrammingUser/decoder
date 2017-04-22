@@ -67,7 +67,7 @@
                         }
                     });
                     solution += "\n\n";
-                    document.getElementById("progress").style.width = (index+1)/codeText.length*100 + "%";
+                    document.getElementById("progress").style.width = Math.round((index+1)/codeText.length*100) + "%";
                     alert("{0}\n{1}\n{2}".format((index+1)/codeText.length*100+"%", index+1, codeText.length));
                 });
                 document.getElementById("solution").value = solution;
