@@ -109,6 +109,7 @@
                 var index = 0;
                 uniqueLetters.forEach(function(numbers) {
                     numbers.forEach(function(number) {
+                        console.log("{0}, {1}, {2}".format(letters, numbers, number));
                         if (letters[number].toLowerCase() != letters[number].toUpperCase()) {
                             if (index < 26) {
                                 letters.splice(number, 1, ALPHABET[index]);
@@ -163,6 +164,7 @@
             <div id="progress">
             </div>
             </div>
+            <!-- <progress></progress> -->
         </div>
         <div id="after">
             <textarea cols="60" rows="10" id="solution" readonly></textarea>
