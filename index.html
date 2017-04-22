@@ -54,6 +54,9 @@
                     document.getElementById("before").style.display = "block";
                     document.getElementById("solution").value = "";
                 });
+                getId("progress").addEventListener("progress", function(event) {
+                    this.style.width = event.detail;
+                });
             });
             function decode() {
                 var codeText = document.getElementById("code").value.toLowerCase().split(" ");
@@ -67,7 +70,7 @@
                         }
                     });
                     solution += "\n\n";
-                    document.getElementById("progress").style.width = Math.round((index+1)/codeText.length*100) + "%";
+                    document.dispatchEvent(new CustomEvent("progress", {"detail":(index+1)/codeText.length*100+"%"}));
                     alert("{0}\n{1}\n{2}".format((index+1)/codeText.length*100+"%", index+1, codeText.length));
                 });
                 document.getElementById("solution").value = solution;
