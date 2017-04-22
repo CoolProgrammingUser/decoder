@@ -59,7 +59,7 @@
                 var codeText = document.getElementById("code").value.toLowerCase().split(" ");
                 var solution = document.getElementById("solution").value;
                 // var progress = document.getElementById("progress").style.width;
-                codeText.forEach(function(text) {
+                codeText.forEach(function(text, index) {
                     text = standardize(text);
                     words[text.length-1].forEach(function(word) {
                         if (text == standardize(word)) {
@@ -67,8 +67,7 @@
                         }
                     });
                     solution += "\n\n";
-                    console.log("{0} -- {1} -- {2}".format(codeText, codeText.indexOf(text)+1, codeText.length));
-                    document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
+                    document.getElementById("progress").style.width = (index+1)/codeText.length*100 + "%";
                 });
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
