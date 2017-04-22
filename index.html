@@ -67,6 +67,7 @@
                         }
                     });
                     solution += "\n\n";
+                    console.log((codeText.indexOf(text)+1)/codeText.length*100 + "%");
                     document.getElementById("progress").style.width = (codeText.indexOf(text)+1)/codeText.length*100 + "%";
                 });
                 document.getElementById("solution").value = solution;
@@ -111,7 +112,6 @@
                 var oldShift;
                 uniqueLetters.forEach(function(numbers) {
                     numbers.forEach(function(number) {
-                        console.log("{0} -- {1} -- {2} -- {3}".format(letters, numbers, number+shift, shift));
                         if (letters[number+shift].toLowerCase() != letters[number+shift].toUpperCase()) {
                             if (index < 26) {
                                 letters.splice(number+shift, 1, ALPHABET[index]);
