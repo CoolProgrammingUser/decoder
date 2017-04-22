@@ -74,20 +74,54 @@
                 document.getElementById("progress").style.width = "0%";
                 document.getElementById("after").style.display = "block";
             }
-            function standardize(word) {
+            function standardize(characters) {
+                var word = "";
+                characters.forEach(function(character, index) {
+                    if (character.toLowerCase() != character.toUpperCase()/*|| character=="'"*/) {  // if the character is a letter
+                        word += character;
+                    } else if (character == "{" && characters.indexOf("}", index) > -1) {
+                        word += characters.slice(index, characters.indexOf("}",index)+1);
+                    }/* else {
+                        // do nothing
+                        // (gets rid of non-letters)
+                    } */
+                });
                 var uniqueLetters = {};
-                word.forEach(function(letter, index) {
-                    if (uniqueLetters[letter]) {
-                        uniqueLetters[letter].push(index);
-                    } else {
-                        uniqueLetters[letter] = [index];
-                    }
+                word.forEach(function(letter, index, word) {
+                    if (letter.toLowerCase() != letter.toUpperCase()) {
+                        if (uniqueLetters[letter]) {
+                            uniqueLetters[letter].push(index);
+                        } else {
+                            uniqueLetters[letter] = [index];
+                        }
+                    } else if (letter == "{") {
+                        if (uniqueLetters["~"+word.slice(index+1,word.indexOf("}",index))]) {
+                            uniqueLetters["~"+word.slice(index+1,word.indexOf("}",index))].push(index);
+                        } else {
+                            uniqueLetters["~"+word.slice(index+1,word.indexOf("}",index))] = [index];
+                        }
+                    }/* else {
+                        // do nothing
+                        // (skips the number between any {}s)
+                    } */
                 });
                 var letters = word.split("");
                 var index = 0;
                 uniqueLetters.forEach(function(numbers) {
                     numbers.forEach(function(number) {
-                        letters.splice(number, 1, ALPHABET[index]);
+                        if (letters[number].toLowerCase() != letters[number].toUpperCase()) {
+                            if (index < 26) {
+                                letters.splice(number, 1, ALPHABET[index]);
+                            } else {  // This should never happen
+                                letters.splice(number, 1, "{"+(index-26)+"}");
+                            }
+                        } else if (letters[number] == "{") {
+                            if (index < 26) {
+                                letters.splice(number, letters.indexOf("}",number)-number+1, ALPHABET[index]);
+                            } else {
+                                letters.splice(number, letters.indexOf("}",number)-number+1, "{"+(index-26)+"}");
+                            }
+                        }
                     });
                     index++;
                 });
@@ -113,9 +147,6 @@
         </style>
     </head>
     <body>
-        <p>
-            Trial number = 0
-        </p>
         <div id="before">
             <textarea cols="60" rows="10" placeholder="Type the code here." id="code"></textarea>
             <br>
