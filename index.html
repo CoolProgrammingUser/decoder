@@ -54,14 +54,11 @@
                     document.getElementById("before").style.display = "block";
                     document.getElementById("solution").value = "";
                 });
-                getId("progress").addEventListener("progress", function(event) {
-                    this.style.width = event.detail;
-                });
             });
             function decode() {
                 var codeText = document.getElementById("code").value.toLowerCase().split(" ");
                 var solution = document.getElementById("solution").value;
-                // var progress = document.getElementById("progress").style.width;
+                getId("progress").max = codeText.length;
                 codeText.forEach(function(text, index) {
                     text = standardize(text);
                     words[text.length-1].forEach(function(word) {
@@ -70,8 +67,8 @@
                         }
                     });
                     solution += "\n\n";
-                    document.dispatchEvent(new CustomEvent("progress", {"detail":(index+1)/codeText.length*100+"%"}));
-                    alert("{0}\n{1}\n{2}".format((index+1)/codeText.length*100+"%", index+1, codeText.length));
+                    getId("progress").value = index
+                    alert(index + "\n" + codeText.length);
                 });
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
@@ -146,13 +143,13 @@
         <style>
             #during {
                 display: none;
-            }
+            }/*
             #progress {
                 float: left;
                 width: 0%;
                 height: 100%;
                 background: #00e;
-            }
+            }*/
             #after {
                 display: none;
             }
@@ -171,11 +168,11 @@
             <h3>
                 Working...
             </h3>
-            <div style="width:30em; height:1em; background:#fff; border:.1em solid black;">
+            <!-- <div style="width:30em; height:1em; background:#fff; border:.1em solid black;">
             <div id="progress">
             </div>
-            </div>
-            <!-- <progress></progress> -->
+            </div> -->
+            <progress id="progress"></progress>
         </div>
         <div id="after">
             <textarea cols="60" rows="10" id="solution" readonly></textarea>
