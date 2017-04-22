@@ -107,20 +107,24 @@
                 });
                 var letters = word.split("");
                 var index = 0;
+                var shift = 0;
                 uniqueLetters.forEach(function(numbers) {
                     numbers.forEach(function(number) {
                         console.log("{0}, {1}, {2}".format(letters, numbers, number));
-                        if (letters[number].toLowerCase() != letters[number].toUpperCase()) {
+                        if (letters[number+shift].toLowerCase() != letters[number+shift].toUpperCase()) {
                             if (index < 26) {
-                                letters.splice(number, 1, ALPHABET[index]);
+                                letters.splice(number+shift, 1, ALPHABET[index]);
                             } else {  // This should never happen
-                                letters.splice(number, 1, "{"+(index-26)+"}");
+                                letters.splice(number+shift, 1, "{"+(index-26)+"}");
+                                shift += "{{0}".format(index-26).length;
                             }
-                        } else if (letters[number] == "{") {
+                        } else if (letters[number+shift] == "{") {
                             if (index < 26) {
-                                letters.splice(number, letters.indexOf("}",number)-number+1, ALPHABET[index]);
+                                letters.splice(number+shift, letters.indexOf("}",number+shift)-(number+shift)+1, ALPHABET[index]);
+                                shift -= letters.indexOf("}", number+shift) - (number+shift);
                             } else {
-                                letters.splice(number, letters.indexOf("}",number)-number+1, "{"+(index-26)+"}");
+                                letters.splice(number+shift, letters.indexOf("}",number+shift)-(number+shift)+1, "{"+(index-26)+"}");
+                                shift += "{{0}".format(index-26).length - letters.indexOf("}",number+shift) + (number+shift);
                             }
                         }
                     });
@@ -138,6 +142,7 @@
                 display: none;
             }
             #progress {
+                float: left;
                 width: 0%;
                 height: 100%;
                 background: #00e;
