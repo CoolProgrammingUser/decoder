@@ -108,6 +108,7 @@
                 var letters = word.split("");
                 var index = 0;
                 var shift = 0;
+                var oldShift;
                 uniqueLetters.forEach(function(numbers) {
                     numbers.forEach(function(number) {
                         console.log("{0} -- {1} -- {2} -- {3}".format(letters, numbers, number+shift, shift));
@@ -115,16 +116,18 @@
                             if (index < 26) {
                                 letters.splice(number+shift, 1, ALPHABET[index]);
                             } else {  // This should never happen
+                                oldShift = shift;
                                 shift += "{{0}".format(index-26).length;
-                                letters.splice(number+(shift-"{{0}".format(index-26).length), 1, "{"+(index-26)+"}");
+                                letters.splice(number+oldShift, 1, "{"+(index-26)+"}");
                             }
                         } else if (letters[number+shift] == "{") {
+                            oldShift = shift;
                             if (index < 26) {
-                                shift -= letters.indexOf("}",number+shift)-(number+shift);  // This needs to happen first or else the splice changes things.
-                                letters.splice(number+(shift+letters.indexOf("}",number+shift)-(number+shift)), letters.indexOf("}",number+(shift+letters.indexOf("}",number+shift)-(number+shift)))-(number+(shift+letters.indexOf("}",number+shift)-(number+shift)))+1, ALPHABET[index]);
+                                shift -= letters.indexOf("}", number+shift) - (number+shift);  // This needs to happen first or else the splice changes things.
+                                letters.splice(number+oldShift, letters.indexOf("}",number+oldShift)-(number+oldShift)+1, ALPHABET[index]);
                             } else {
-                                shift += "{{0}".format(index-26).length-letters.indexOf("}",number+shift)+(number+shift);
-                                letters.splice(number+(shift-("{{0}".format(index-26).length-letters.indexOf("}",number+shift)+(number+shift))), letters.indexOf("}",number+(shift-("{{0}".format(index-26).length-letters.indexOf("}",number+shift)+(number+shift))))-(number+(shift-("{{0}".format(index-26).length-letters.indexOf("}",number+shift)+(number+shift))))+1, "{"+(index-26)+"}");
+                                shift += "{{0}".format(index-26).length - letters.indexOf("}",number+shift) + (number+shift);
+                                letters.splice(number+oldShift, letters.indexOf("}",number+oldShift)-(number+oldShift)+1, "{"+(index-26)+"}");
                             }
                         }
                     });
