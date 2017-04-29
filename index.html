@@ -9,6 +9,7 @@
             var words = [[]];
             var ALPHABET = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
             var PUNCTUATION = [".", "?", "!", ",", "'", '"', ";", ":", "-", "(", ")"];
+            var solutions = [];
             window.addEventListener("load", function() {
                 // sets "words" to a list of English words
                 var file = new XMLHttpRequest();
@@ -57,34 +58,51 @@
                 });
             });
             function decode() {
-                var codeText = document.getElementById("code").value.toLowerCase().split(" ");
+                var codeText = document.getElementById("code").value.toLowerCase();
+                var values = {};
+                var strikeOut = 1;  // the number of strikes against a character it takes to have it removed
                 var solution = document.getElementById("solution").value;
-                codeText.forEach(function(text, index) {
-                    text = standardize(text);
-                    words[text.length-1].forEach(function(word) {
-                        if (text == standardize(word)) {
+                codeText.forEach(function(character) {  // finds all of the unique letters in the text
+                    if (character != character.toUpperCase() && !values.letters.includes(character)) {  // if it's a letter not in values.letters
+                        values[character] = [];
+                    }  // There needs to be something to handle numbers in {}s.
+                });
+                var codeWords = {};
+                codeText.split(" ").forEach(function(word) {
+                    var newWord = "";
+                    word.forEach(function(character, index) {
+                        if (character.toLowerCase() != character.toUpperCase()/*|| character=="'"*/) {  // if the character is a letter
+                            newWord += character;
+                        } else if (character == "{" && word("}", index) > -1) {
+                            newWord += word.slice(index, word.indexOf("}",index)+1);
+                        }/* else {
+                            // do nothing
+                            // (gets rid of non-letters)
+                        } */
+                    });
+                    codeWords[newWord] = [];  // might not work if there's {}s
+                });
+                codeWords.forEach(function(array, key) {  // finds all of the words with the same letter pattern as the code words
+                    var standardizedWord = standardize(key);  // Doing this only once (not at every if-statement) speeds things up.
+                    words[key.length-1].forEach(function(word) {
+                        if (standardizedWord == standardize(word)) {
+                            array.push(word);
                             solution += word + " ";
                         }
                     });
                     solution += "\n\n";
                 });
+                /// order codeWords (or another variable) in order of increasing word length
+                /// assign possible letters to values in the format value[character].push({"posibility":letter, "strikes":number});
+                /// give possible letters a strike when they don't show up in a possible word associated with a code word which uses the code letter associated with the possible letter
+                ///     repeat until no changes to possible letters are made
+                /// add each possible solution to solutions
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
                 document.getElementById("after").style.display = "block";
                 document.body.style.cursor = "auto";
             }
-            function standardize(characters) {
-                var word = "";
-                characters.forEach(function(character, index) {
-                    if (character.toLowerCase() != character.toUpperCase()/*|| character=="'"*/) {  // if the character is a letter
-                        word += character;
-                    } else if (character == "{" && characters.indexOf("}", index) > -1) {
-                        word += characters.slice(index, characters.indexOf("}",index)+1);
-                    }/* else {
-                        // do nothing
-                        // (gets rid of non-letters)
-                    } */
-                });
+            function standardize(word) {
                 var uniqueLetters = {};
                 word.forEach(function(letter, index, word) {
                     if (letter.toLowerCase() != letter.toUpperCase()) {
@@ -108,7 +126,7 @@
                 var index = 0;
                 var shift = 0;
                 var oldShift;
-                uniqueLetters.forEach(function(numbers) {
+                uniqueLetters.forEach(function(numbers) {  // This could likely be done with a search-and-replace method. (although going straight to the index is probably faster than a searching method)
                     numbers.forEach(function(number) {
                         if (letters[number+shift].toLowerCase() != letters[number+shift].toUpperCase()) {
                             if (index < 26) {
