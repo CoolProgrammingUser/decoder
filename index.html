@@ -44,7 +44,7 @@
                 file.send();
                 // gives the decode button functionality
                 document.getElementById("decode").addEventListener("click", function() {
-                    document.body.style.cursor = "progress";
+                    document.style.cursor = "progress";
                     document.getElementById("before").style.display = "none";
                     document.getElementById("during").style.display = "block";
                     setTimeout(decode, 0);  /////////////// ???????
@@ -63,7 +63,7 @@
                 var strikeOut = 1;  // the number of strikes against a character it takes to have it removed
                 var solution = document.getElementById("solution").value;
                 codeText.forEach(function(character) {  // finds all of the unique letters in the text
-                    if (character != character.toUpperCase() && !values.letters.includes(character)) {  // if it's a letter not in values.letters
+                    if (character != character.toUpperCase() && !values.hasOwnProperty(character)) {  // if it's a letter not in values.letters
                         values[character] = [];
                     }  // There needs to be something to handle numbers in {}s.
                 });
@@ -100,7 +100,7 @@
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
                 document.getElementById("after").style.display = "block";
-                document.body.style.cursor = "auto";
+                document.style.cursor = "auto";
             }
             function standardize(word) {
                 var uniqueLetters = {};
