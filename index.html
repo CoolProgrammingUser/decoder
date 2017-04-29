@@ -44,7 +44,7 @@
                 file.send();
                 // gives the decode button functionality
                 document.getElementById("decode").addEventListener("click", function() {
-                    document.style.cursor = "progress";
+                    document.html.style.cursor = "progress";
                     document.getElementById("before").style.display = "none";
                     document.getElementById("during").style.display = "block";
                     setTimeout(decode, 0);  /////////////// ???????
@@ -100,7 +100,7 @@
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
                 document.getElementById("after").style.display = "block";
-                document.style.cursor = "auto";
+                document.html.style.cursor = "auto";
             }
             function standardize(word) {
                 var uniqueLetters = {};
