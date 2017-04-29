@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="cursor">
     <head>
         <title>
             Decoder
@@ -44,7 +44,13 @@
                 file.send();
                 // gives the decode button functionality
                 document.getElementById("decode").addEventListener("click", function() {
-                    document.html.style.cursor = "progress";
+                    var styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
+                    styles.forEach(function(style) {
+                        if (style.selectorText == ".cursor") {
+                            style.style.cursor = "progress";
+                            return "break";
+                        }
+                    });
                     document.getElementById("before").style.display = "none";
                     document.getElementById("during").style.display = "block";
                     setTimeout(decode, 0);  /////////////// ???????
@@ -100,7 +106,13 @@
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
                 document.getElementById("after").style.display = "block";
-                document.html.style.cursor = "auto";
+                var styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
+                styles.forEach(function(style) {
+                    if (style.selectorText == ".cursor") {
+                        style.style.cursor = "auto";
+                        return "break";
+                    }
+                });
             }
             function standardize(word) {
                 var uniqueLetters = {};
@@ -157,6 +169,9 @@
             }
         </script>
         <style>
+            .cursor {
+                cursor: auto;
+            }
             #during {
                 display: none;
             }/*
