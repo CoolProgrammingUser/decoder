@@ -74,7 +74,8 @@
                     }  // There needs to be something to handle numbers in {}s.
                 });
                 var codeWords = {};
-                codeText.split(" ").forEach(function(word) {
+                codeText = codeText.split(" ").sort(function(a, b) {return a.length-b.length});  // puts codeText in order of increasing word length
+                codeText.forEach(function(word) {
                     var newWord = "";
                     word.forEach(function(character, index) {
                         if (character.toLowerCase() != character.toUpperCase()/*|| character=="'"*/) {  // if the character is a letter
@@ -98,7 +99,6 @@
                     });
                     solution += "\n\n";
                 });
-                /// order codeWords (or another variable) in order of increasing word length
                 /// assign possible letters to values in the format value[character].push({"posibility":letter, "strikes":number});
                 /// give possible letters a strike when they don't show up in a possible word associated with a code word which uses the code letter associated with the possible letter
                 ///     repeat until no changes to possible letters are made
