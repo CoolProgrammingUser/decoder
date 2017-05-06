@@ -71,10 +71,12 @@
                 codeText.forEach(function(character) {  // finds all of the unique letters in the text
                     if (character != character.toUpperCase() && !values.hasOwnProperty(character)) {  // if it's a letter not in values.letters
                         values[character] = [];
-                    }  // There needs to be something to handle numbers in {}s.
+                    }  //// There needs to be something to handle numbers in {}s.
                 });
+                /// "values" now has an empty array for every unique symbol in the encoded text
+                codeText = codeText.split(" ").sort(function(a, b) {return a.length-b.length});
+                /// "codeText" is now in order of increasing word length
                 var codeWords = {};
-                codeText = codeText.split(" ").sort(function(a, b) {return a.length-b.length});  // puts codeText in order of increasing word length
                 codeText.forEach(function(word) {
                     var newWord = "";
                     word.forEach(function(character, index) {
@@ -87,8 +89,12 @@
                             // (gets rid of non-letters)
                         } */
                     });
+                    /// "newWord" now contains a word from the encoded text with the punctuation removed
                     codeWords[newWord] = [];  // might not work if there's {}s
                 });
+                /// "codeWords" now has an empty array for every word in the encoded text
+                /// and every word in the encoded text is in order of increasing length
+                /// (smaller words have less possible words which is helpful to start with later)
                 codeWords.forEach(function(array, key) {  // finds all of the words with the same letter pattern as the code words
                     var standardizedWord = standardize(key);  // Doing this only once (not at every if-statement) speeds things up.
                     words[key.length-1].forEach(function(word) {
@@ -99,10 +105,26 @@
                     });
                     solution += "\n\n";
                 });
-                /// assign possible letters to values in the format value[character].push({"posibility":letter, "strikes":number});
-                /// give possible letters a strike when they don't show up in a possible word associated with a code word which uses the code letter associated with the possible letter
-                ///     repeat until no changes to possible letters are made
-                /// add each possible solution to solutions
+                /// "codeWords" now has an array containing a list of all English words with the same letter pattern as their respective word from the encoded text
+                this.changes = Infinity;  // this variable only needs to be declared with "this" while using safeWhile()
+                safeWhile("this.changes > 0", function() {
+                    // determines the letters which are valid values for each unique symbol in the encoded text across all the words
+                    this.changes = 0;
+                    values.forEach(function(posibilities, symbol) {
+                        codeWords.forEach(function(words, text) {
+                            if (text.includes(symbol)) {
+                                words.forEach(function(word) {
+                                    //// find and add the letter to the value possibilities (or add a strike)
+                                    this.changes++;
+                                });
+                            }
+                        });
+                    });
+                });
+                //// assign possible letters to values in the format value[character].push({"posibility":letter, "strikes":number});
+                //// give possible letters a strike when they don't show up in a possible word associated with a code word which uses the code letter associated with the possible letter
+                ////     repeat until no changes to possible letters are made
+                //// add each possible solution to solutions
                 document.getElementById("solution").value = solution;
                 document.getElementById("during").style.display = "none";
                 document.getElementById("after").style.display = "block";
