@@ -68,12 +68,17 @@
                 var values = {};
                 var strikeOut = 1;  // the number of strikes against a character it takes to have it removed
                 var solution = document.getElementById("solution").value;
-                codeText.forEach(function(character) {  // finds all of the unique letters in the text
-                    if (character != character.toUpperCase() && !values.hasOwnProperty(character)) {  // if it's a letter not in values.letters
-                        values[character] = [];
+                codeText.forEach(function(character, index) {  // finds all of the unique letters in the text and their locations
+                    if (character != character.toUpperCase()) {  // if it's a letter
+                        if (values.hasOwnProperty(character)) {
+                            values[character].appearances.push(index);
+                        } else {
+                            values[character] = {"appearances" : [index]};
+                        }
                     }  //// There needs to be something to handle numbers in {}s.
                 });
-                /// "values" now has an empty array for every unique symbol in the encoded text
+                /// "values" now has an object for every unique symbol in the encoded text
+                /// with an "appearances" property containing indices of appearance for each unique symbol
                 codeText = codeText.split(" ").sort(function(a, b) {return a.length-b.length});
                 /// "codeText" is now in order of increasing word length
                 var codeWords = {};
@@ -123,7 +128,7 @@
                         });
                     });
                 });
-                //// assign possible letters to values in the format value[character].push({"posibility":letter, "strikes":number});
+                //// assign possible letters to values in the format value[character]["posibility"].push(letter); ["strikes"]=number;
                 //// give possible letters a strike when they don't show up in a possible word associated with a code word which uses the code letter associated with the possible letter
                 ////     repeat until no changes to possible letters are made
                 //// add each possible solution to solutions
@@ -236,7 +241,17 @@
         </div>
         <div id="after">
             <textarea cols="60" rows="10" id="solution" readonly></textarea>
-            <p id="solutionNumber"></p>
+            <br>
+            <br>
+            <button>
+                &lt;
+            </button>
+            <span id="solutionNumber">0/0</span>
+            <button>
+                &gt;
+            </button>
+            <br>
+            <br>
             <button type="button" id="newCode">
                 Try a new<br>
                 code
