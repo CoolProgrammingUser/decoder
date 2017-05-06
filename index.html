@@ -109,15 +109,15 @@
                 this.changes = Infinity;  // this variable only needs to be declared with "this" while using safeWhile()
                 safeWhile("this.changes > 0", function() {
                     // determines the letters which are valid values for each unique symbol in the encoded text across all the words
-                    console.log(this.changes);
                     this.changes = 0;
                     values.forEach(function(posibilities, symbol) {
                         codeWords.forEach(function(words, text) {
                             if (text.includes(symbol)) {
                                 words.forEach(function(word) {
                                     //// find and add the letter to the value possibilities (or add a strike)
-                                    
-                                    this.changes++;
+                                    if (false) {
+                                        this.changes++;
+                                    }
                                 });
                             }
                         });
