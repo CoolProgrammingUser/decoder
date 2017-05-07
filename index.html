@@ -86,7 +86,6 @@
                 });
             });
             function decode() {
-                var time = performance.now();  ////
                 var codeText = document.getElementById("code").value.toLowerCase();
                 var values = {};
                 var strikeOut = 1;  // the number of strikes against a character it takes to have it removed
@@ -120,8 +119,6 @@
                     });
                 });
                 /// "codeWords" now has an array containing a list of all English words with the same letter pattern as their respective word from the encoded text
-                console.log(performance.now()-time + "\n");
-                time = performance.now();
                 values.forEach(function(properties, symbol) {  // determines the letters which are valid values for each unique symbol in the encoded text across all the words
                     var matches = 0;
                     codeWords.forEach(function(words, text) {
@@ -169,8 +166,6 @@
                 /// "strikes" corresponding to a list of strikes made in the same order as the possibilities indicating the likelihood of a symbol being a certain letter
                 ///
                 /// codeWords now only has words which contain letters that don't have too many strikes against them
-                console.log(performance.now()-time + "\n");
-                time = performance.now();
                 codeText = document.getElementById("code").value.toLowerCase().split(" ");
                 codeText.forEach(function(word, index) {
                     codeText[index] = isolate(word);
@@ -222,8 +217,8 @@
                     }
                     return falseTrue;
                 }
-                var safety = 1;  //// not necessary with a correctly functioning while loop
-                while (trueFalse) {
+                var time = performance.now();  ////
+                while (trueFalse) {  //// This needs to go a lot faster.
                     if (currentIndexList[index] <= totalIndexList[index]) {
                         if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
                             if (index < currentIndexList.length - 1) {  // if the index isn't at the end of the array
@@ -248,12 +243,7 @@
                             trueFalse = false;
                         }
                     }
-                    if (safety > 100000) {  //// not necessary with a correctly functioning while loop
-                        console.log(solutions);
-                        throw "Recurrsion depth exceeded.";
-                    }
                 }
-                console.log(performance.now()-time + "\n--------\n");
                 solutionIndex = 0;
                 document.getElementById("solution").value = solutions[0];
                 getId("solutionNumber").innerHTML = "1/" + solutions.length;
@@ -266,6 +256,8 @@
                         return "break";
                     }
                 });
+                console.log(performance.now()-time);  ////
+                alert("Your code is finished!");  ////
             }
             function isolate(word) {
                 /**
