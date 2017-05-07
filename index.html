@@ -10,6 +10,7 @@
             var ALPHABET = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
             var PUNCTUATION = [".", "?", "!", ",", "'", '"', ";", ":", "-", "(", ")"];
             var solutions = [];
+            var solutionIndex = 0;
             window.addEventListener("load", function() {
                 // sets "words" to a list of English words
                 var file = new XMLHttpRequest();
@@ -63,6 +64,26 @@
                     document.getElementById("before").style.display = "block";
                     document.getElementById("solution").value = "";
                 });
+                // gives the "last" button functionality
+                getId("last").addEventListener("click", function() {
+                    if (solutionIndex >= 0) {
+                        solutionIndex--;
+                    } else {
+                        solutionIndex = solutions.length - 1;
+                    }
+                    getId("solution").value = solutions[solutionIndex];
+                    getId("solutionNumber").innerHTML = solutionIndex+1 + "/" + solutions.length;
+                });
+                // gives the "next" button functionality
+                getId("next").addEventListener("click", function() {
+                    if (solutionIndex < solutions.length - 1) {
+                        solutionIndex++;
+                    } else {
+                        solutionIndex = 0;
+                    }
+                    getId("solution").value = solutions[solutionIndex];
+                    getId("solutionNumber").innerHTML = solutionIndex+1 + "/" + solutions.length;
+                });
             });
             function decode() {
                 var codeText = document.getElementById("code").value.toLowerCase();
@@ -83,19 +104,8 @@
                 /// "codeText" is now in order of increasing word length
                 var codeWords = {};
                 codeText.forEach(function(word) {
-                    var newWord = "";
-                    word.forEach(function(character, index) {
-                        if (character.toLowerCase() != character.toUpperCase()/*|| character=="'"*/) {  // if the character is a letter
-                            newWord += character;
-                        } else if (character == "{" && word("}", index) > -1) {
-                            newWord += word.slice(index, word.indexOf("}",index)+1);
-                        }/* else {
-                            // do nothing
-                            // (gets rid of non-letters)
-                        } */
-                    });
-                    /// "newWord" now contains a word from the encoded text with the punctuation removed
-                    codeWords[newWord] = [];  // might not work if there's {}s
+                    /// isolate() removes the puctuation from the word
+                    codeWords[isolate(word)] = [];  // assignment might not work if there's {}s
                 });
                 /// "codeWords" now has an empty array for every word in the encoded text
                 /// and every word in the encoded text is in order of increasing length
@@ -109,8 +119,7 @@
                     });
                 });
                 /// "codeWords" now has an array containing a list of all English words with the same letter pattern as their respective word from the encoded text
-                // determines the letters which are valid values for each unique symbol in the encoded text across all the words
-                values.forEach(function(properties, symbol) {
+                values.forEach(function(properties, symbol) {  // determines the letters which are valid values for each unique symbol in the encoded text across all the words
                     var matches = 0;
                     codeWords.forEach(function(words, text) {
                         if (text.includes(symbol)) {
@@ -136,6 +145,17 @@
                                     values[symbol].strikes[values[symbol].possibilities.indexOf(possibility)]++;  // add a strike corresponding to the possibility
                                 }
                             });
+                            values[symbol].possibilities.forEach(function(possibility) {
+                                if (values[symbol].strikes[values[symbol].possibilities.indexOf(possibility)] >= strikeOut) {
+                                    var offSet = 0;  // makes sure the correct word is deleted when there are multiple deletions
+                                    words.forEach(function(word, number) {  // gets rid of all the words containing letters with more strikes than allowed
+                                        if (word[index] == possibility) {
+                                            codeWords[text].splice(number+offSet, 1);
+                                            offSet--;
+                                        }
+                                    });
+                                }
+                            });
                             matches++;
                         }
                     });
@@ -144,9 +164,88 @@
                 /// "appearances" corresponding to the indices of the text where the symbol is found (done earlier)
                 /// "possibilities" corresponding to a list of all the letters the symbol could be
                 /// "strikes" corresponding to a list of strikes made in the same order as the possibilities indicating the likelihood of a symbol being a certain letter
-                
-                //// add each possible solution to solutions
-                document.getElementById("solution").value = document.getElementById("code").value.toLowerCase();
+                ///
+                /// codeWords now only has words which contain letters that don't have too many strikes against them
+                codeText = document.getElementById("code").value.toLowerCase().split(" ");
+                codeText.forEach(function(word, index) {
+                    codeText[index] = isolate(word);
+                });
+                var totalIndexList = [],
+                    currentIndexList = [];
+                codeText.forEach(function(word) {
+                    totalIndexList.push(codeWords[word].length-1);
+                    currentIndexList.push(0);
+                });
+                var trueFalse = true,
+                    index = 0,
+                    codeKey = {},
+                    solution;
+                values.forEach(function(unnecessary, key) {
+                    codeKey[key] = undefined;
+                });
+                function usageCheck(letters) {
+                    /**
+                    makes sure a word doesn't conflict with the letters used in previous words
+                    */
+                    var falseTrue = true;
+                    var changes = {};
+                    letters.forEach(function(letter, placement) {
+                        var codeLetter = codeText[index][placement];
+                        if (codeKey[codeLetter] != letter) {
+                            var unused = true;
+                            codeKey.forEach(function(guess) {  // checks if the letter is being used elsewhere
+                                if (guess == letter) {
+                                    unused = false;
+                                }
+                            });
+                            if (unused) {
+                                changes[codeLetter] = letter;
+                            } else {
+                                falseTrue = false;
+                            }
+                        }
+                    });
+                    if (falseTrue) {  // updates the code key with the letters of the word if it passes
+                        changes.forEach(function(value, key) {
+                            codeKey[key] = value;
+                        });
+                    }
+                    return falseTrue;
+                }
+                var safety = 1;  //// not necessary with a correctly functioning while loop
+                while (trueFalse) {
+                    if (currentIndexList[index] <= totalIndexList[index]) {
+                        if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
+                            if (index < currentIndexList.length - 2) {  // if the index isn't at the end of the array
+                                index++;
+                            } else {
+                                solution = [];
+                                codeText.forEach(function(word, number) {
+                                    solution.push(codeWords[word][currentIndexList[number]]);
+                                });
+                                solutions.push(solution.join(" "));
+                                currentIndexList[index]++;
+                            }
+                        } else {
+                            currentIndexList[index]++;
+                        }
+                    } else {
+                        if (index > 0) {
+                            currentIndexList[index] = 0;
+                            index--;
+                            currentIndexList[index]++;
+                        } else {
+                            trueFalse = false;
+                        }
+                    }
+                    if (safety > 100000) {  //// not necessary with a correctly functioning while loop
+                        console.log(solutions);
+                        throw "Recurrsion depth exceeded.";
+                    }
+                }
+                solutionIndex = 0;
+                document.getElementById("solution").value = solutions[0];
+                getId("solutionNumber").innerHTML = "1/" + solutions.length;
                 document.getElementById("during").style.display = "none";
                 document.getElementById("after").style.display = "block";
                 var styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
@@ -157,7 +256,33 @@
                     }
                 });
             }
+            function isolate(word) {
+                /**
+                removes the puctuation from words
+                */
+                var newWord = "";
+                word.forEach(function(character, index) {
+                    if (character.toLowerCase() != character.toUpperCase()/*|| character=="'"*/) {  // if the character is a letter
+                        newWord += character;
+                    } else if (character == "{" && word.indexOf("}", index) > -1) {
+                        newWord += word.slice(index, word.indexOf("}",index)+1);
+                    }/* else {
+                        // do nothing
+                        // (gets rid of non-letters)
+                    } */
+                });
+                return newWord;
+            }
             function standardize(word) {
+                /**
+                makes a word have a standard letter pattern
+                (alphabetically assigns different letters to different letters and same letters to same letters)
+                symbols comprised of {number} are considered one symbol
+                examples:
+                    hello --> abccd
+                    awesome --> abcdefc
+                    qxf{32}xb --> abcdbe
+                */
                 var uniqueLetters = {};
                 word.forEach(function(letter, index, word) {
                     if (letter.toLowerCase() != letter.toUpperCase()) {
@@ -257,11 +382,11 @@
             <textarea cols="60" rows="10" id="solution" readonly></textarea>
             <br>
             <br>
-            <button>
+            <button id="last">
                 &lt;
             </button>
             <span id="solutionNumber">0/0</span>
-            <button>
+            <button id="next">
                 &gt;
             </button>
             <br>
