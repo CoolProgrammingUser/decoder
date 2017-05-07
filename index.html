@@ -180,29 +180,36 @@
                     index = 0,
                     codeKey = {},
                     solution;
-                values.forEach(function(unnecessary, key) {
-                    codeKey[key] = undefined;
-                });
                 function usageCheck(letters) {
                     /**
                     makes sure a word doesn't conflict with the letters used in previous words
                     */
                     var falseTrue = true;
                     var changes = {};
+                    if (index == 0) {
+                        values.forEach(function(unnecessary, key) {
+                            codeKey[key] = undefined;
+                        });
+                    }
                     letters.forEach(function(letter, placement) {
                         var codeLetter = codeText[index][placement];
-                        if (codeKey[codeLetter] != letter) {
+                        if (codeKey[codeLetter] == undefined) {
                             var unused = true;
                             codeKey.forEach(function(guess) {  // checks if the letter is being used elsewhere
                                 if (guess == letter) {
                                     unused = false;
+                                    return "break";
                                 }
                             });
                             if (unused) {
                                 changes[codeLetter] = letter;
                             } else {
                                 falseTrue = false;
+                                return "break";
                             }
+                        } else if (codeKey[codeLetter] != letter) {
+                            falseTrue = false;
+                            return "break";
                         }
                     });
                     if (falseTrue) {  // updates the code key with the letters of the word if it passes
@@ -372,6 +379,9 @@
             <h3>
                 Working...
             </h3>
+            <h4>
+                (This isn't frozen.)
+            </h4>
             <!-- <div style="width:30em; height:1em; background:#fff; border:.1em solid black;">
             <div id="progress">
             </div>
