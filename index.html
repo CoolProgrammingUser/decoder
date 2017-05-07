@@ -26,7 +26,7 @@
                             remove.forEach(function(word) {
                                 wordList.splice(wordList.indexOf(word), 1);
                             });
-                            var add = ['aardvark','amps','armadillo','auger','bites','cuttlefish','eel','foe','kangaroo','octopus','parrot','squid'];
+                            var add = ['aardvark','amps','armadillo','auger','bites','cuttlefish','eel','foe','kangaroo','lizard','octopus','parrot','squid'];
                             add.forEach(function(word) {
                                 wordList.push(word);
                             });
@@ -58,6 +58,7 @@
                 // gives the newCode button functionality
                 document.getElementById("newCode").addEventListener("click", function() {
                     document.getElementById("after").style.display = "none";
+                    solutions = [];
                     document.getElementById("code").value = "";
                     document.getElementById("before").style.display = "block";
                     document.getElementById("solution").value = "";
@@ -67,13 +68,12 @@
                 var codeText = document.getElementById("code").value.toLowerCase();
                 var values = {};
                 var strikeOut = 1;  // the number of strikes against a character it takes to have it removed
-                var solution = document.getElementById("solution").value;
                 codeText.forEach(function(character, index) {  // finds all of the unique letters in the text and their locations
                     if (character != character.toUpperCase()) {  // if it's a letter
                         if (values.hasOwnProperty(character)) {
                             values[character].appearances.push(index);
                         } else {
-                            values[character] = {"appearances" : [index]};
+                            values[character] = {"appearances" : [index], "possibilities" : [], "strikes" : []};
                         }
                     }  //// There needs to be something to handle numbers in {}s.
                 });
@@ -105,34 +105,48 @@
                     words[key.length-1].forEach(function(word) {
                         if (standardizedWord == standardize(word)) {
                             array.push(word);
-                            solution += word + " ";
                         }
                     });
-                    solution += "\n\n";
                 });
                 /// "codeWords" now has an array containing a list of all English words with the same letter pattern as their respective word from the encoded text
-                this.changes = Infinity;  // this variable only needs to be declared with "this" while using safeWhile()
-                safeWhile("this.changes > 0", function() {
-                    // determines the letters which are valid values for each unique symbol in the encoded text across all the words
-                    this.changes = 0;
-                    values.forEach(function(posibilities, symbol) {
-                        codeWords.forEach(function(words, text) {
-                            if (text.includes(symbol)) {
-                                words.forEach(function(word) {
-                                    //// find and add the letter to the value possibilities (or add a strike)
-                                    if (false) {
-                                        this.changes++;
-                                    }
-                                });
-                            }
-                        });
+                // determines the letters which are valid values for each unique symbol in the encoded text across all the words
+                values.forEach(function(properties, symbol) {
+                    var matches = 0;
+                    codeWords.forEach(function(words, text) {
+                        if (text.includes(symbol)) {
+                            var index = text.indexOf(symbol);
+                            var letters = [];
+                            words.forEach(function(word) {
+                                if (!letters.includes(word[index])) {
+                                    letters.push(word[index]);
+                                }
+                            });
+                            var present = [];  // for all of the letters (below) that are present in values.possibilities
+                            letters.forEach(function(letter) {
+                                if (values[symbol].possibilities.includes(letter)) {  // I want this to be current, so I don't use "properties".
+                                    present.push(letter);
+                                } else {
+                                    values[symbol].possibilities.push(letter);
+                                    values[symbol].strikes.push(matches);
+                                    present.push(letter);
+                                }
+                            });
+                            values[symbol].possibilities.forEach(function(possibility) {
+                                if (!present.includes(possibility)) {  // if the possibility wasn't in one of the words where its symbol appeared
+                                    values[symbol].strikes[values[symbol].possibilities.indexOf(possibility)]++;  // add a strike corresponding to the possibility
+                                }
+                            });
+                            matches++;
+                        }
                     });
                 });
-                //// assign possible letters to values in the format value[character]["posibility"].push(letter); ["strikes"]=number;
-                //// give possible letters a strike when they don't show up in a possible word associated with a code word which uses the code letter associated with the possible letter
-                ////     repeat until no changes to possible letters are made
+                /// values now has, for each unique symbol in the encrypted text:
+                /// "appearances" corresponding to the indices of the text where the symbol is found (done earlier)
+                /// "possibilities" corresponding to a list of all the letters the symbol could be
+                /// "strikes" corresponding to a list of strikes made in the same order as the possibilities indicating the likelihood of a symbol being a certain letter
+                
                 //// add each possible solution to solutions
-                document.getElementById("solution").value = solution;
+                document.getElementById("solution").value = document.getElementById("code").value.toLowerCase();
                 document.getElementById("during").style.display = "none";
                 document.getElementById("after").style.display = "block";
                 var styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
