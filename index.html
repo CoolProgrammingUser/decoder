@@ -66,7 +66,7 @@
                 });
                 // gives the "last" button functionality
                 getId("last").addEventListener("click", function() {
-                    if (solutionIndex >= 0) {
+                    if (solutionIndex > 0) {
                         solutionIndex--;
                     } else {
                         solutionIndex = solutions.length - 1;
@@ -216,7 +216,7 @@
                 while (trueFalse) {
                     if (currentIndexList[index] <= totalIndexList[index]) {
                         if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
-                            if (index < currentIndexList.length - 2) {  // if the index isn't at the end of the array
+                            if (index < currentIndexList.length - 1) {  // if the index isn't at the end of the array
                                 index++;
                             } else {
                                 solution = [];
