@@ -189,10 +189,8 @@
                     */
                     var falseTrue = true;
                     var changes = {};
-                    console.log("--------");
                     letters.forEach(function(letter, placement) {
                         var codeLetter = codeText[index][placement];
-                        console.log(codeKey[codeLetter].letter + "\n" + letter);
                         if (codeKey[codeLetter] == undefined || index <= codeKey[codeLetter].maximumIndex) {
                             var unused = true;
                             codeKey.forEach(function(guess) {  // checks if the letter is being used in a preceeding word
