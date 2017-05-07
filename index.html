@@ -194,7 +194,7 @@
                         if (codeKey[codeLetter] == undefined || index <= codeKey[codeLetter].maximumIndex) {
                             var unused = true;
                             codeKey.forEach(function(guess) {  // checks if the letter is being used in a preceeding word
-                                if (guess.letter == letter && guess.maximumIndex < index) {
+                                if (guess != undefined && guess.letter == letter && guess.maximumIndex < index) {
                                     unused = false;
                                     return "break";
                                 }
