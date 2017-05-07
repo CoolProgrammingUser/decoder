@@ -180,7 +180,7 @@
                     index = 0,
                     codeKey = {},
                     solution;
-                function usageCheck(letters) {  //// This needs to allow for imperfect matches
+                function usageCheck(letters) {  //// This needs to allow for imperfect matches.
                     /**
                     makes sure a word doesn't conflict with the letters used in previous words
                     */
@@ -191,8 +191,10 @@
                             codeKey[key] = undefined;
                         });
                     }
+                    console.log("--------");
                     letters.forEach(function(letter, placement) {
                         var codeLetter = codeText[index][placement];
+                        console.log(codeKey[codeLetter] + "\n" + letter);
                         if (codeKey[codeLetter] == undefined) {
                             var unused = true;
                             codeKey.forEach(function(guess) {  // checks if the letter is being used elsewhere
@@ -207,7 +209,7 @@
                                 falseTrue = false;
                                 return "break";
                             }
-                        } else if (codeKey[codeLetter] != letter) {
+                        } else if (codeKey[codeLetter] != letter) {  //// This could be where you allow for imperfect matches.
                             falseTrue = false;
                             return "break";
                         }
@@ -221,7 +223,6 @@
                 }
                 var safety = 1;  //// not necessary with a correctly functioning while loop
                 while (trueFalse) {
-                    console.log(index + "\n" + currentIndexList + "\n\n");
                     if (currentIndexList[index] <= totalIndexList[index]) {
                         if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
                             if (index < currentIndexList.length - 1) {  // if the index isn't at the end of the array
