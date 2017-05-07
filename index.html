@@ -148,12 +148,14 @@
                             values[symbol].possibilities.forEach(function(possibility) {
                                 if (values[symbol].strikes[values[symbol].possibilities.indexOf(possibility)] >= strikeOut) {
                                     var offSet = 0;  // makes sure the correct word is deleted when there are multiple deletions
+                                    console.log(words + "\n\n--------\n\n");
                                     words.forEach(function(word, number) {  // gets rid of all the words containing letters with more strikes than allowed
                                         if (word[index] == possibility) {
                                             codeWords[text].splice(number+offSet, 1);
                                             offSet--;
                                         }
                                     });
+                                    console.log(codeWords[text] + "\n\n========\n\n");
                                 }
                             });
                             matches++;
@@ -180,7 +182,7 @@
                     index = 0,
                     codeKey = {},
                     solution;
-                function usageCheck(letters) {
+                function usageCheck(letters) {  //// This needs to allow for imperfect matches
                     /**
                     makes sure a word doesn't conflict with the letters used in previous words
                     */
