@@ -221,7 +221,7 @@
                 }
                 var safety = 1;  //// not necessary with a correctly functioning while loop
                 while (trueFalse) {
-                    console.log(index + "\n" + codeText[index] + "\n\n");
+                    console.log(index + "\n" + currentIndexList[index] + "\n\n");
                     if (currentIndexList[index] <= totalIndexList[index]) {
                         if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
                             if (index < currentIndexList.length - 1) {  // if the index isn't at the end of the array
