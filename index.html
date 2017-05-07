@@ -86,6 +86,7 @@
                 });
             });
             function decode() {
+                var time = performance.now();  ////
                 var codeText = document.getElementById("code").value.toLowerCase();
                 var values = {};
                 var strikeOut = 1;  // the number of strikes against a character it takes to have it removed
@@ -119,6 +120,8 @@
                     });
                 });
                 /// "codeWords" now has an array containing a list of all English words with the same letter pattern as their respective word from the encoded text
+                console.log(performance.now()-time + "\n");
+                time = performance.now();
                 values.forEach(function(properties, symbol) {  // determines the letters which are valid values for each unique symbol in the encoded text across all the words
                     var matches = 0;
                     codeWords.forEach(function(words, text) {
@@ -166,6 +169,8 @@
                 /// "strikes" corresponding to a list of strikes made in the same order as the possibilities indicating the likelihood of a symbol being a certain letter
                 ///
                 /// codeWords now only has words which contain letters that don't have too many strikes against them
+                console.log(performance.now()-time + "\n");
+                time = performance.now();
                 codeText = document.getElementById("code").value.toLowerCase().split(" ");
                 codeText.forEach(function(word, index) {
                     codeText[index] = isolate(word);
@@ -248,6 +253,7 @@
                         throw "Recurrsion depth exceeded.";
                     }
                 }
+                console.log(performance.now()-time + "\n--------\n);
                 solutionIndex = 0;
                 document.getElementById("solution").value = solutions[0];
                 getId("solutionNumber").innerHTML = "1/" + solutions.length;
