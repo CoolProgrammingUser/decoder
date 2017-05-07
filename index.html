@@ -71,6 +71,16 @@
                     getId("solution").value = solutions[solutionIndex];
                     getId("solutionNumber").innerHTML = solutionIndex+1 + "/" + solutions.length;
                 });
+                // gives the "superFastLast" button functionality
+                getId("superFastLast").addEventListener("click", function() {
+                    if (solutionIndex > 999) {
+                        solutionIndex -= 1000;
+                    } else {
+                        solutionIndex = solutions.length - 1;
+                    }
+                    getId("solution").value = solutions[solutionIndex];
+                    getId("solutionNumber").innerHTML = solutionIndex+1 + "/" + solutions.length;
+                });
                 // gives the "fastLast" button functionality
                 getId("fastLast").addEventListener("click", function() {
                     if (solutionIndex > 49) {
@@ -105,6 +115,16 @@
                 getId("fastNext").addEventListener("click", function() {
                     if (solutionIndex < solutions.length - 50) {
                         solutionIndex += 50;
+                    } else {
+                        solutionIndex = 0;
+                    }
+                    getId("solution").value = solutions[solutionIndex];
+                    getId("solutionNumber").innerHTML = solutionIndex+1 + "/" + solutions.length;
+                });
+                // gives the "superFastNext" button functionality
+                getId("superFastNext").addEventListener("click", function() {
+                    if (solutionIndex < solutions.length - 1000) {
+                        solutionIndex += 1000;
                     } else {
                         solutionIndex = 0;
                     }
@@ -421,6 +441,9 @@
             </button>
             <br>
             <br>
+            <button id="superFastLast">
+                &lt;&lt;&lt;
+            </button>
             <button id="fastLast">
                 &lt;&lt;
             </button>
@@ -433,6 +456,9 @@
             </button>
             <button id="fastNext">
                 &gt;&gt;
+            </button>
+            <button id="superFastNext">
+                &gt;&gt;&gt;
             </button>
             <br>
             <br>
