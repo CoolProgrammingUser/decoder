@@ -64,6 +64,23 @@
                     document.getElementById("before").style.display = "block";
                     document.getElementById("solution").value = "";
                 });
+                // gives the "jump" button functionality
+                getId("jump").addEventListener("click", function() {
+                    solutionIndex = getId("jumpIndex").value - 1;
+                    getId("jumpIndex").value = "";
+                    getId("solution").value = solutions[solutionIndex];
+                    getId("solutionNumber").innerHTML = solutionIndex+1 + "/" + solutions.length;
+                });
+                // gives the "fastLast" button functionality
+                getId("fastLast").addEventListener("click", function() {
+                    if (solutionIndex > 49) {
+                        solutionIndex -= 50;
+                    } else {
+                        solutionIndex = solutions.length - 1;
+                    }
+                    getId("solution").value = solutions[solutionIndex];
+                    getId("solutionNumber").innerHTML = solutionIndex+1 + "/" + solutions.length;
+                });
                 // gives the "last" button functionality
                 getId("last").addEventListener("click", function() {
                     if (solutionIndex > 0) {
@@ -78,6 +95,16 @@
                 getId("next").addEventListener("click", function() {
                     if (solutionIndex < solutions.length - 1) {
                         solutionIndex++;
+                    } else {
+                        solutionIndex = 0;
+                    }
+                    getId("solution").value = solutions[solutionIndex];
+                    getId("solutionNumber").innerHTML = solutionIndex+1 + "/" + solutions.length;
+                });
+                // gives the "fastNext" button functionality
+                getId("fastNext").addEventListener("click", function() {
+                    if (solutionIndex < solutions.length - 50) {
+                        solutionIndex += 50;
                     } else {
                         solutionIndex = 0;
                     }
@@ -388,12 +415,24 @@
             <textarea cols="60" rows="10" id="solution" readonly></textarea>
             <br>
             <br>
+            <input type="text" placeholder="Jump to:" id="jumpIndex">
+            <button id="jump">
+                Jump
+            </button>
+            <br>
+            <br>
+            <button id="fastLast">
+                &lt;&lt;
+            </button>
             <button id="last">
                 &lt;
             </button>
             <span id="solutionNumber">0/0</span>
             <button id="next">
                 &gt;
+            </button>
+            <button id="fastNext">
+                &gt;&gt;
             </button>
             <br>
             <br>
