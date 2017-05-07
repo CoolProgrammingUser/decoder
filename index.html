@@ -180,25 +180,23 @@
                     index = 0,
                     codeKey = {},
                     solution;
+                values.forEach(function(unnecessary, key) {
+                    codeKey[key] = undefined;
+                });
                 function usageCheck(letters) {  //// This needs to allow for imperfect matches.
                     /**
                     makes sure a word doesn't conflict with the letters used in previous words
                     */
                     var falseTrue = true;
                     var changes = {};
-                    if (index == 0) {
-                        values.forEach(function(unnecessary, key) {
-                            codeKey[key] = undefined;
-                        });
-                    }
                     console.log("--------");
                     letters.forEach(function(letter, placement) {
                         var codeLetter = codeText[index][placement];
-                        console.log(codeKey[codeLetter] + "\n" + letter);
-                        if (codeKey[codeLetter] == undefined) {
+                        console.log(codeKey[codeLetter].letter + "\n" + letter);
+                        if (codeKey[codeLetter] == undefined || index <= codeKey[codeLetter].maximumIndex) {
                             var unused = true;
-                            codeKey.forEach(function(guess) {  // checks if the letter is being used elsewhere
-                                if (guess == letter) {
+                            codeKey.forEach(function(guess) {  // checks if the letter is being used in a preceeding word
+                                if (guess.letter == letter && guess.maximumIndex < index) {
                                     unused = false;
                                     return "break";
                                 }
@@ -209,14 +207,14 @@
                                 falseTrue = false;
                                 return "break";
                             }
-                        } else if (codeKey[codeLetter] != letter) {  //// This could be where you allow for imperfect matches.
+                        } else if (codeKey[codeLetter].letter != letter) {  //// This could be where you allow for imperfect matches.
                             falseTrue = false;
                             return "break";
                         }
                     });
                     if (falseTrue) {  // updates the code key with the letters of the word if it passes
                         changes.forEach(function(value, key) {
-                            codeKey[key] = value;
+                            codeKey[key] = {"letter":value, "maximumIndex":index};
                         });
                     }
                     return falseTrue;
