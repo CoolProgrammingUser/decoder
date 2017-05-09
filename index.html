@@ -47,16 +47,18 @@
                 file.send();
                 // gives the decode button functionality
                 document.getElementById("decode").addEventListener("click", function() {
-                    var styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
-                    styles.forEach(function(style) {
-                        if (style.selectorText == ".cursor") {
-                            style.style.cursor = "progress";
-                            return "break";
-                        }
-                    });
-                    document.getElementById("before").style.display = "none";
-                    document.getElementById("during").style.display = "block";
-                    setTimeout(decode, 0);  /////////////// ???????
+                    if (getId("code").value != "") {
+                        var styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
+                        styles.forEach(function(style) {
+                            if (style.selectorText == ".cursor") {
+                                style.style.cursor = "progress";
+                                return "break";
+                            }
+                        });
+                        document.getElementById("before").style.display = "none";
+                        document.getElementById("during").style.display = "block";
+                        setTimeout(decode, 0);  /////////////// ???????
+                    }
                 });
                 // gives the "superFastLast" button functionality
                 getId("superFastLast").addEventListener("click", function() {
@@ -201,7 +203,6 @@
             }
             function decode() {
                 var codeText = document.getElementById("code").value.toLowerCase();
-                codeText = codeText==undefined ? "" : codeText;
                 var values = {};
                 var strikeOut = 1;  // the number of strikes against a character it takes to have it removed
                 codeText.forEach(function(character, index) {  // finds all of the unique letters in the text and their locations
@@ -332,7 +333,6 @@
                     }
                     return falseTrue;
                 }
-                var time = performance.now();  ////
                 while (trueFalse) {  //// This needs to go a lot faster.
                     if (currentIndexList[index] <= totalIndexList[index]) {
                         if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
@@ -372,7 +372,7 @@
                     }
                 });
                 console.log(performance.now()-time);  ////
-                alert("Your code is finished!");  ////
+                alert("Your code is finished!");
             }
             function isolate(word) {
                 /**
@@ -493,7 +493,7 @@
             <h4>
                 (This isn't frozen.)
             </h4>
-            <div style="width:30em; height:1em; background:#fff; border:.1em solid black;">
+            <div style="display:none; width:30em; height:1em; background:#fff; border:.1em solid black;">
             <div id="progress">
             </div>
             </div>
