@@ -177,15 +177,19 @@
                 });
                 // gives the nextWord button functionality
                 getId("nextWord").addEventListener("click", function() {
+                    if (getId("wordIndex").value == "" || getId("wordIndex").value < 1 || getId("wordIndex").value > getId("solution").value.split(" ").length) {
+                        getId("wordIndex").value = 1;
+                    }
+                    var index = Number(getId("wordIndex").value) - 1;
                     var startingIndex = solutionIndex;
-                    var word = getId("solution").value.split(" ")[0];
+                    var word = getId("solution").value.split(" ")[index];
                     do {
                         if (solutionIndex < solutions.length - 1) {
                             solutionIndex++;
                         } else {
                             solutionIndex = 0;
                         }
-                    } while (solutions[solutionIndex].split(" ")[0] == word && solutionIndex != startingIndex);
+                    } while (solutions[solutionIndex].split(" ")[index] == word && solutionIndex != startingIndex);
                     if (solutionIndex == startingIndex) {
                         alert("There's only one word which fits at the beginning of these solutions.");
                     } else {
