@@ -202,6 +202,7 @@
                 getId("solutionNumber").innerHTML = solutionIndex+1 + "/" + solutions.length;
             }
             function decode() {
+                var time = performance.now();  ////
                 var codeText = document.getElementById("code").value.toLowerCase();
                 var values = {};
                 var strikeOut = 1;  // the number of strikes against a character it takes to have it removed
