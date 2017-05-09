@@ -156,17 +156,21 @@
                 });
                 // gives the lastWord button functionality
                 getId("lastWord").addEventListener("click", function() {
+                    if (getId("wordIndex").value == "" || getId("wordIndex").value < 1 || getId("wordIndex").value > getId("solution").value.split(" ").length) {
+                        getId("wordIndex").value = 1;
+                    }
+                    var index = Number(getId("wordIndex").value) - 1;
                     var startingIndex = solutionIndex;
-                    var word = getId("solution").value.split(" ")[0];
+                    var word = getId("solution").value.split(" ")[index];
                     do {
                         if (solutionIndex > 0) {
                             solutionIndex--;
                         } else {
                             solutionIndex = solutions.length - 1;
                         }
-                    } while (solutions[solutionIndex].split(" ")[0] == word && solutionIndex != startingIndex);
+                    } while (solutions[solutionIndex].split(" ")[index] == word && solutionIndex != startingIndex);
                     if (solutionIndex == startingIndex) {
-                        alert("There's only one word which fits at the beginning of these solutions.");
+                        alert("There's only one word which fits at that place in these solutions.");
                     } else {
                         navigate();
                     }
@@ -544,10 +548,11 @@
             <br>
             <br>
             <button id="lastWord">
-                &lt; Previous first word
+                &lt; Previous word
             </button>
+            <input type="text" placeholder="Word #" id="wordIndex">
             <button id="nextWord">
-                Next first word &gt;
+                Next word &gt;
             </button>
             <div style="display:none">
             <br>
