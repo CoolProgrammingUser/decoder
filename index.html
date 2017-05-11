@@ -314,7 +314,7 @@
                 });
                 console.log("After refining eligible words:"); ////
                 codeText.forEach(function(word, number) {  //// This logs how many possibilities each word has at this point.
-                    console.log("Possibilities for word " + number + " = " + codeWords[word].length);
+                    console.log("Possibilities for word " + (number+1) + " = " + codeWords[word].length);
                 });
                 function usageCheck(letters) {  //// This needs to allow for imperfect matches.
                     /**
@@ -350,7 +350,6 @@
                     }
                     return falseTrue;
                 }
-                /*
                 while (trueFalse) {  //// This needs to go faster.
                     if (currentIndexList[index] <= totalIndexList[index]) {
                         if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
@@ -377,7 +376,6 @@
                         }
                     }
                 }
-                */
                 solutionIndex = 0;
                 document.getElementById("solution").value = solutions[0];
                 getId("solutionNumber").innerHTML = "1/" + solutions.length;
@@ -390,7 +388,7 @@
                         return "break";
                     }
                 });
-                console.log("Time to decode = " + (performance.now()-time) + " milliseconds");  ////
+                console.log("Time to decode = " + (performance.now()-time) + " milliseconds\n");  ////
                 alert("Your code is finished!");
             }
             function isolate(word) {
