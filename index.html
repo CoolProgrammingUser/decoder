@@ -312,6 +312,10 @@
                 values.forEach(function(unnecessary, key) {
                     codeKey[key] = undefined;
                 });
+                console.log("After refining eligible words:"); ////
+                codeText.forEach(function(word, number) {  //// This logs how many possibilities each word has at this point.
+                    console.log("Possibilities for word " + number + " = " + codeWords[word].length);
+                });
                 function usageCheck(letters) {  //// This needs to allow for imperfect matches.
                     /**
                     makes sure a word doesn't conflict with the letters used in previous words
@@ -346,7 +350,8 @@
                     }
                     return falseTrue;
                 }
-                while (trueFalse) {  //// This needs to go a lot faster.
+                /*
+                while (trueFalse) {  //// This needs to go faster.
                     if (currentIndexList[index] <= totalIndexList[index]) {
                         if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
                             if (index < currentIndexList.length - 1) {  // if the index isn't at the end of the array
@@ -372,6 +377,7 @@
                         }
                     }
                 }
+                */
                 solutionIndex = 0;
                 document.getElementById("solution").value = solutions[0];
                 getId("solutionNumber").innerHTML = "1/" + solutions.length;
@@ -384,7 +390,7 @@
                         return "break";
                     }
                 });
-                console.log(performance.now()-time);  ////
+                console.log("Time to decode = " + (performance.now()-time) + " milliseconds");  ////
                 alert("Your code is finished!");
             }
             function isolate(word) {
@@ -558,7 +564,7 @@
             <button id="lastWord">
                 &lt; Previous word
             </button>
-            <input type="text" placeholder="Word #" id="wordIndex">
+            <input type="text" placeholder="Word #" style="width:5em" id="wordIndex">
             <button id="nextWord">
                 Next word &gt;
             </button>
