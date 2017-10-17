@@ -328,9 +328,10 @@
                         let codeLetter = codeText[index][placement];
                         if (codeKey[codeLetter] == undefined || index <= codeKey[codeLetter].maximumIndex) {
                             let unused = true;
+                            let keys = Object.keys(codeKey);
                             let codeKeyIndex = 0;
-                            while(codeKeyIndex < codeKey.length) {  // checks if the letter is being used in a preceeding word
-                                let guess = codeKey[codeKeyIndex];
+                            while(codeKeyIndex < keys.length) {  // checks if the letter is being used in a preceeding word
+                                let guess = codeKey[keys[codeKeyIndex]];
                                 if (guess != undefined && guess.letter == letter && guess.maximumIndex < index) {
                                     unused = false;
                                     break;
