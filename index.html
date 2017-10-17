@@ -320,20 +320,25 @@
                     /**
                     makes sure a word doesn't conflict with the letters used in previous words
                     */
-                    var falseTrue = true;
-                    var changes = {};
-                    letters.forEach(function(letter, placement) {
-                        var codeLetter = codeText[index][placement];
+                    let falseTrue = true;
+                    let changes = [];
+                    let placement = 0;
+                    while(placement < letters.length) {  // goes through every letter
+                        let letter = letters[placement];
+                        let codeLetter = codeText[index][placement];
                         if (codeKey[codeLetter] == undefined || index <= codeKey[codeLetter].maximumIndex) {
-                            var unused = true;
-                            codeKey.forEach(function(guess) {  // checks if the letter is being used in a preceeding word
+                            let unused = true;
+                            let codeKeyIndex = 0;
+                            while(codeKeyIndex < codeKey.length) {  // checks if the letter is being used in a preceeding word
+                                let guess = codeKey[codeKeyIndex];
                                 if (guess != undefined && guess.letter == letter && guess.maximumIndex < index) {
                                     unused = false;
                                     return "break";
                                 }
-                            });
+                                codeKeyIndex++;
+                            }
                             if (unused) {
-                                changes[codeLetter] = letter;
+                                changes.push([codeLetter, letter]);
                             } else {
                                 falseTrue = false;
                                 return "break";
@@ -342,11 +347,14 @@
                             falseTrue = false;
                             return "break";
                         }
-                    });
+                        placement++;
+                    }
                     if (falseTrue) {  // updates the code key with the letters of the word if it passes
-                        changes.forEach(function(value, key) {
-                            codeKey[key] = {"letter":value, "maximumIndex":index};
-                        });
+                        let changeIndex = 0;
+                        while(changeIndex < changes.length) {
+                            codeKey[changes[changeIndex][0]] = {"letter":changes[changeIndex][1], "maximumIndex":index};
+                            changeIndex++;
+                        }
                     }
                     return falseTrue;
                 }
@@ -357,9 +365,12 @@
                                 index++;
                             } else {
                                 solution = [];
-                                codeText.forEach(function(word, number) {
+                                let number = 0;
+                                while(number < codeText.length) {
+                                    let word = codeText[number];
                                     solution.push(codeWords[word][currentIndexList[number]]);
-                                });
+                                    number++;
+                                }
                                 solutions.push(solution.join(" "));
                                 currentIndexList[index]++;
                             }
