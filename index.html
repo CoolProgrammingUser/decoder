@@ -333,7 +333,7 @@
                                 let guess = codeKey[codeKeyIndex];
                                 if (guess != undefined && guess.letter == letter && guess.maximumIndex < index) {
                                     unused = false;
-                                    return "break";
+                                    break;
                                 }
                                 codeKeyIndex++;
                             }
@@ -341,11 +341,11 @@
                                 changes.push([codeLetter, letter]);
                             } else {
                                 falseTrue = false;
-                                return "break";
+                                break;
                             }
                         } else if (codeKey[codeLetter].letter != letter) {  //// This could be where you allow for imperfect matches.
                             falseTrue = false;
-                            return "break";
+                            break;
                         }
                         placement++;
                     }
