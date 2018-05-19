@@ -137,6 +137,7 @@ pcs
 pda
 pdf
 phd
+phys
 pic
 ppc
 ppi
