@@ -8,15 +8,16 @@
 		<script>
 			var S = Standards.general;
 			// https://www.worldclasslearning.com/english/five-verb-forms.html
-			var words = [[]];
-			var verbs = [[]];
+			var words = [[]];  // holds every English word in arrays in order of increasing word length
+			var verbs = [[]];  // holds every verb in arrays in order of increasing word length
 			var ALPHABET = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 			var PUNCTUATION = [".", "?", "!", ",", "'", '"', ";", ":", "-", "(", ")"];
-			var solutions = [];
+			var solutions = [];  // holds all possible solutions
 			var filtered = {};
 			var hidden = [];
-			var solutionIndex = 0;
+			var solutionIndex = 0;  // holds which solution is to be displayed
 			window.addEventListener("load", function() {
+
 				// sets "words" to a list of English words
 				var file = new XMLHttpRequest();
 				file.open("GET", "https://coolprogramminguser.github.io/decoder/word list.txt");
@@ -24,7 +25,7 @@
 					if(file.readyState === 4) {
 						if(file.status === 200 || file.status == 0) {
 							var wordList = file.responseText;  // sets words to a single string of the whole file
-							wordList = wordList.split(/\r\n|\n/);  // sets words to an array of lines of text
+							wordList = wordList.trim().split(/\r\n|\n/);  // sets words to an array of lines of text
 							wordList.pop();  // For some reason, there's an empty item at the end of the list that I need to get rid of.
 							//////////
 							// This isn't necessary if I modify the lists.
@@ -49,9 +50,9 @@
 				}
 				file.send();
 
+				// sets "verbs" to a list of verbs
 				S.getFile("https://coolprogramminguser.github.io/decoder/verbs.txt", function (list) {
-					list = list.split(/\r\n|\n| /);
-					list.forEach(function (verb) {
+					list.trim().split(/\r\n|\n| /).forEach(function (verb) {
 						while (verb.length > verbs.length) {
 							verbs.push([]);
 						}
@@ -228,9 +229,9 @@
 				S.getId("solutionNumber").innerHTML = solutionIndex+1 + "/" + solutions.length;
 			}
 			function decode() {
-				var time = performance.now();  ////
-				var codeText = document.getElementById("code").value.toLowerCase();
-				var values = {};
+				var time = performance.now();  //// tracks the performance of the decoder
+				var codeText = document.getElementById("code").value.toLowerCase();  // holds the encoded text
+				var values = {};  // keeps track of data related to the code symbols (appearances, possibilities, and strikes)
 				var strikeOut = 1;  // the number of strikes against a character it takes to have it removed
 				S.forEach(codeText, function(character, index) {  // finds all of the unique letters in the text and their locations
 					if (character != character.toUpperCase()) {  // if it's a letter
@@ -245,14 +246,14 @@
 				/// with an "appearances" property containing indices of appearance for each unique symbol
 				codeText = codeText.split(" ").sort(function(a, b) {return a.length-b.length});
 				/// "codeText" is now in order of increasing word length
-				var codeWords = {};
+				var codeWords = {};  // will hold a list of possible decoded words for every unique word
 				S.forEach(codeText, function(word) {
 					/// isolate() removes the puctuation from the word
 					codeWords[isolate(word)] = [];  // assignment might not work if there's {}s
 				});
 				/// "codeWords" now has an empty array for every word in the encoded text
 				/// and every word in the encoded text is in order of increasing length
-				/// (smaller words have less possible words which is helpful to start with later)
+				/// (smaller words have less possible words? which is helpful to start with later) ////
 				S.forEach(codeWords, function(array, key) {  // finds all of the words with the same letter pattern as the code words
 					var standardizedWord = standardize(key);  // Doing this only once (not at every if-statement) speeds things up.
 					words[key.length-1].forEach(function(word) {
@@ -320,9 +321,9 @@
 					currentIndexList.push(0);
 				});
 				var trueFalse = true,
-					index = 0,
+					index = 0,  // which code word is being looked at
 					codeKey = {},
-					solution;
+					solution;  // the current solution being constructed
 				S.forEach(values, function(unnecessary, key) {
 					codeKey[key] = undefined;
 				});
@@ -377,17 +378,21 @@
 				while (trueFalse) {  // This is the most taxing part of the decoder.
 					if (currentIndexList[index] <= totalIndexList[index]) {
 						if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
-							if (index < currentIndexList.length - 1) {  // if the index isn't at the end of the array
-								index++;
-							} else {
-								solution = [];
-								let number = 0;
-								while(number < codeText.length) {
-									let word = codeText[number];
-									solution.push(codeWords[word][currentIndexList[number]]);
-									number++;
+							if (!checkVerbs || checkVerbs) {  //// checks whether there's at least one verb in the solution in question (if it should have one)
+								if (index < currentIndexList.length - 1) {  // if the index isn't at the end of the array
+									index++;
+								} else {
+									solution = [];
+									let number = 0;
+									while (number < codeText.length) {
+										let word = codeText[number];
+										solution.push(codeWords[word][currentIndexList[number]]);
+										number++;
+									}
+									solutions.push(solution.join(" "));
+									currentIndexList[index]++;
 								}
-								solutions.push(solution.join(" "));
+							} else {
 								currentIndexList[index]++;
 							}
 						} else {
