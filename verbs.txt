@@ -65,6 +65,7 @@ betray betrays betrayed
 bid bids bid
 bind binds bound
 bite bites bit
+blame blames blamed
 bleed bleeds bled
 bless blesses blessed
 blossom blossoms blossomed

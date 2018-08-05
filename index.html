@@ -5,6 +5,9 @@
 			Decoder
 		</title>
 		<script src="https://epicenterprograms.github.io/standards/behavior/general.js"></script>
+		<!--
+		<script src="file:///C:/Users/Robert/Documents/GitHub/standards/behavior/general.js"></script>
+		-->
 		<script>
 			var S = Standards.general;
 			// https://www.worldclasslearning.com/english/five-verb-forms.html
@@ -16,42 +19,35 @@
 			var filtered = {};
 			var hidden = [];
 			var solutionIndex = 0;  // holds which solution is to be displayed
+
 			window.addEventListener("load", function() {
 
 				// sets "words" to a list of English words
-				var file = new XMLHttpRequest();
-				file.open("GET", "https://coolprogramminguser.github.io/decoder/word list.txt");
-				file.onreadystatechange = function () {
-					if(file.readyState === 4) {
-						if(file.status === 200 || file.status == 0) {
-							var wordList = file.responseText;  // sets words to a single string of the whole file
-							wordList = wordList.trim().split(/\r\n|\n/);  // sets words to an array of lines of text
-							wordList.pop();  // For some reason, there's an empty item at the end of the list that I need to get rid of.
-							//////////
-							// This isn't necessary if I modify the lists.
-							var remove = ['b','c','d','e','f','g','h','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','aa','ab','ac','ah','aj','al','au','av','aw','ba','bb','bc','bd','bg','bi','bk','bl','bm','bo','bp','br','bs','bt','bw','ca','cc','cb','ce','cf','cg','ch','ci','cj','cl','cm','cn','co','cp','cr','cs','ct','cu','cv','cw','cz','da','db','dc','dd','de','df','dg','dh','di','dk','dl','dm','dp','dr','ds','dt','du','dv','dx','ea','ec','ed','ee','ef','eg','eh','el','em','en','ep','eq','er','es','et','eu','ev','ex','ez','fa','fc','fd','fe','ff','fg','fi','fl','fm','fo','fp','fr','fs','ft','fu','fw','fx','fy','ga','gb','gc','gd','ge','gg','gi','gl','gm','gp','gr','gs','gt','ha','hb','hc','hd','hh','hk','hl','ho','hp','hq','hr','hs','ht','hu','hz','ia','ic','ie','ii','il','im','io','ip','ir','iv','ix','ja','jc','jd','je','jj','jm','jo','jp','jr','js','ka','kb','kg','km','ko','ks','kw','ky','la','lb','lc','ld','le','lf','lg','li','ll','lm','ln','lo','lp','ls','lt','lu','ma','mb','mc','md','mf','mg','mh','mi','mj','ml','mm','mn','mo','mp','mr','mrs','ms','mt','mu','mv','mw','mx','na','nb','nc','nd','ne','ng','nh','ni','nj','nl','nm','nn','np','nr','ns','nt','nu','nv','nw','ny','nz','ob','oc','oe','og','oh','ol','om','oo','op','os','ot','ou','oz','pa','pb','pc','pd','pe','pf','pg','ph','pj','pk','pl','pn','po','pp','pr','ps','pt','qc','qt','ra','rb','rc','rd','re','rf','rg','rh','ri','rj','rl','rm','rn','ro','rp','rr','rs','rt','ru','rv','rw','rx','sa','sb','sc','sd','se','sf','sg','sh','si','sk','sl','sm','sn','sp','sq','sr','ss','st','su','sv','sw','ta','tb','tc','td','te','tf','th','ti','tm','tn','tp','tr','ts','tt','tu','tx','ty','uc','uh','ui','uk','ul','um','un','ur','ut','uv','uw','va','vb','vc','ve','vg','vi','vp','vs','vt','wa','wb','wc','wi','wm','wn','wp','wr','ws','wt','wu','wv','ww','wx','wy','xi','xl','xp','xx','ya','ye','yn','yo','yr','yu','za','zu','aaa','abc','abu','acc','acm','ada','adsl','ae','af','ag','ai','ak','ala','ali','alot','alt','amazoncom','amazoncouk','amd','amy','aol','ap','api','apr','ar','arg','asn','asp','ata','ati','aud','aug','aus','ave','avg','avi','aye','az','ann','cnn','css','dee','fcc','fee','foo','gcc','lee','rss','vii','bbc','bbs','bbw','ccd','ddr','llc','llp','ppc','ppm','rrp','ssl','aka','ana','bob','dod','dvd','gig','lil','lol','mem','non','pgp','php','psp','sas','sms','sys','tft','ben','bio','bios','biz','blvd','bmw','boc','bon','buf','cad','cal','cam','cams','cas','cbs','cds','cdt','ceo','cest','cet','cfr','cgi','chad','chi','cho','cia','ciao','cio','cir','cms','col','com','cos','cox','cpu','crm','cst','cum','cvs','dan','das','dat','dec','def','del','dem','der','des','dev','die','dir','dis','div','diy','dna','dns','doc','dom','dos','dow','dpi','dsc','dsl','dts','dui','eau','eco','eds','edt','enb','eng','ent','eos','epa','erp','est','etc','eur','eva','exp','ext','faq','fbi','fda','feb','fla','fri','ftp','fwd','gba','gbp','gdp','gen','geo','ghz','gif','gis','gmc','gmt','gnu','gov','gpl','gps','gsm','gst','gtk','gui','hart','hiv','hon','hrs','hwy','ian','ibm','icq','ict','ide','iii','ima','img','inc','ind','inf','ing','ins','int','ips','ira','irc','irs','isa','iso','isp','ist','jan','jim','joe','jon','jpg','jul','jun','jvc','kai','kay','kde','ken','kim','lan','las','lat','lbs','lcd','len','leo','les','leu','lib','liz','loc','los','lou','ltd','mae','mag','mai','mar','mas','mba','med','mel','mfg','mhz','mia','mic','mid','mil','min','mlb','mls','mod','mon','mpg','mph','msg','msn','mtv','nam','nat','nav','nba','nbc','nec','neo','nfl','nhl','nhs','nil','nor','nos','nov','nsw','nyc','obj','oct','oem','ons','ooo','org','pac','pal','pam','pas','pci','pcs','pct','pda','pdf','pdt','phd','phi','phys','pic','pix','plc','pmc','por','pos','pre','psi','pst','pts','pty','pvc','qld','qty','que','qui','rca','rec','ref','reg','reid','rel','rep','res','rfc','rna','rob','rom','ron','roy','rpg','rpm','sam','san','sao','sci','sec','sen','seo','sep','seq','ser','sic','sie','sig','sim','sku','soa','soc','sol','sox','sql','src','sri','std','ste','str','sur','tba','tcp','ted','tel','tex','tgp','thu','thy','til','tim','tmp','tom','tri','tue','una','und','une','uni','upc','ups','uri','url','urw','usb','usc','usd','usr','utc','val','var','vcr','ver','vhs','vic','vid','vip','vol','von','vpn','wal','wan','wav','wed','wma','wto','xml','xxx','yea','yrs','zum','zus'];
-							remove.forEach(function(word) {
-								wordList.splice(wordList.indexOf(word), 1);
-							});
-							var add = ['aardvark','amps','armadillo','auger','bites','cuttlefish','eel','foe','kangaroo','lizard','octopus','parrot','squid'];
-							add.forEach(function(word) {
-								wordList.push(word);
-							});
-							wordList.sort();  // alphabetizes wordList
-							//////////
-							wordList.forEach(function(word) {
-								while (word.length > words.length) {
-									words.push([]);
-								}
-								words[word.length-1].push(word);
-							});
+				S.getFile("word list.txt", function (wordList) {
+					wordList = wordList.trim().split(/\r\n|\n/);  // sets words to an array of lines of text
+					wordList.pop();  // For some reason, there's an empty item at the end of the list that I need to get rid of.
+					//////////
+					// This isn't necessary if I modify the lists.
+					var remove = ['b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'aa', 'ab', 'ac', 'ah', 'aj', 'al', 'au', 'av', 'aw', 'ba', 'bb', 'bc', 'bd', 'bg', 'bi', 'bk', 'bl', 'bm', 'bo', 'bp', 'br', 'bs', 'bt', 'bw', 'ca', 'cc', 'cb', 'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'cl', 'cm', 'cn', 'co', 'cp', 'cr', 'cs', 'ct', 'cu', 'cv', 'cw', 'cz', 'da', 'db', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'di', 'dk', 'dl', 'dm', 'dp', 'dr', 'ds', 'dt', 'du', 'dv', 'dx', 'ea', 'ec', 'ed', 'ee', 'ef', 'eg', 'eh', 'el', 'em', 'en', 'ep', 'eq', 'er', 'es', 'et', 'eu', 'ev', 'ex', 'ez', 'fa', 'fc', 'fd', 'fe', 'ff', 'fg', 'fi', 'fl', 'fm', 'fo', 'fp', 'fr', 'fs', 'ft', 'fu', 'fw', 'fx', 'fy', 'ga', 'gb', 'gc', 'gd', 'ge', 'gg', 'gi', 'gl', 'gm', 'gp', 'gr', 'gs', 'gt', 'ha', 'hb', 'hc', 'hd', 'hh', 'hk', 'hl', 'ho', 'hp', 'hq', 'hr', 'hs', 'ht', 'hu', 'hz', 'ia', 'ic', 'ie', 'ii', 'il', 'im', 'io', 'ip', 'ir', 'iv', 'ix', 'ja', 'jc', 'jd', 'je', 'jj', 'jm', 'jo', 'jp', 'jr', 'js', 'ka', 'kb', 'kg', 'km', 'ko', 'ks', 'kw', 'ky', 'la', 'lb', 'lc', 'ld', 'le', 'lf', 'lg', 'li', 'll', 'lm', 'ln', 'lo', 'lp', 'ls', 'lt', 'lu', 'ma', 'mb', 'mc', 'md', 'mf', 'mg', 'mh', 'mi', 'mj', 'ml', 'mm', 'mn', 'mo', 'mp', 'mr', 'mrs', 'ms', 'mt', 'mu', 'mv', 'mw', 'mx', 'na', 'nb', 'nc', 'nd', 'ne', 'ng', 'nh', 'ni', 'nj', 'nl', 'nm', 'nn', 'np', 'nr', 'ns', 'nt', 'nu', 'nv', 'nw', 'ny', 'nz', 'ob', 'oc', 'oe', 'og', 'oh', 'ol', 'om', 'oo', 'op', 'os', 'ot', 'ou', 'oz', 'pa', 'pb', 'pc', 'pd', 'pe', 'pf', 'pg', 'ph', 'pj', 'pk', 'pl', 'pn', 'po', 'pp', 'pr', 'ps', 'pt', 'qc', 'qt', 'ra', 'rb', 'rc', 'rd', 're', 'rf', 'rg', 'rh', 'ri', 'rj', 'rl', 'rm', 'rn', 'ro', 'rp', 'rr', 'rs', 'rt', 'ru', 'rv', 'rw', 'rx', 'sa', 'sb', 'sc', 'sd', 'se', 'sf', 'sg', 'sh', 'si', 'sk', 'sl', 'sm', 'sn', 'sp', 'sq', 'sr', 'ss', 'st', 'su', 'sv', 'sw', 'ta', 'tb', 'tc', 'td', 'te', 'tf', 'th', 'ti', 'tm', 'tn', 'tp', 'tr', 'ts', 'tt', 'tu', 'tx', 'ty', 'uc', 'uh', 'ui', 'uk', 'ul', 'um', 'un', 'ur', 'ut', 'uv', 'uw', 'va', 'vb', 'vc', 've', 'vg', 'vi', 'vp', 'vs', 'vt', 'wa', 'wb', 'wc', 'wi', 'wm', 'wn', 'wp', 'wr', 'ws', 'wt', 'wu', 'wv', 'ww', 'wx', 'wy', 'xi', 'xl', 'xp', 'xx', 'ya', 'ye', 'yn', 'yo', 'yr', 'yu', 'za', 'zu', 'aaa', 'abc', 'abu', 'acc', 'acm', 'ada', 'adsl', 'ae', 'af', 'ag', 'ai', 'ak', 'ala', 'ali', 'alot', 'alt', 'amazoncom', 'amazoncouk', 'amd', 'amy', 'aol', 'ap', 'api', 'apr', 'ar', 'arg', 'asn', 'asp', 'ata', 'ati', 'aud', 'aug', 'aus', 'ave', 'avg', 'avi', 'aye', 'az', 'ann', 'cnn', 'css', 'dee', 'fcc', 'fee', 'foo', 'gcc', 'lee', 'rss', 'vii', 'bbc', 'bbs', 'bbw', 'ccd', 'ddr', 'llc', 'llp', 'ppc', 'ppm', 'rrp', 'ssl', 'aka', 'ana', 'bob', 'dod', 'dvd', 'gig', 'lil', 'lol', 'mem', 'non', 'pgp', 'php', 'psp', 'sas', 'sms', 'sys', 'tft', 'ben', 'bio', 'bios', 'biz', 'blvd', 'bmw', 'boc', 'bon', 'buf', 'cad', 'cal', 'cam', 'cams', 'cas', 'cbs', 'cds', 'cdt', 'ceo', 'cest', 'cet', 'cfr', 'cgi', 'chad', 'chi', 'cho', 'cia', 'ciao', 'cio', 'cir', 'cms', 'col', 'com', 'cos', 'cox', 'cpu', 'crm', 'cst', 'cum', 'cvs', 'dan', 'das', 'dat', 'dec', 'def', 'del', 'dem', 'der', 'des', 'dev', 'die', 'dir', 'dis', 'div', 'diy', 'dna', 'dns', 'doc', 'dom', 'dos', 'dow', 'dpi', 'dsc', 'dsl', 'dts', 'dui', 'eau', 'eco', 'eds', 'edt', 'enb', 'eng', 'ent', 'eos', 'epa', 'erp', 'est', 'etc', 'eur', 'eva', 'exp', 'ext', 'faq', 'fbi', 'fda', 'feb', 'fla', 'fri', 'ftp', 'fwd', 'gba', 'gbp', 'gdp', 'gen', 'geo', 'ghz', 'gif', 'gis', 'gmc', 'gmt', 'gnu', 'gov', 'gpl', 'gps', 'gsm', 'gst', 'gtk', 'gui', 'hart', 'hiv', 'hon', 'hrs', 'hwy', 'ian', 'ibm', 'icq', 'ict', 'ide', 'iii', 'ima', 'img', 'inc', 'ind', 'inf', 'ing', 'ins', 'int', 'ips', 'ira', 'irc', 'irs', 'isa', 'iso', 'isp', 'ist', 'jan', 'jim', 'joe', 'jon', 'jpg', 'jul', 'jun', 'jvc', 'kai', 'kay', 'kde', 'ken', 'kim', 'lan', 'las', 'lat', 'lbs', 'lcd', 'len', 'leo', 'les', 'leu', 'lib', 'liz', 'loc', 'los', 'lou', 'ltd', 'mae', 'mag', 'mai', 'mar', 'mas', 'mba', 'med', 'mel', 'mfg', 'mhz', 'mia', 'mic', 'mid', 'mil', 'min', 'mlb', 'mls', 'mod', 'mon', 'mpg', 'mph', 'msg', 'msn', 'mtv', 'nam', 'nat', 'nav', 'nba', 'nbc', 'nec', 'neo', 'nfl', 'nhl', 'nhs', 'nil', 'nor', 'nos', 'nov', 'nsw', 'nyc', 'obj', 'oct', 'oem', 'ons', 'ooo', 'org', 'pac', 'pal', 'pam', 'pas', 'pci', 'pcs', 'pct', 'pda', 'pdf', 'pdt', 'phd', 'phi', 'phys', 'pic', 'pix', 'plc', 'pmc', 'por', 'pos', 'pre', 'psi', 'pst', 'pts', 'pty', 'pvc', 'qld', 'qty', 'que', 'qui', 'rca', 'rec', 'ref', 'reg', 'reid', 'rel', 'rep', 'res', 'rfc', 'rna', 'rob', 'rom', 'ron', 'roy', 'rpg', 'rpm', 'sam', 'san', 'sao', 'sci', 'sec', 'sen', 'seo', 'sep', 'seq', 'ser', 'sic', 'sie', 'sig', 'sim', 'sku', 'soa', 'soc', 'sol', 'sox', 'sql', 'src', 'sri', 'std', 'ste', 'str', 'sur', 'tba', 'tcp', 'ted', 'tel', 'tex', 'tgp', 'thu', 'thy', 'til', 'tim', 'tmp', 'tom', 'tri', 'tue', 'una', 'und', 'une', 'uni', 'upc', 'ups', 'uri', 'url', 'urw', 'usb', 'usc', 'usd', 'usr', 'utc', 'val', 'var', 'vcr', 'ver', 'vhs', 'vic', 'vid', 'vip', 'vol', 'von', 'vpn', 'wal', 'wan', 'wav', 'wed', 'wma', 'wto', 'xml', 'xxx', 'yea', 'yrs', 'zum', 'zus'];
+					remove.forEach(function (word) {
+						wordList.splice(wordList.indexOf(word), 1);
+					});
+					var add = ['aardvark', 'amps', 'armadillo', 'auger', 'bites', 'cuttlefish', 'eel', 'encode', 'encoded', 'encodes', 'foe', 'kangaroo', 'lizard', 'octopus', 'parrot', 'squid'];
+					add.forEach(function (word) {
+						wordList.push(word);
+					});
+					wordList.sort();  // alphabetizes wordList
+					//////////
+					wordList.forEach(function (word) {
+						while (word.length > words.length) {
+							words.push([]);
 						}
-					}
-				}
-				file.send();
+						words[word.length - 1].push(word);
+					});
+				});
 
 				// sets "verbs" to a list of verbs
-				S.getFile("https://coolprogramminguser.github.io/decoder/verbs.txt", function (list) {
+				S.getFile("verbs.txt", function (list) {
 					list.trim().split(/\r\n|\n| /).forEach(function (verb) {
 						while (verb.length > verbs.length) {
 							verbs.push([]);
@@ -228,6 +224,31 @@
 				S.getId("solution").value = solutions[solutionIndex];
 				S.getId("solutionNumber").innerHTML = solutionIndex+1 + "/" + solutions.length;
 			}
+
+			/**
+			function decode() {
+				let worker = new Worker("webworker.js");
+				worker.addEventListener("message", function (message) {
+					if (solutions.length > 0) {
+						document.getElementById("solution").value = solutions[0];
+						S.getId("solutionNumber").textContent = "1/" + solutions.length;
+					} else {
+						document.getElementById("solution").value = "No solution was found.";
+						S.getId("solutionNumber").textContent = "0/0";
+					}
+					document.getElementById("during").style.display = "none";
+					document.getElementById("after").style.display = "block";
+					var styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
+					S.forEach(styles, function (style) {
+						if (style.selectorText == ".cursor") {
+							style.style.cursor = "auto";
+							return "break";
+						}
+					});
+				});
+				worker.postMessage({ text: document.getElementById("code").value.toLowerCase() });
+			}
+			/*/
 			function decode() {
 				var time = performance.now();  //// tracks the performance of the decoder
 				var codeText = document.getElementById("code").value.toLowerCase();  // holds the encoded text
@@ -238,17 +259,17 @@
 						if (values.hasOwnProperty(character)) {
 							values[character].appearances.push(index);
 						} else {
-							values[character] = {"appearances" : [index], "possibilities" : [], "strikes" : []};
+							values[character] = {appearances: [index], codeWords: [], possibilities: [], strikes: []};
 						}
 					}  //// There needs to be something to handle numbers in {}s.
 				});
 				/// "values" now has an object for every unique symbol in the encoded text
 				/// with an "appearances" property containing indices of appearance for each unique symbol
 				codeText = codeText.split(" ").sort(function(a, b) {return a.length-b.length});
-				/// "codeText" is now in order of increasing word length
+				/// "codeText" is now an array in order of increasing word length
 				var codeWords = {};  // will hold a list of possible decoded words for every unique word
 				S.forEach(codeText, function(word) {
-					/// isolate() removes the puctuation from the word
+					/// isolate() removes the punctuation from the word
 					codeWords[isolate(word)] = [];  // assignment might not work if there's {}s
 				});
 				/// "codeWords" now has an empty array for every word in the encoded text
@@ -263,78 +284,107 @@
 					});
 				});
 				/// "codeWords" now has an array containing a list of all English words with the same letter pattern as their respective word from the encoded text
-				S.forEach(values, function(properties, symbol) {  // determines the letters which are valid values for each unique symbol in the encoded text across all the words
-					var matches = 0;
-					S.forEach(codeWords, function(words, text) {
-						if (text.includes(symbol)) {
-							var index = text.indexOf(symbol);
-							var letters = [];
-							words.forEach(function(word) {
-								if (!letters.includes(word[index])) {
-									letters.push(word[index]);
-								}
-							});
-							var present = [];  // for all of the letters (below) that are present in values.possibilities
-							letters.forEach(function(letter) {
-								if (values[symbol].possibilities.includes(letter)) {  // I want this to be current, so I don't use "properties".
-									present.push(letter);
-								} else {
-									values[symbol].possibilities.push(letter);
-									values[symbol].strikes.push(matches);
-									present.push(letter);
-								}
-							});
-							values[symbol].possibilities.forEach(function(possibility) {
-								if (!present.includes(possibility)) {  // if the possibility wasn't in one of the words where its symbol appeared
-									values[symbol].strikes[values[symbol].possibilities.indexOf(possibility)]++;  // add a strike corresponding to the possibility
-								}
-							});
-							values[symbol].possibilities.forEach(function(possibility) {
-								if (values[symbol].strikes[values[symbol].possibilities.indexOf(possibility)] >= strikeOut) {
-									var offSet = 0;  // makes sure the correct word is deleted when there are multiple deletions
-									words.forEach(function(word, number) {  // gets rid of all the words containing letters with more strikes than allowed
-										if (word[index] == possibility) {
-											codeWords[text].splice(number+offSet, 1);
-											offSet--;
-										}
-									});
-								}
-							});
-							matches++;
+				Object.keys(values).forEach(function (symbol) {  // for every unique symbol
+					S.forEach(codeWords, function (possibleWords, text) {  // for every code word
+						if (text.includes(symbol)) {  // if the current code word includes the current symbol
+							// for every code word that contains a certain symbol
+							values[symbol].codeWords.push(text);  // add the code word to the codeWords list of the symbol
 						}
 					});
 				});
+				/// now every symbol in "values" is associated with a list of code words where that symbol is contained
+				S.forEach(values, function (properties, symbol) {  // for every unique symbol
+					let symbolIndex = properties.codeWords[0].indexOf(symbol);  // where the symbol is in the code word (more than one place isn't needed)
+					// adds all letters the symbol could be
+					codeWords[properties.codeWords[0]].forEach(function (possibility) {
+						if (!values[symbol].possibilities.includes(possibility[symbolIndex])) {
+							values[symbol].possibilities.push(possibility[symbolIndex]);
+						}
+					});
+					/// This samples the first code word where the symbol is present and
+					/// goes through all of the possible English words associated with the sampled code word.
+					/// If the corresponding letter of the English word isn't already listed as a possible symbol decryption,
+					/// the letter is added to the possibilities associated with the given symbol.
+					/// This creates a preliminary list to work with in the next code block.
+				});
+				/// now every symbol in "values" has a preliminary set of possible decryptions
+
+				// determines which letters are valid values for each unique symbol in the encoded text across all words
+				// (when a symbol never equals a certain letter in any possibility for one word, any possibilities for other words using that letter must be eliminated)
+				// (determines what symbol decryptions make sense within words)
+				let changed;  // whether any of the following processing has caused a change in the possible words
+				do {
+					changed = false;
+					S.forEach(values, function (properties, symbol) {  // for every unique symbol
+						properties.codeWords.forEach(function (word) {  // for every code word that contains the symbol
+							// sets the possible decryptions of the current symbol based on the possibilities associated with the code word
+							let symbolIndex = word.indexOf(symbol);  // where the symbol is in the code word (more than one place isn't needed)
+							let codeLetters = [];  // will hold possible decryptions of the current symbol
+							codeWords[word].forEach(function (possibility) {
+								if (!codeLetters.includes(possibility[symbolIndex])) {
+									codeLetters.push(possibility[symbolIndex]);
+								}
+							});
+							S.forEach(values[symbol].possibilities, function (possibility) {  // This can't use the native array function because I need it to copy.
+								if (!codeLetters.includes(possibility)) {
+									// remove the possibility from "values"
+									values[symbol].possibilities.splice(values[symbol].possibilities.indexOf(possibility), 1);
+									// remove the relavent words from "codeWords"
+									properties.codeWords.forEach(function (codeWord) {
+										let newSymbolIndex = codeWord.indexOf(symbol);
+										S.forEach(codeWords[codeWord], function (otherWord) {  // This can't use the native array function because I need it to copy.
+											if (otherWord[newSymbolIndex] == possibility) {  // if the code word possibility includes the eliminated letter
+												codeWords[codeWord].splice(codeWords[codeWord].indexOf(otherWord), 1);  // remove the possibility from "codeWords"
+											}
+										}, true);
+									});
+									changed = true;  // indicates that the possible decryption has changed
+								}
+							}, true);
+						});
+					});
+				} while (changed)
 				/// values now has, for each unique symbol in the encrypted text:
 				/// "appearances" corresponding to the indices of the text where the symbol is found (done earlier)
+				/// "codeWords" corresponding to the code words that contain the symbol (done earlier)
 				/// "possibilities" corresponding to a list of all the letters the symbol could be
-				/// "strikes" corresponding to a list of strikes made in the same order as the possibilities indicating the likelihood of a symbol being a certain letter
+				//// "strikes" corresponding to a list of strikes made in the same order as the possibilities indicating the likelihood of a symbol being a certain letter
 				///
-				/// codeWords now only has words which contain letters that don't have too many strikes against them
+				/// codeWords now only has words which contain letters that don't have too many strikes against them ////
+
+				// determines whether there's any solution possible
+				S.forEach(values, function (properties, symbol) {
+					if (properties.possibilities.length == 0) {
+						console.warn('The symbol "' + symbol + '" has no possibilities left.');
+					}
+				});
+
 				codeText = document.getElementById("code").value.toLowerCase().split(" ");
 				codeText.forEach(function(word, index) {
 					codeText[index] = isolate(word);
 				});
-				var totalIndexList = [],
-					currentIndexList = [];
-				codeText.forEach(function(word) {
+				var totalIndexList = [],  // will hold the maximum index of the possibilities for each encoded word
+					currentIndexList = [];  // will hold a list of indices corresponding to the current possibility of each word being investigated
+				codeText.forEach(function(word) {  // sets totalIndexList and currentIndexList
 					totalIndexList.push(codeWords[word].length-1);
 					currentIndexList.push(0);
 				});
-				var trueFalse = true,
+				var trueFalse = true,  // holds the result of complicated processing which determines whether the following decoding loop should continue
 					index = 0,  // which code word is being looked at
 					codeKey = {},
 					solution;  // the current solution being constructed
 				S.forEach(values, function(unnecessary, key) {
 					codeKey[key] = undefined;
 				});
-				console.log("After refining eligible words:"); ////
-				codeText.forEach(function(word, number) {  //// This logs how many possibilities each word has at this point.
-					console.log("Possibilities for word " + (number+1) + " = " + codeWords[word].length);
+				console.info("After refining eligible words:"); ////
+				let totalPossibilities = 1;
+				codeText.forEach(function (word, number) {  //// This logs how many possibilities each word has at this point.
+					totalPossibilities *= codeWords[word].length;
+					console.info("Possibilities for word " + (number+1) + " = " + codeWords[word].length);
 				});
+				console.info("Total possibilites = " + totalPossibilities);
 				function usageCheck(letters) {  //// This needs to allow for imperfect matches.
-					/**
-					makes sure a word doesn't conflict with the letters used in previous words
-					*/
+					// makes sure a word doesn't conflict with the letters used in previous words
 					let falseTrue = true;
 					let changes = [];
 					let placement = 0;
@@ -374,13 +424,14 @@
 					}
 					return falseTrue;
 				}
+				// determines which symbol decryptions make sense across words
 				var checkVerbs = codeText.length > 2;  // The text should have a verb if it's longer than 2 words long.
 				while (trueFalse) {  // This is the most taxing part of the decoder.
 					if (currentIndexList[index] <= totalIndexList[index]) {
 						if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
 							if (!checkVerbs || checkVerbs) {  //// checks whether there's at least one verb in the solution in question (if it should have one)
-								if (index < currentIndexList.length - 1) {  // if the index isn't at the end of the array
-									index++;
+								if (index < currentIndexList.length - 1) {  // if the index isn't at the end of the array (if every word hasn't been checked yet)
+									index++;  // go to the next word of the encoded text
 								} else {
 									solution = [];
 									let number = 0;
@@ -389,7 +440,15 @@
 										solution.push(codeWords[word][currentIndexList[number]]);
 										number++;
 									}
-									solutions.push(solution.join(" "));
+									if (checkVerbs) {  // if verbs should be checked for  //// This should be able to be done earlier.
+										if (solution.some(function (solutionWord) {  // if the solution has a verb
+											return verbs[solutionWord.length-1].includes(solutionWord);
+										})) {
+											solutions.push(solution.join(" "));
+										}
+									} else {
+										solutions.push(solution.join(" "));
+									}
 									currentIndexList[index]++;
 								}
 							} else {
@@ -409,8 +468,13 @@
 					}
 				}
 				solutionIndex = 0;
-				document.getElementById("solution").value = solutions[0];
-				S.getId("solutionNumber").innerHTML = "1/" + solutions.length;
+				if (solutions.length > 0) {
+					document.getElementById("solution").value = solutions[0];
+					S.getId("solutionNumber").textContent = "1/" + solutions.length;
+				} else {
+					document.getElementById("solution").value = "No solution was found.";
+					S.getId("solutionNumber").textContent = "0/0";
+				}
 				document.getElementById("during").style.display = "none";
 				document.getElementById("after").style.display = "block";
 				var styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
@@ -420,9 +484,11 @@
 						return "break";
 					}
 				});
-				console.log("Time to decode = " + (performance.now()-time) + " milliseconds\n\n");  ////
+				console.info("Time to decode = " + Math.round(performance.now()-time)/1000 + " seconds\n\n");  ////
 				alert("Your code is finished!");
 			}
+			//*/
+
 			function isolate(word) {
 				/**
 				removes the puctuation from words
@@ -478,9 +544,9 @@
 						if (letters[number+shift].toLowerCase() != letters[number+shift].toUpperCase()) {
 							if (index < 26) {
 								letters.splice(number+shift, 1, ALPHABET[index]);
-							} else {  // This should never happen
+							} else {  // This should never happen.
 								oldShift = shift;
-								shift += "{{0}".format(index-26).length;
+								shift += ("{"+"{0}").format(index-26).length;  // two braces can't be back-to-back without doing weird stuff
 								letters.splice(number+oldShift, 1, "{"+(index-26)+"}");
 							}
 						} else if (letters[number+shift] == "{") {
@@ -489,7 +555,7 @@
 								shift -= letters.indexOf("}", number+shift) - (number+shift);  // This needs to happen first or else the splice changes things.
 								letters.splice(number+oldShift, letters.indexOf("}",number+oldShift)-(number+oldShift)+1, ALPHABET[index]);
 							} else {
-								shift += "{{0}".format(index-26).length - letters.indexOf("}",number+shift) + (number+shift);
+								shift += ("{"+"{0}").format(index-26).length - letters.indexOf("}",number+shift) + (number+shift);
 								letters.splice(number+oldShift, letters.indexOf("}",number+oldShift)-(number+oldShift)+1, "{"+(index-26)+"}");
 							}
 						}
@@ -504,6 +570,9 @@
 			}
 		</script>
 		<link rel="stylesheet" href="https://epicenterprograms.github.io/standards/formatting/foundation.css">
+		<!--
+		<link rel="stylesheet" href="file:///C:/Users/Robert/Documents/GitHub/standards/formatting/foundation.css">
+		-->
 		<style>
 			.cursor {
 				cursor: auto;
@@ -511,8 +580,18 @@
 			#during {
 				display: none;
 			}
-			#progress {
+			#progressContainer {
+				z-index: 1;
+				border: .05rem solid black;
+				border-radius: .25rem;
+				width: 30rem;
+				height: 1rem;
+				background: #aaa;
+			}
+			#progressBar {
+				z-index: -1;
 				float: left;
+				border-radius: .25rem;
 				width: 0%;
 				height: 100%;
 				background: #00e;
@@ -544,14 +623,14 @@
 				</button>
 			</div>
 			<div id="during">
-				<h3>
+				<h3 id="workingHeading">
 					Working...
 				</h3>
-				<h4>
+				<h4 style="display:none">
 					(This isn't frozen.)
 				</h4>
-				<div style="display:none; width:30em; height:1em; background:#fff; border:.1em solid black;">
-					<div id="progress"></div>
+				<div id="progressContainer">
+					<div id="progressBar"></div>
 				</div>
 				<!-- <progress id="progress"></progress> -->
 			</div>
