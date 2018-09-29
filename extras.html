@@ -6,16 +6,240 @@
 		</title>
 		<base target="_blank">
 		<script src="https://epicenterprograms.github.io/standards/behavior/general.js"></script>
+		<script>
+			var S = Standards.general;
+
+			S.listen("morseCodeText", "dblclick", function () {
+				this.value = "";
+			});
+
+			S.listen("morseCodeText", "keydown", function (event) {
+				if (event.key == "Enter") {
+					toMorseCode();
+				}
+			});
+
+			function toMorseCode() {
+				if (S.getId("morseCodeText").value.trim() != "") {
+					let signal = new S.Sound({ waveform: "square" });
+					let translation = "";
+					let note = "a";
+					S.getId("morseCodeText").value.toLowerCase().split("").forEach(function (character) {
+						switch (character) {
+							case "a":
+								translation += ". -";
+								break;
+							case "b":
+								translation += "- . . .";
+								break;
+							case "c":
+								translation += "- . - .";
+								break;
+							case "d":
+								translation += "- . .";
+								break;
+							case "e":
+								translation += ".";
+								break;
+							case "f":
+								translation += ". . - .";
+								break;
+							case "g":
+								translation += "- - .";
+								break;
+							case "h":
+								translation += ". . . .";
+								break;
+							case "i":
+								translation += ". .";
+								break;
+							case "j":
+								translation += ". - - -";
+								break;
+							case "k":
+								translation += "- . -";
+								break;
+							case "l":
+								translation += ". - . .";
+								break;
+							case "m":
+								translation += "- -";
+								break;
+							case "n":
+								translation += "- .";
+								break;
+							case "o":
+								translation += "- - -";
+								break;
+							case "p":
+								translation += ". - - .";
+								break;
+							case "q":
+								translation += "- - . -";
+								break;
+							case "r":
+								translation += ". - .";
+								break;
+							case "s":
+								translation += ". . .";
+								break;
+							case "t":
+								translation += "-";
+								break;
+							case "u":
+								translation += ". . -";
+								break;
+							case "v":
+								translation += ". . . -";
+								break;
+							case "w":
+								translation += ". - -";
+								break;
+							case "x":
+								translation += "- . . -";
+								break;
+							case "y":
+								translation += "- . - -";
+								break;
+							case "z":
+								translation += "- - . .";
+								break;
+							case " ":
+								translation += "    ";
+								break;
+							case "0":
+								translation += "- - - - -";
+								break;
+							case "1":
+								translation += ". - - - -";
+								break;
+							case "2":
+								translation += ". . - - -";
+								break;
+							case "3":
+								translation += ". . . - -";
+								break;
+							case "4":
+								translation += ". . . . -";
+								break;
+							case "5":
+								translation += ". . . . .";
+								break;
+							case "6":
+								translation += "- . . . .";
+								break;
+							case "7":
+								translation += "- - . . .";
+								break;
+							case "8":
+								translation += "- - - . .";
+								break;
+							case "9":
+								translation += "- - - - .";
+								break;
+							case ".":
+								translation += ". - . - . -";
+								break;
+							case "?":
+								translation += ". . - - . .";
+								break;
+							case "!":
+								translation += ["- . - . - -", "- - - ."][Math.round(Math.random())];
+								break;
+							case ",":
+								translation += "- - . . - -";
+								break;
+							case "'":
+								translation += ". - - - - .";
+								break;
+							case "(":
+								translation += "- . - - .";
+								break;
+							case ")":
+								translation += "- . - - . -";
+								break;
+							case ":":
+								translation += "- - - . . .";
+								break;
+							case ";":
+								translation += "- . - . - .";
+								break;
+							case '"':
+								translation += ". - . . - .";
+								break;
+							case "/":
+								translation += "- . . - .";
+								break;
+							case "+":
+								translation += ". - . - .";
+								break;
+							case "-":
+								translation += "- . . . . -";
+								break;
+							case "=":
+								translation += "- . . . -";
+								break;
+							case "$":
+								translation += ". . . - . . -";
+								break;
+							case "@":
+								translation += ". - - . - .";
+								break;
+							case "_":
+								translation += ". . - - . -";
+								break;
+							case "ñ":
+								translation += "- - . - -";
+								break;
+							default:
+								translation += "*";
+						}
+						translation += "   ";
+					});
+					translation = translation.replace(/\./g, note).trim();
+					translation = translation.replace(/-/g, note + "--");
+					translation = translation.replace(/\*/g, "a5-");
+					signal.play(translation, { attack: 1, noteLength: 1000/S.getId("morseCodeSpeed").value, decay: 1 });
+				}
+			}
+
+			S.listen("morseCodeSpeed", "dblclick", function () {
+				this.value = "";
+			});
+
+			S.listen("morseCodeSpeed", "change", function () {
+				this.value = this.value.trim();
+				if (this.value == "" || S.getType(Number(this.value)) != "Number" || Number(this.value) < 1) {
+					this.value = 15;
+				}
+			});
+
+			S.onLoad(function () {
+				S.makeToneGenerator(true);
+			});
+		</script>
 		<link rel="stylesheet" href="https://epicenterprograms.github.io/standards/formatting/foundation.css">
+		<style>
+			#morseCodeSpeed {
+				width: 2rem;
+			}
+		</style>
 	</head>
 	<body>
 		<h1 class="main-title">
 			Extras
 		</h1>
 		<main>
-			<p>
-				This will have a bunch of cool extras.
-			</p>
+			<button onclick='window.location.href = "."'>
+				Back
+			</button>
+			<br>
+			<input type="text" id="morseCodeText">
+			<button onclick="toMorseCode()">
+				Translate to Morse Code
+			</button>
+			Speed:
+			<input type="text" id="morseCodeSpeed" value="15">
 		</main>
 	</body>
 </html>
