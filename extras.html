@@ -214,6 +214,16 @@
 				}
 			});
 
+			S.listen("randomMorseCode", "click", function () {
+				let text = S.getId("morseCodeText");
+				text.value = "";
+				text.value += ["I am ", "You are ", "We are ", "Morse Code is ", "This website is "][Math.floor(Math.random()*5)];
+				text.value += ["super ", "extremely ", "very ", "unmistakably ", "indisputably ", "most certainly ", "absolutely ", "without question ", "exceptionally "][Math.floor(Math.random()*9)];
+				text.value += ["amazing.", "awesome.", "cool.", "spectacular.", "sublime.", "lame. (Just kidding.)"][Math.floor(Math.random()*6)];
+				toMorseCode();
+				text.value = "";
+			});
+
 			S.onLoad(function () {
 				S.makeToneGenerator(true);
 			});
@@ -240,6 +250,10 @@
 			</button>
 			Speed:
 			<input type="text" id="morseCodeSpeed" value="15">
+			<br>
+			<button id="randomMorseCode">
+				Make a random message in Morse Code
+			</button>
 		</main>
 	</body>
 </html>
