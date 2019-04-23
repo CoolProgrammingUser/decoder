@@ -9,19 +9,17 @@
 		<script>
 			var S = Standards.general;
 
+			var telegraph = new S.Sound({ waveform: "square" });
 			S.listen("morseCodeText", "dblclick", function () {
 				this.value = "";
 			});
-
 			S.listen("morseCodeText", "keydown", function (event) {
 				if (event.key == "Enter") {
 					toMorseCode();
 				}
 			});
-
 			function toMorseCode() {
 				if (S.getId("morseCodeText").value.trim() != "") {
-					let signal = new S.Sound({ waveform: "square" });
 					let translation = "";
 					let note = "a";
 					S.getId("morseCodeText").value.toLowerCase().split("").forEach(function (character) {
@@ -199,29 +197,28 @@
 					translation = translation.replace(/\./g, note).trim();
 					translation = translation.replace(/-/g, note + "--");
 					translation = translation.replace(/\*/g, "a5-");
-					signal.play(translation, { attack: 1, noteLength: 1000/S.getId("morseCodeSpeed").value, decay: 1 });
+					telegraph.play(translation, { attack: 1, noteLength: 1000/S.getId("morseCodeSpeed").value, decay: 1 });
 				}
 			}
-
 			S.listen("morseCodeSpeed", "dblclick", function () {
 				this.value = "";
 			});
-
 			S.listen("morseCodeSpeed", "change", function () {
 				this.value = this.value.trim();
 				if (this.value == "" || S.getType(Number(this.value)) != "Number" || Number(this.value) < 1) {
 					this.value = 15;
 				}
 			});
-
 			S.listen("randomMorseCode", "click", function () {
-				let text = S.getId("morseCodeText");
-				text.value = "";
-				text.value += ["I am ", "You are ", "We are ", "Morse Code is ", "This website is "][Math.floor(Math.random()*5)];
-				text.value += ["super ", "extremely ", "very ", "unmistakably ", "indisputably ", "most certainly ", "absolutely ", "without question ", "exceptionally "][Math.floor(Math.random()*9)];
-				text.value += ["amazing.", "awesome.", "cool.", "spectacular.", "sublime.", "lame. (Just kidding.)"][Math.floor(Math.random()*6)];
-				toMorseCode();
-				text.value = "";
+				if (!telegraph.playing) {
+					let text = S.getId("morseCodeText");
+					text.value = "";
+					text.value += ["I am ", "You are ", "We are ", "Morse Code is ", "This website is "][Math.floor(Math.random() * 5)];
+					text.value += ["super ", "extremely ", "very ", "unmistakably ", "indisputably ", "most certainly ", "absolutely ", "without question ", "exceptionally "][Math.floor(Math.random() * 9)];
+					text.value += ["amazing.", "awesome.", "cool.", "spectacular.", "sublime.", "lame. (Just kidding.)"][Math.floor(Math.random() * 6)];
+					toMorseCode();
+					text.value = "";
+				}
 			});
 
 			S.onLoad(function () {
@@ -244,6 +241,9 @@
 				Back
 			</button>
 			<br>
+			<h2>
+				Morse Code
+			</h2>
 			<input type="text" id="morseCodeText">
 			<button onclick="toMorseCode()">
 				Translate to Morse Code
