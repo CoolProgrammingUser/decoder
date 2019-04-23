@@ -221,6 +221,94 @@
 				}
 			});
 
+			S.listen("decrypted", "dblclick", function () {
+				this.value = "";
+				S.getId("encrypted").value = "";
+			});
+			S.listen("encrypted", "dblclick", function () {
+				this.value = "";
+				S.getId("decrypted").value = "";
+			});
+			S.listen("encode", "click", function () {
+				let alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+				let ALPHABET = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+				if (S.getId("decrypted").value.trim() != "") {
+					S.getId("encrypted").value = S.getId("decrypted").value.trim().replace(/\w|(?: \w)/g, function (match) {
+						if (match[0] == " ") {
+							if (alphabet.includes(match[1])) {
+								match = String(2 * (alphabet.indexOf(match[1]) + 1));
+								if (match.length < 2) {
+									match = "0" + match;
+								}
+								match = match.splice(0, 1, match[0] == "0" ? "j" : alphabet[Number(match[0])-1]);
+								match = match.splice(1, 1, match[1] == "0" ? "J" : ALPHABET[Number(match[1])-1]);
+							} else if (ALPHABET.includes(match[1])) {
+								match = String(2 * (ALPHABET.indexOf(match[1]) + 1));
+								if (match.length < 2) {
+									match = "0" + match;
+								}
+								match = match.splice(0, 1, match[0] == "0" ? "J" : ALPHABET[Number(match[0])-1]);
+								match = match.splice(1, 1, match[1] == "0" ? "J" : ALPHABET[Number(match[1])-1]);
+							}
+						} else if (alphabet.includes(match)) {
+							match = String(alphabet.indexOf(match) + 1);
+							if (match.length < 2) {
+								match = "0" + match;
+							}
+							match = match.splice(0, 1, match[0] == "0" ? "j" : alphabet[Number(match[0])-1]);
+							match = match.splice(1, 1, match[1] == "0" ? "j" : alphabet[Number(match[1])-1]);
+						} else if (ALPHABET.includes(match)) {
+							match = String(ALPHABET.indexOf(match) + 1);
+							if (match.length < 2) {
+								match = "0" + match;
+							}
+							match = match.splice(0, 1, match[0] == "0" ? "J" : ALPHABET[Number(match[0])-1]);
+							match = match.splice(1, 1, match[1] == "0" ? "j" : alphabet[Number(match[1])-1]);
+						}
+						return match;
+					});
+				} else if (S.getId("encrypted").value.trim() != "") {
+					S.getId("decrypted").value = S.getId("encrypted").value.trim().replace(/\w\w/g, function (match) {
+						if (alphabet.includes(match[0])) {  // not a capital
+							if (alphabet.includes(match[1])) {  // not preceded by a space
+								match = match.splice(0, 1, match[0] == "j" ? "0" : String(alphabet.indexOf(match[0]) + 1));
+								match = match.splice(1, 1, match[1] == "j" ? "0" : String(alphabet.indexOf(match[1]) + 1));
+								match = alphabet[Number(match) - 1];
+							} else if (ALPHABET.includes(match[1])) {  // preceded by a space
+								match = match.splice(0, 1, match[0] == "j" ? "0" : String(alphabet.indexOf(match[0]) + 1));
+								match = match.splice(1, 1, match[1] == "J" ? "0" : String(ALPHABET.indexOf(match[1]) + 1));
+								match = " " + alphabet[Number(match) / 2 - 1];
+							}
+						} else if (ALPHABET.includes(match[0])) {  // a capital
+							if (alphabet.includes(match[1])) {  // not preceded by a space
+								match = match.splice(0, 1, match[0] == "J" ? "0" : String(ALPHABET.indexOf(match[0]) + 1));
+								match = match.splice(1, 1, match[1] == "j" ? "0" : String(alphabet.indexOf(match[1]) + 1));
+								match = ALPHABET[Number(match) - 1];
+							} else if (ALPHABET.includes(match[1])) {  // preceded by a space
+								match = match.splice(0, 1, match[0] == "J" ? "0" : String(ALPHABET.indexOf(match[0]) + 1));
+								match = match.splice(1, 1, match[1] == "J" ? "0" : String(ALPHABET.indexOf(match[1]) + 1));
+								match = " " + ALPHABET[Number(match) / 2 - 1];
+							}
+						}
+						return match;
+					});
+				}
+			});
+
+			S.onKeyDown("Enter", function () {
+				switch (document.activeElement) {
+					case S.getId("morseCodeText"):
+						toMorseCode();
+						break;
+					case S.getId("decrypted"):
+						S.getId("encode").click();
+						break;
+					case S.getId("encrypted"):
+						S.getId("encode").click();
+						break;
+				}
+			});
+
 			S.onLoad(function () {
 				S.makeToneGenerator(true);
 			});
@@ -254,6 +342,14 @@
 			<button id="randomMorseCode">
 				Make a random message in Morse Code
 			</button>
+			<h2>
+				Code generator
+			</h2>
+			<input type="text" id="decrypted">
+			<button id="encode">
+				Encode
+			</button>
+			<input type="text" id="encrypted">
 		</main>
 	</body>
 </html>
