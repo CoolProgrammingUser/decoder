@@ -221,19 +221,19 @@
 				}
 			});
 
-			S.listen("decrypted", "dblclick", function () {
+			S.listen("decrypted1", "dblclick", function () {
 				this.value = "";
-				S.getId("encrypted").value = "";
+				S.getId("encrypted1").value = "";
 			});
-			S.listen("encrypted", "dblclick", function () {
+			S.listen("encrypted1", "dblclick", function () {
 				this.value = "";
-				S.getId("decrypted").value = "";
+				S.getId("decrypted1").value = "";
 			});
-			S.listen("encode", "click", function () {
+			S.listen("encode1", "click", function () {
 				let alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 				let ALPHABET = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
-				if (S.getId("decrypted").value.trim() != "") {
-					S.getId("encrypted").value = S.getId("decrypted").value.trim().replace(/\w|(?: \w)/g, function (match) {
+				if (S.getId("decrypted1").value.trim() != "") {
+					S.getId("encrypted1").value = S.getId("decrypted1").value.trim().replace(/\w|(?: \w)/g, function (match) {
 						if (match[0] == " ") {
 							if (alphabet.includes(match[1])) {
 								match = String(2 * (alphabet.indexOf(match[1]) + 1));
@@ -267,8 +267,8 @@
 						}
 						return match;
 					});
-				} else if (S.getId("encrypted").value.trim() != "") {
-					S.getId("decrypted").value = S.getId("encrypted").value.trim().replace(/\w\w/g, function (match) {
+				} else if (S.getId("encrypted1").value.trim() != "") {
+					S.getId("decrypted1").value = S.getId("encrypted1").value.trim().replace(/\w\w/g, function (match) {
 						if (alphabet.includes(match[0])) {  // not a capital
 							if (alphabet.includes(match[1])) {  // not preceded by a space
 								match = match.splice(0, 1, match[0] == "j" ? "0" : String(alphabet.indexOf(match[0]) + 1));
@@ -295,16 +295,92 @@
 				}
 			});
 
+			S.listen("decrypted2", "dblclick", function () {
+				this.value = "";
+				S.getId("encrypted2").value = "";
+			});
+			S.listen("encrypted2", "dblclick", function () {
+				this.value = "";
+				S.getId("decrypted2").value = "";
+			});
+			S.listen("encode2", "click", function () {
+				if (S.getId("encryptionKey").value.trim() != "") {
+					let key = S.getId("encryptionKey").value.trim();
+					let keyIndex = 0;
+					let text = "";
+					if (S.getId("decrypted2").value.trim() != "") {
+						let message = S.getId("decrypted2").value.trim();
+						if (message[0] != " ") {
+							message = " " + message;
+						}
+						message = message.replace(/[A-Z]/g, function (capital) {
+							return " " + capital.toLowerCase();
+						});
+						message = message.replace(/ [a-z]/g, function (word) {
+							return word[1].toUpperCase();
+						});
+						S.forEach(message, function (character) {
+							let number = character.codePointAt(0) + key.codePointAt(keyIndex);
+							if (number > 580 - 325 || number < 512 - 325) {
+								text += String.fromCodePoint(127900 + number);
+							} else {
+								text += String.fromCodePoint(128000 + number + 325);
+							}
+							keyIndex++;
+							if (keyIndex >= key.length) {
+								keyIndex = 0;
+							}
+						});
+						S.getId("encrypted2").value = text;
+					} else if (S.getId("encrypted2").value.trim() != "") {
+						let message = S.getId("encrypted2").value.trim();
+						S.forEach(message.length / 2, function (number) {
+							let codePoint = (message[message.length - number * 2] + message[message.length - number * 2 + 1]).codePointAt(0);
+							if (codePoint < 128512 || codePoint > 128580) {
+								codePoint -= 127900;
+							} else {
+								codePoint -= 128325;
+							}
+							codePoint -= key.codePointAt(keyIndex);
+							if (codePoint < 0) {
+								codePoint = 0;
+							}
+							text += String.fromCodePoint(codePoint);
+							keyIndex++;
+							if (keyIndex >= key.length) {
+								keyIndex = 0;
+							}
+						});
+						text = text.replace(/[A-Z]/g, function (capital) {
+							return " " + capital.toLowerCase();
+						});
+						text = text.replace(/  [a-z]/g, function (word) {
+							return " " + word[2].toUpperCase();
+						});
+						if (text[0] == " ") {
+							text = text.slice(1);
+						}
+						S.getId("decrypted2").value = text;
+					}
+				}
+			});
+
 			S.onKeyDown("Enter", function () {
 				switch (document.activeElement) {
 					case S.getId("morseCodeText"):
 						toMorseCode();
 						break;
-					case S.getId("decrypted"):
-						S.getId("encode").click();
+					case S.getId("decrypted1"):
+						S.getId("encode1").click();
 						break;
-					case S.getId("encrypted"):
-						S.getId("encode").click();
+					case S.getId("encrypted1"):
+						S.getId("encode1").click();
+						break;
+					case S.getId("decrypted2"):
+						S.getId("encode2").click();
+						break;
+					case S.getId("encrypted2"):
+						S.getId("encode2").click();
 						break;
 				}
 			});
@@ -343,13 +419,27 @@
 				Make a random message in Morse Code
 			</button>
 			<h2>
-				Code generator
+				Code generators
 			</h2>
-			<input type="text" id="decrypted" placeholder="Encode">
-			<button id="encode">
+			<h3>
+				Password-protected encryption
+			</h3>
+			<input type="text" id="encryptionKey" placeholder="password">
+			<br>
+			<textarea id="decrypted2" placeholder="Decoded text"></textarea>
+			<textarea id="encrypted2" placeholder="Encoded text"></textarea>
+			<br>
+			<button id="encode2">
 				Encode
 			</button>
-			<input type="text" id="encrypted" placeholder="Decode">
+			<h3>
+				Letter code
+			</h3>
+			<input type="text" id="decrypted1" placeholder="Encode">
+			<button id="encode1">
+				Encode
+			</button>
+			<input type="text" id="encrypted1" placeholder="Decode">
 		</main>
 	</body>
 </html>
