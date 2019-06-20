@@ -364,17 +364,24 @@
 						}
 						S.getId("decrypted2").value = text;
 					}
+				} else {
+					S.makeDialog("A password is required.");
 				}
 			});
 
 
+			var symbols = [];
+			var symbol = [];
+			var drawASymbol = function () { };
 			S.listen("decrypted3", "dblclick", function () {
+				symbols = [];
 				this.value = "";
 				S.getId("encrypted3").innerHTML = "";
 			});
 			S.listen("encode3", "click", function () {
 				if (S.getId("decrypted3").value.trim() != "") {
 					S.getId("encrypted3").innerHTML = "";
+					symbols = [];
 					let message = S.getId("decrypted3").value;
 					message = message.replace(/ +/g, " ");  // prevents more than one space at a time
 					message = message.replace(/(\W)I(\W)/g, function (match, nonletter1, nonletter2) {  // uncapitalizes the word "I"
@@ -389,12 +396,12 @@
 					message = message.trim();
 					let sh = Number(S.getId("symbolSize").value);  // symbol height
 					let bu = sh / 4;  // base unit
-					let hlw = bu / 6; // half line width
+					let hlw = bu / 6; // half line width (helps with padding the canvas to prevent lines from being cut in half at the edges)
 					let u2 = bu * 2;  // 2 units
 					let u3 = bu * 3;  // 3 units
 					let u4 = bu * 4;  // 4 units
-					function setSizes(size) {
-						sh = size;
+					function setSizes() {
+						sh = Number(S.getId("symbolSize").value);
 						bu = sh / 4;
 						hlw = bu / 6;
 						u2 = bu * 2;
@@ -403,7 +410,6 @@
 					}
 					let odd = true;
 					let components = { gl: 0, dl: 0, va: 0, ha: 0, c: 0 };  // grid line, diagonal line, vertical arch, horizontal arch, circle
-					let symbol = [];
 					function getDimensions(type, size, variation) {
 						switch (type) {
 							case "gl":
@@ -511,12 +517,17 @@
 								throw new TypeError("A symbol component had an unrecognized type.");
 						}
 					}
-					function drawSymbol(symbolToReplace) {
+					function drawSymbol(symbolToReplace, indexToReplace) {
+						let currentSymbol = JSON.parse(JSON.stringify(symbol));  // prevents changing the coordinates of the actual symbol
 						let canvas = document.createElement("canvas");
 						let c = canvas.getContext("2d");
 						let minX = 2 * sh + 2 * hlw;
 						let maxX = 0;
-						S.forEach(symbol, function (component) {
+						setSizes();  // allows changing the symbol size
+						S.forEach(currentSymbol, function (component) {  // converts the symbol coordinates from unit values to actual values
+							component.coords = [hlw + component.coords[0] * bu, hlw + component.coords[1] * bu];
+						});
+						S.forEach(currentSymbol, function (component) {  // determines the smallest x-value used in the symbol
 							let width = getDimensions(component.type, component.size, component.variation)[0] * bu;
 							if (width < 0) {
 								if (component.coords[0] + width < minX) {
@@ -528,12 +539,12 @@
 								}
 							}
 						});
-						if (minX > hlw) {
-							S.forEach(symbol, function (component) {
+						if (minX > hlw) {  // shifts the symbol components to the left edge of the canvas
+							S.forEach(currentSymbol, function (component) {
 								component.coords[0] = component.coords[0] - minX + hlw;
 							});
 						}
-						S.forEach(symbol, function (component) {
+						S.forEach(currentSymbol, function (component) {  // determines the largest x-value used in the symbol
 							let width = getDimensions(component.type, component.size, component.variation)[0] * bu;
 							if (width < 0) {
 								width = 0;
@@ -542,12 +553,12 @@
 								maxX = component.coords[0] + width;
 							}
 						});
-						c.canvas.width = maxX + hlw;
+						c.canvas.width = maxX + hlw;  // makes the canvas width as big as the symbol
 						c.canvas.height = sh + 2 * hlw;
 						c.beginPath();
 						c.lineWidth = 2 * hlw;
 						c.lineCap = "round";
-						S.forEach(symbol, function (component) {
+						S.forEach(currentSymbol, function (component) {
 							switch (component.type) {
 								case "gl":
 									if (component.size == "biggest") {
@@ -740,33 +751,25 @@
 						} else {
 							S.getId("encrypted3").appendChild(img);
 						}
-						let currentSymbol = symbol;
+						currentSymbol = symbol;
+						let currentIndex;
+						if (indexToReplace === undefined) {
+							currentIndex = symbols.length - 1;
+						} else {
+							currentIndex = indexToReplace;
+						}
 						img.addEventListener("click", function () {
 							odd = true;
-							createSubsymbol(currentSymbol, img);
-						});
-						let originalSize = sh;
-						window.addEventListener("symbolResize", function () {
-							setSizes(originalSize);  // makes sure the first symbol uses the correct units after multiple resizes
-							S.forEach(currentSymbol, function (component) {
-								component.coords = [(component.coords[0] - hlw) / bu, (component.coords[1] - hlw) / bu];
-							});
-							setSizes(Number(S.getId("symbolSize").value));
-							S.forEach(currentSymbol, function (component) {
-								component.coords = [component.coords[0] * bu + hlw, component.coords[1] * bu + hlw];
-							});
-							symbol = currentSymbol;
-							drawSymbol(img);
-							setSizes(originalSize);
-							window.removeEventListener("symbolResize", arguments.callee);
+							createSubsymbol(currentSymbol, img, currentIndex);
 						});
 					}
-					function createSubsymbol(character, symbolToReplace) {
+					drawASymbol = drawSymbol;
+					function createSubsymbol(character, symbolToReplace, indexToReplace) {
 						components = { gl: 0, dl: 0, va: 0, ha: 0, c: 0 };
 						if (odd) {
 							symbol = [];
 						}
-						if (!character) {  // if a capital subsymbol should be made
+						if (character === null) {  // if a capital subsymbol should be made
 							components.gl = 1;
 							components.c = 2;
 						} else if (S.getType(character) == "String") {
@@ -911,6 +914,9 @@
 								case "/":
 									components.ha = 3;
 									break;
+								case '"':
+									components.gl = 5;
+									break;
 								case "0":
 									components.gl = 2;
 									components.vl = 2;
@@ -1000,72 +1006,72 @@
 									if (width >= 0) {
 										if (height >= 0) {
 											component.coords = [
-												hlw + Math.round((9 - width) * Math.random()) * bu,
-												hlw + Math.round((4 - height) * Math.random()) * bu
+												Math.round((9 - width) * Math.random()),
+												Math.round((4 - height) * Math.random())
 											];
-											if (component.coords[0] > hlw + (4 + wr - width) * bu) {
+											if (component.coords[0] > 4 + wr - width) {
 												component.coords = [
-													hlw + Math.round((9 - width) * Math.random()) * bu,
-													hlw + Math.round((4 - height) * Math.random()) * bu
+													Math.round((9 - width) * Math.random()),
+													Math.round((4 - height) * Math.random())
 												];
 											}
-											if (component.coords[0] > hlw + (4 + wr + 1 - width) * bu) {
+											if (component.coords[0] > 4 + wr + 1 - width) {
 												component.coords = [
-													hlw + Math.round((9 - width) * Math.random()) * bu,
-													hlw + Math.round((4 - height) * Math.random()) * bu
+													Math.round((9 - width) * Math.random()),
+													Math.round((4 - height) * Math.random())
 												];
 											}
 										} else {
 											component.coords = [
-												hlw + Math.round((9 - width) * Math.random()) * bu,
-												hlw + Math.round((4 + height) * Math.random() - height) * bu
+												Math.round((9 - width) * Math.random()),
+												Math.round((4 + height) * Math.random() - height)
 											];
-											if (component.coords[0] > hlw + (4 + wr - width) * bu) {
+											if (component.coords[0] > 4 + wr - width) {
 												component.coords = [
-													hlw + Math.round((9 - width) * Math.random()) * bu,
-													hlw + Math.round((4 + height) * Math.random() - height) * bu
+													Math.round((9 - width) * Math.random()),
+													Math.round((4 + height) * Math.random() - height)
 												];
 											}
-											if (component.coords[0] > hlw + (4 + wr + 1 - width) * bu) {
+											if (component.coords[0] > 4 + wr + 1 - width) {
 												component.coords = [
-													hlw + Math.round((9 - width) * Math.random()) * bu,
-													hlw + Math.round((4 + height) * Math.random() - height) * bu
+													Math.round((9 - width) * Math.random()),
+													Math.round((4 + height) * Math.random() - height)
 												];
 											}
 										}
 									} else {
 										if (height >= 0) {
 											component.coords = [
-												hlw + Math.round((9 + width) * Math.random() - width) * bu,
-												hlw + Math.round((4 - height) * Math.random()) * bu
+												Math.round((9 + width) * Math.random() - width),
+												Math.round((4 - height) * Math.random())
 											];
-											if (component.coords[0] > hlw + (4 + wr) * bu) {
+											if (component.coords[0] > 4 + wr) {
 												component.coords = [
-													hlw + Math.round((9 + width) * Math.random() - width) * bu,
-													hlw + Math.round((4 - height) * Math.random()) * bu
+													Math.round((9 + width) * Math.random() - width),
+													Math.round((4 - height) * Math.random())
 												];
 											}
-											if (component.coords[0] > hlw + (4 + wr + 1) * bu) {
+											if (component.coords[0] > 4 + wr + 1) {
 												component.coords = [
-													hlw + Math.round((9 + width) * Math.random() - width) * bu,
-													hlw + Math.round((4 - height) * Math.random()) * bu
+													Math.round((9 + width) * Math.random() - width),
+													Math.round((4 - height) * Math.random())
 												];
 											}
 										} else {
 											component.coords = [
-												hlw + Math.round((9 + width) * Math.random() - width) * bu,
-												hlw + Math.round((4 + height) * Math.random() - height) * bu
+												Math.round((9 + width) * Math.random() - width),
+												Math.round((4 + height) * Math.random() - height)
 											];
-											if (component.coords[0] > hlw + (4 + wr) * bu) {
+											if (component.coords[0] > 4 + wr) {
 												component.coords = [
-													hlw + Math.round((9 + width) * Math.random() - width) * bu,
-													hlw + Math.round((4 + height) * Math.random() - height) * bu
+													Math.round((9 + width) * Math.random() - width),
+													Math.round((4 + height) * Math.random() - height)
 												];
 											}
-											if (component.coords[0] > hlw + (4 + wr + 1) * bu) {
+											if (component.coords[0] > 4 + wr + 1) {
 												component.coords = [
-													hlw + Math.round((9 + width) * Math.random() - width) * bu,
-													hlw + Math.round((4 + height) * Math.random() - height) * bu
+													Math.round((9 + width) * Math.random() - width),
+													Math.round((4 + height) * Math.random() - height)
 												];
 											}
 										}
@@ -1075,28 +1081,39 @@
 							}
 						});
 						if (!odd) {
-							drawSymbol(symbolToReplace);
+							if (indexToReplace === undefined) {
+								symbols.push(symbol);
+							} else {
+								symbols[indexToReplace] = symbol;
+							}
+							drawSymbol(symbolToReplace, indexToReplace);
+							odd = !odd;
 						} else if (S.getType(character) == "Array") {
 							odd = !odd;
-							createSubsymbol(character, symbolToReplace);
+							createSubsymbol(character, symbolToReplace, indexToReplace);
+						} else {
+							odd = !odd;
 						}
-						odd = !odd;
 					}
 					S.forEach(message, function (character) {
 						if (character.search(/[A-Z]/) > -1) {  // if it's a capital
-							createSubsymbol();
+							createSubsymbol(null);
 							createSubsymbol(character.toLowerCase());
 						} else {
 							createSubsymbol(character);
 						}
 					});
 					if (!odd) {
+						symbols.push(symbol);
 						drawSymbol();
 					}
 				}
 			});
 			S.listen("symbolSize", "change", function () {
-				window.dispatchEvent(new Event("symbolResize"));
+				S.forEach(S.getId("encrypted3").getElementsByTagName("img"), function (img, index) {
+					symbol = symbols[index];
+					drawASymbol(img, index);
+				});
 			});
 
 			S.onKeyDown("Enter", function () {
@@ -1153,7 +1170,9 @@
 			<button onclick='window.location.href = "."'>
 				Back
 			</button>
-			<br>
+			<section>
+				Maybe you've come here in a desperate attempt to find a way of getting around the short-comings of the main decoder or maybe you were just curious after the decoder did its job; regardless, this is primarily just a place for random code-related fun. Feel free to explore.
+			</section>
 			<h2>
 				Morse Code
 			</h2>
@@ -1170,6 +1189,9 @@
 			<h2>
 				Code generators
 			</h2>
+			<section>
+				The following sections can be used to convert text into various codes. In places where the encrypted section is editable, code can be put in, and decrypted text will be the output. Pressing "Enter" on a keyboard while having an input selected will function the same as pressing the "Encode" buttons. Double-clicking on an input will erase both the decrypted and encrypted text.
+			</section>
 			<h3>
 				Password-protected encryption
 			</h3>
@@ -1184,15 +1206,18 @@
 			<h3>
 				Letter code
 			</h3>
-			<input type="text" id="decrypted1" placeholder="Encode">
+			<textarea id="decrypted1" placeholder="Encode"></textarea>
 			<button id="encode1">
 				Encode
 			</button>
-			<input type="text" id="encrypted1" placeholder="Decode">
+			<textarea id="encrypted1" placeholder="Decode"></textarea>
 			<h3>
 				Symbol code
 			</h3>
-			<input type="text" id="decrypted3" placeholder="Text">
+			<section>
+				This can change text into seemingly random symbols. Pressing "Encode" multiple times will give different symbols. The symbols in the output are pictures and can be saved and used elsewhere. (Maximum symbol size is recommended if the pictures will ever be enlarged.) Due to the extreme complexity of preventing such an occurrence, there will undoubtedly be times when parts of a symbol overlap with themselves or the symbol is awkwardly arranged; As a means of combating this, it's possible to click on the undesirable symbol to rearrange its parts. There are no decoding capabilities at present because no one has time for image-recognition software. Sometimes, the symbol area randomly disappears when changing individual symbols at a large symbol-size; This can be corrected by changing the symbol size (and changing it back).
+			</section>
+			<textarea id="decrypted3" placeholder="Text"></textarea>
 			<button id="encode3">
 				Encode
 			</button>
