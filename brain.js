@@ -341,16 +341,19 @@ self.addEventListener("message", function (message) {
 		resolve();
 	}).catch(function (error) {
 		messenger.error = { message: error.message, fileName: error.fileName, lineNumber: error.lineNumber };
+		messenger = JSON.parse(JSON.stringify(messenger));
 		self.postMessage(messenger);
 		self.close();  // closes the web worker
 	}).then(function () {
 		messenger.progress = 100;
 		messenger.solutions = solutions;
 		messenger.time = Math.round(performance.now() - time) / 1000;
+		messenger = JSON.parse(JSON.stringify(messenger));
 		self.postMessage(messenger);
 		self.close();  // closes the web worker
 	}).catch(function (error) {
 		messenger.error = { message: error.message, fileName: error.fileName, lineNumber: error.lineNumber };
+		messenger = JSON.parse(JSON.stringify(messenger));
 		self.postMessage(messenger);
 		self.close();  // closes the web worker
 	});
