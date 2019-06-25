@@ -233,8 +233,15 @@
 					if (message.data.error) {
 						document.getElementById("during").style.display = "none";
 						document.getElementById("before").style.display = "block";
+						let styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
+						S.forEach(styles, function (style) {
+							if (style.selectorText == ".cursor") {
+								style.style.cursor = "auto";
+								return "break";
+							}
+						});
 						S.makeDialog("The decoder encountered a problem.");
-						console.error(new Error(message.data.error.message, message.data.error.fileName, message.data.error.lineNumber));
+						console.error(message.data.error);
 					} else if (message.data.progress < 100) {
 						S.getId("progressBar").style.width = message.data.progress + "%";
 					} else {
@@ -248,7 +255,7 @@
 						}
 						document.getElementById("during").style.display = "none";
 						document.getElementById("after").style.display = "block";
-						var styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
+						let styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
 						S.forEach(styles, function (style) {
 							if (style.selectorText == ".cursor") {
 								style.style.cursor = "auto";
