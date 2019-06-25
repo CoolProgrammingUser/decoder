@@ -234,7 +234,7 @@
 						document.getElementById("during").style.display = "none";
 						document.getElementById("before").style.display = "block";
 						S.makeDialog("The decoder encountered a problem.");
-						console.error(message.data.error);
+						console.error(new Error(message.data.error.message, message.data.error.fileName, message.data.error.lineNumber));
 					} else if (message.data.progress < 100) {
 						S.getId("progressBar").style.width = message.data.progress + "%";
 					} else {

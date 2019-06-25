@@ -340,7 +340,7 @@ self.addEventListener("message", function (message) {
 		}
 		resolve();
 	}).catch(function (error) {
-		messenger.error = error;
+		messenger.error = { message: error.message, fileName: error.fileName, lineNumber: error.lineNumber };
 		self.postMessage(messenger);
 		self.close();  // closes the web worker
 	}).then(function () {
@@ -350,7 +350,7 @@ self.addEventListener("message", function (message) {
 		self.postMessage(messenger);
 		self.close();  // closes the web worker
 	}).catch(function (error) {
-		messenger.error = error;
+		messenger.error = { message: error.message, fileName: error.fileName, lineNumber: error.lineNumber };
 		self.postMessage(messenger);
 		self.close();  // closes the web worker
 	});
