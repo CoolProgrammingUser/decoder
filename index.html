@@ -14,7 +14,7 @@
 			var words = [[]];  // holds every English word in arrays in order of increasing word length
 			var verbs = [[]];  // holds every verb in arrays in order of increasing word length
 			var ALPHABET = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
-			var PUNCTUATION = [".", "?", "!", ",", "'", '"', ";", ":", "-", "(", ")"];
+			var PUNCTUATION = [".", "?", "!", ",", "'", '"', ";", ":", "-", "(", ")", "/"];
 			var solutions = [];  // holds all possible solutions
 			var filtered = {};
 			var hidden = [];
@@ -225,28 +225,42 @@
 				S.getId("solutionNumber").innerHTML = solutionIndex+1 + "/" + solutions.length;
 			}
 
-			/**
+			/**/
 			function decode() {
 				let worker = new Worker("webworker.js");
+				let messenger = {};
 				worker.addEventListener("message", function (message) {
-					if (solutions.length > 0) {
-						document.getElementById("solution").value = solutions[0];
-						S.getId("solutionNumber").textContent = "1/" + solutions.length;
+					if (message.data.error) {
+						document.getElementById("during").style.display = "none";
+						document.getElementById("before").style.display = "block";
+						S.makeDialog("The decoder encountered a problem.");
+						console.error(message.data.error);
+					} else if (message.data.progress < 100) {
+						S.getId("progressBar").style.width = message.data.progress + "%";
 					} else {
-						document.getElementById("solution").value = "No solution was found.";
-						S.getId("solutionNumber").textContent = "0/0";
-					}
-					document.getElementById("during").style.display = "none";
-					document.getElementById("after").style.display = "block";
-					var styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
-					S.forEach(styles, function (style) {
-						if (style.selectorText == ".cursor") {
-							style.style.cursor = "auto";
-							return "break";
+						solutions = message.data.solutions;
+						if (solutions.length > 0) {
+							document.getElementById("solution").value = solutions[0];
+							S.getId("solutionNumber").textContent = "1/" + solutions.length;
+						} else {
+							document.getElementById("solution").value = "No solution was found.";
+							S.getId("solutionNumber").textContent = "0/0";
 						}
-					});
+						document.getElementById("during").style.display = "none";
+						document.getElementById("after").style.display = "block";
+						var styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
+						S.forEach(styles, function (style) {
+							if (style.selectorText == ".cursor") {
+								style.style.cursor = "auto";
+								return "break";
+							}
+						});
+					}
 				});
-				worker.postMessage({ text: document.getElementById("code").value.toLowerCase() });
+				messenger.words = words;
+				messenger.verbs = verbs;
+				messenger.text = document.getElementById("code").value.toLowerCase();
+				worker.postMessage(messenger);
 			}
 			/*/
 			function decode() {
