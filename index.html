@@ -245,6 +245,7 @@
 						S.getId("progressBar").style.width = message.data.progress + "%";
 					} else {
 						solutions = message.data.solutions;
+						console.log(solutions);
 						if (solutions.length > 0) {
 							document.getElementById("solution").value = solutions[0];
 							S.getId("solutionNumber").textContent = "1/" + solutions.length;
