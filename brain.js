@@ -239,7 +239,7 @@ self.addEventListener("message", function (message) {
 			}
 		});
 
-		codeText = document.getElementById("code").value.toLowerCase().split(" ");  ///////////////////////////////////////////////////////////////////////////////////
+		codeText = message.data.text.split(" ");
 		codeText.forEach(function (word, index) {
 			codeText[index] = isolate(word);
 		});
