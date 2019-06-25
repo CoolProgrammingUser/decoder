@@ -341,7 +341,7 @@ self.addEventListener("message", function (message) {
 		resolve();
 	}).catch(function (error) {
 		console.error(error);
-		messenger.error = { message: error.message, fileName: error.fileName, lineNumber: error.lineNumber };
+		messenger.error = true;
 		messenger = JSON.parse(JSON.stringify(messenger));
 		self.postMessage(messenger);
 		self.close();  // closes the web worker
@@ -354,7 +354,7 @@ self.addEventListener("message", function (message) {
 		self.close();  // closes the web worker
 	}).catch(function (error) {
 		console.error(error);
-		messenger.error = { message: error.message, fileName: error.fileName, lineNumber: error.lineNumber };
+		messenger.error = true;
 		messenger = JSON.parse(JSON.stringify(messenger));
 		self.postMessage(messenger);
 		self.close();  // closes the web worker

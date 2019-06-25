@@ -241,7 +241,6 @@
 							}
 						});
 						S.makeDialog("The decoder encountered a problem.");
-						console.error(new Error(message.data.error.message, message.data.error.fileName, message.data.error.lineNumber));
 					} else if (message.data.progress < 100) {
 						S.getId("progressBar").style.width = message.data.progress + "%";
 					} else {
@@ -253,6 +252,7 @@
 							document.getElementById("solution").value = "No solution was found.";
 							S.getId("solutionNumber").textContent = "0/0";
 						}
+						console.info("Time to decode = " + message.data.time + " seconds");
 						document.getElementById("during").style.display = "none";
 						document.getElementById("after").style.display = "block";
 						let styles = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
