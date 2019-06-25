@@ -239,7 +239,7 @@ self.addEventListener("message", function (message) {
 			}
 		});
 
-		codeText = document.getElementById("code").value.toLowerCase().split(" ");
+		codeText = document.getElementById("code").value.toLowerCase().split(" ");  ///////////////////////////////////////////////////////////////////////////////////
 		codeText.forEach(function (word, index) {
 			codeText[index] = isolate(word);
 		});
@@ -340,7 +340,8 @@ self.addEventListener("message", function (message) {
 		}
 		resolve();
 	}).catch(function (error) {
-		messenger.error = error;
+		console.error(error);
+		messenger.error = { message: error.message, fileName: error.fileName, lineNumber: error.lineNumber };
 		messenger = JSON.parse(JSON.stringify(messenger));
 		self.postMessage(messenger);
 		self.close();  // closes the web worker
@@ -352,7 +353,8 @@ self.addEventListener("message", function (message) {
 		self.postMessage(messenger);
 		self.close();  // closes the web worker
 	}).catch(function (error) {
-		messenger.error = error;
+		console.error(error);
+		messenger.error = { message: error.message, fileName: error.fileName, lineNumber: error.lineNumber };
 		messenger = JSON.parse(JSON.stringify(messenger));
 		self.postMessage(messenger);
 		self.close();  // closes the web worker
