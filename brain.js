@@ -342,16 +342,16 @@ self.addEventListener("message", function (message) {
 	}).catch(function (error) {
 		messenger.error = error;
 		self.postMessage(messenger);
-		//// self.close();  // closes the web worker
+		self.close();  // closes the web worker
 	}).then(function () {
 		messenger.progress = 100;
 		messenger.solutions = solutions;
 		messenger.time = Math.round(performance.now() - time) / 1000;
 		self.postMessage(messenger);
-		//// self.close();  // closes the web worker
+		self.close();  // closes the web worker
 	}).catch(function (error) {
 		messenger.error = error;
 		self.postMessage(messenger);
-		//// self.close();  // closes the web worker
+		self.close();  // closes the web worker
 	});
 });

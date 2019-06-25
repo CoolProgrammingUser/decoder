@@ -10,9 +10,6 @@
 		-->
 		<script>
 			var S = Standards.general;
-
-			var worker = new Worker("webworker.js");
-
 			// https://www.worldclasslearning.com/english/five-verb-forms.html
 			var words = [[]];  // holds every English word in arrays in order of increasing word length
 			var verbs = [[]];  // holds every verb in arrays in order of increasing word length
@@ -230,6 +227,7 @@
 
 			/**/
 			function decode() {
+				let worker = new Worker("brain.js");
 				let messenger = {};
 				worker.addEventListener("message", function (message) {
 					if (message.data.error) {
@@ -237,7 +235,6 @@
 						document.getElementById("before").style.display = "block";
 						S.makeDialog("The decoder encountered a problem.");
 						console.error(message.data.error);
-						worker.removeEventListener("message", arguments.callee);
 					} else if (message.data.progress < 100) {
 						S.getId("progressBar").style.width = message.data.progress + "%";
 					} else {
@@ -258,7 +255,6 @@
 								return "break";
 							}
 						});
-						worker.removeEventListener("message", arguments.callee);
 					}
 				});
 				messenger.words = words;
