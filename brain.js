@@ -312,7 +312,7 @@ self.addEventListener("message", function (message) {
 				if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
 					if (index < currentIndexList.length - 1) {  // if the index isn't at the end of the array (if every word hasn't been checked yet)
 						index++;  // go to the next word of the encoded text
-						messenger.progress = (currentIndexList[0] + 1) / (totalIndexList[0] + 1) * 100;
+						messenger.progress = (currentIndexList[0] + 1) / (totalIndexList[0] + 1) * 100 - .1;
 						self.postMessage(messenger);  // gives the website an update up the progress
 					} else {
 						solution = [];
