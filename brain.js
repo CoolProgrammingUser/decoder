@@ -344,19 +344,17 @@ self.addEventListener("message", function (message) {
 		messenger.error = true;
 		messenger = JSON.parse(JSON.stringify(messenger));
 		self.postMessage(messenger);
-		self.close();  // closes the web worker
 	}).then(function () {
 		messenger.progress = 100;
 		messenger.solutions = solutions;
 		messenger.time = Math.round(performance.now() - time) / 1000;
 		messenger = JSON.parse(JSON.stringify(messenger));
 		self.postMessage(messenger);
-		self.close();  // closes the web worker
+		// self.close();  // closes the web worker
 	}).catch(function (error) {
 		console.error(error);
 		messenger.error = true;
 		messenger = JSON.parse(JSON.stringify(messenger));
 		self.postMessage(messenger);
-		self.close();  // closes the web worker
 	});
 });
