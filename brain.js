@@ -129,6 +129,7 @@ function checkSolution(solution) {
 self.addEventListener("message", function (message) {
 	var time = performance.now();  //// tracks the performance of the decoder
 	new Promise(function (resolve, reject) {
+		solutions = [];
 		var codeText = message.data.text;  // holds the encoded text
 		words = message.data.words;
 		verbs = message.data.verbs;
@@ -305,6 +306,7 @@ self.addEventListener("message", function (message) {
 			return falseTrue;
 		}
 		// determines which symbol decryptions work across words
+		console.log("Getting to work");
 		while (trueFalse) {  // This is the most taxing part of the decoder.
 			if (currentIndexList[index] <= totalIndexList[index]) {
 				if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
@@ -338,18 +340,22 @@ self.addEventListener("message", function (message) {
 				}
 			}
 		}
+		console.log("Resolving");
 		resolve();
+		console.log("Resolved");
 	}).catch(function (error) {
 		console.error(error);
 		messenger.error = true;
 		messenger = JSON.parse(JSON.stringify(messenger));
 		self.postMessage(messenger);
 	}).then(function () {
+		console.log("Finishing");
 		messenger.progress = 100;
 		messenger.solutions = solutions;
 		messenger.time = Math.round(performance.now() - time) / 1000;
 		messenger = JSON.parse(JSON.stringify(messenger));
 		self.postMessage(messenger);
+		console.log("Posted");
 		// self.close();  // closes the web worker
 	}).catch(function (error) {
 		console.error(error);
