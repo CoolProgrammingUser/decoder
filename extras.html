@@ -13,11 +13,6 @@
 			S.listen("morseCodeText", "dblclick", function () {
 				this.value = "";
 			});
-			S.listen("morseCodeText", "keydown", function (event) {
-				if (event.key == "Enter") {
-					toMorseCode();
-				}
-			});
 			function toMorseCode() {
 				if (S.getId("morseCodeText").value.trim() != "") {
 					let translation = "";
@@ -1127,7 +1122,7 @@
 			});
 
 
-			S.onKeyDown("Enter", function () {
+			S.listen("Enter", "keydown", function () {
 				switch (document.activeElement) {
 					case S.getId("morseCodeText"):
 						toMorseCode();
