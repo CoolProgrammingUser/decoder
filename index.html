@@ -45,7 +45,6 @@
 						}
 						words[word.length - 1].push(word);
 					});
-					console.log(words);
 				});
 
 				// sets "verbs" to a list of verbs
@@ -268,7 +267,6 @@
 						worker.removeEventListener("message", arguments.callee);
 					}
 				});
-				console.log(words);
 				messenger.words = words;
 				messenger.verbs = verbs;
 				messenger.text = document.getElementById("code").value.toLowerCase();
