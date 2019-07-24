@@ -267,6 +267,7 @@
 						worker.removeEventListener("message", arguments.callee);
 					}
 				});
+				console.log(words);
 				messenger.words = words;
 				messenger.verbs = verbs;
 				messenger.text = document.getElementById("code").value.toLowerCase();
