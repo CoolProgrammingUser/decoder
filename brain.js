@@ -153,6 +153,7 @@ self.addEventListener("message", function (message) {
 			/// isolate() removes the punctuation from the word
 			codeWords[isolate(word)] = [];  // assignment might not work if there's {}s
 		});
+		console.log(codeWords);
 		/// "codeWords" now has an empty array for every word in the encoded text
 		/// and every word in the encoded text is in order of increasing length
 		/// (smaller words have less possible words? which is helpful to start with later) ////
