@@ -46,10 +46,6 @@
 						words[word.length - 1].push(word);
 					});
 					console.log(words);
-				}).catch(function (error) {
-					S.makeDialog("The word list wasn't loaded.");
-					console.error("The word list wasn't loaded.");
-					console.error(error);
 				});
 
 				// sets "verbs" to a list of verbs
@@ -60,10 +56,6 @@
 						}
 						verbs[verb.length - 1].push(verb);
 					});
-				}).catch(function (error) {
-					S.makeDialog("The verb list wasn't loaded.");
-					console.error("The verb list wasn't loaded.");
-					console.error(error);
 				});
 
 				// gives the decode button functionality
