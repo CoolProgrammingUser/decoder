@@ -153,12 +153,12 @@ self.addEventListener("message", function (message) {
 			/// isolate() removes the punctuation from the word
 			codeWords[isolate(word)] = [];  // assignment might not work if there's {}s
 		});
-		console.log(codeWords);
 		/// "codeWords" now has an empty array for every word in the encoded text
 		/// and every word in the encoded text is in order of increasing length
 		/// (smaller words have less possible words? which is helpful to start with later) ////
 		S.forEach(codeWords, function (array, key) {  // finds all of the words with the same letter pattern as the code words
 			var standardizedWord = standardize(key);  // Doing this only once (not at every if-statement) speeds things up.
+			console.log(words[key.length - 1]);
 			words[key.length - 1].forEach(function (word) {
 				if (standardizedWord == standardize(word)) {
 					array.push(word);
