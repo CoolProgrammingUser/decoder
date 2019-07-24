@@ -158,6 +158,7 @@ self.addEventListener("message", function (message) {
 		/// (smaller words have less possible words? which is helpful to start with later) ////
 		S.forEach(codeWords, function (array, key) {  // finds all of the words with the same letter pattern as the code words
 			var standardizedWord = standardize(key);  // Doing this only once (not at every if-statement) speeds things up.
+			console.log(key);
 			console.log(words[key.length - 1]);
 			words[key.length - 1].forEach(function (word) {
 				if (standardizedWord == standardize(word)) {
