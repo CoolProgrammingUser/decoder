@@ -10,6 +10,7 @@ ave
 bbc
 bc
 bio
+biol
 biz
 bmw
 blvd
@@ -74,6 +75,7 @@ ie
 im
 img
 inc
+incl
 ind
 int
 ip
@@ -92,6 +94,7 @@ la
 lb
 lcd
 lib
+libs
 llc
 ltd
 m
@@ -105,6 +108,8 @@ mic
 mid
 mil
 min
+mins
+misc
 ml
 mlb
 mm
@@ -160,10 +165,12 @@ rpm
 rsvp
 rv
 sat
+sbjct
 sci
 sec
 seo
 sep
+sept
 seq
 sms
 sqrt
@@ -173,6 +180,8 @@ std
 sun
 tba
 tel
+temp
+thru
 thu
 thurs
 tue
