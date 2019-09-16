@@ -302,62 +302,156 @@
 			});
 			S.listen("encode2", "click", function () {
 				if (S.getId("encryptionKey").value.trim() != "") {
-					let key = S.getId("encryptionKey").value.trim();
-					let keyIndex = 0;
-					let text = "";
-					if (S.getId("decrypted2").value.trim() != "") {
-						let message = S.getId("decrypted2").value.trim();
-						if (message[0] != " ") {
-							message = " " + message;
+					if (S.getId("advancedEncryption").checked) {
+						let message = "";
+						if (S.getId("decrypted2").value.trim() != "") {  // if encoding
+							message = S.getId("decrypted2").value.trim();
+							// reformats the message
+							if (message[0] != " ") {
+								message = " " + message;
+							}
+							message = message.replace(/[A-Z]/g, function (capital) {
+								return " " + capital.toLowerCase();
+							});
+							message = message.replace(/ [a-z]/g, function (word) {
+								return word[1].toUpperCase();
+							});
+						} else if (S.getId("encrypted2").value.trim() != "") {  // if decoding
+							message = S.getId("encrypted2").value.trim();
 						}
-						message = message.replace(/[A-Z]/g, function (capital) {
-							return " " + capital.toLowerCase();
+						// sets the message length
+						// (emojis are counted as two characters ordinarily)
+						let length = 0;  // length of the message
+						S.forEach(message, function () {
+							length++;
 						});
-						message = message.replace(/ [a-z]/g, function (word) {
-							return word[1].toUpperCase();
+						length %= 100;  // prevents moving into awkward ranges in long messages
+						// complicates the password
+						let password = S.getId("encryptionKey").value.trim();
+						let key = [];  // each code point of the password
+						S.forEach(password, function (letter) {
+							key.push(letter.codePointAt(0) + password.length + password.slice(-3).codePointAt(0) % 10 - 5);
 						});
-						S.forEach(message, function (character) {
-							let number = character.codePointAt(0) + key.codePointAt(keyIndex);
-							if (number > 580 - 325 || number < 512 - 325) {
-								text += String.fromCodePoint(127900 + number);
-							} else {
-								text += String.fromCodePoint(128000 + number + 325);
+						key = key.slice(length % 5 + 1).concat(key.slice(0, length % 5 + 1));
+						key[0] += length;
+						key[key.length - 1] += length;
+						// handles the encoding or decoding
+						let keyIndex = 0;  // which letter of the password is currently being used
+						let text = "";  // the result
+						if (S.getId("decrypted2").value.trim() != "") {  // if encoding
+							// encodes each letter
+							S.forEach(message, function (character) {
+								let number = character.codePointAt(0) + key[keyIndex];
+								if (number > 128500) {  // handles one range of emojis
+									text += String.fromCodePoint(number - 127744 + 154);
+								} else if (number >= 127744) {  // handles another range of emojis
+									text += String.fromCodePoint(number - 127744 + 180);
+								} else if (number > 580 - 325 || number < 512 - 325) {  // converts everything else into emojis
+									text += String.fromCodePoint(127900 + number);
+								} else {  // helps make face emojis the most likely
+									text += String.fromCodePoint(128000 + number + 325);
+								}
+								keyIndex++;
+								if (keyIndex >= key.length) {
+									keyIndex = 0;
+								}
+							});
+							// displays the encrypted text
+							S.getId("encrypted2").value = text;
+						} else if (S.getId("encrypted2").value.trim() != "") {  // if decoding
+							// decodes each emoji
+							S.forEach(message, function (emoji) {
+								let codePoint = emoji.codePointAt(0);
+								if (codePoint <= 910) {  // handles another range of emojis
+									codePoint += 127564;
+								} else if (codePoint < 127900) {  // handles one range of emojis
+									codePoint += 127590;
+								} else if (codePoint < 128512 || codePoint > 128580) {  // converts everything else back into text
+									codePoint -= 127900;
+								} else {  // helps undo face emojis
+									codePoint -= 128325;
+								}
+								codePoint -= key[keyIndex];
+								if (codePoint < 0) {
+									codePoint = 0;
+								}
+								text += String.fromCodePoint(codePoint);
+								keyIndex++;
+								if (keyIndex >= key.length) {
+									keyIndex = 0;
+								}
+							});
+							// reformats the message
+							text = text.replace(/[A-Z]/g, function (capital) {
+								return " " + capital.toLowerCase();
+							});
+							text = text.replace(/  [a-z]/g, function (word) {
+								return " " + word[2].toUpperCase();
+							});
+							if (text[0] == " ") {
+								text = text.slice(1);
 							}
-							keyIndex++;
-							if (keyIndex >= key.length) {
-								keyIndex = 0;
-							}
-						});
-						S.getId("encrypted2").value = text;
-					} else if (S.getId("encrypted2").value.trim() != "") {
-						let message = S.getId("encrypted2").value.trim();
-						S.forEach(message.length / 2, function (number) {
-							let codePoint = (message[message.length - number * 2] + message[message.length - number * 2 + 1]).codePointAt(0);
-							if (codePoint < 128512 || codePoint > 128580) {
-								codePoint -= 127900;
-							} else {
-								codePoint -= 128325;
-							}
-							codePoint -= key.codePointAt(keyIndex);
-							if (codePoint < 0) {
-								codePoint = 0;
-							}
-							text += String.fromCodePoint(codePoint);
-							keyIndex++;
-							if (keyIndex >= key.length) {
-								keyIndex = 0;
-							}
-						});
-						text = text.replace(/[A-Z]/g, function (capital) {
-							return " " + capital.toLowerCase();
-						});
-						text = text.replace(/  [a-z]/g, function (word) {
-							return " " + word[2].toUpperCase();
-						});
-						if (text[0] == " ") {
-							text = text.slice(1);
+							// displays the decoded text
+							S.getId("decrypted2").value = text;
 						}
-						S.getId("decrypted2").value = text;
+					} else {
+						let key = S.getId("encryptionKey").value.trim();
+						let keyIndex = 0;
+						let text = "";
+						if (S.getId("decrypted2").value.trim() != "") {
+							let message = S.getId("decrypted2").value.trim();
+							if (message[0] != " ") {
+								message = " " + message;
+							}
+							message = message.replace(/[A-Z]/g, function (capital) {
+								return " " + capital.toLowerCase();
+							});
+							message = message.replace(/ [a-z]/g, function (word) {
+								return word[1].toUpperCase();
+							});
+							S.forEach(message, function (character) {
+								let number = character.codePointAt(0) + key.codePointAt(keyIndex);
+								if (number > 580 - 325 || number < 512 - 325) {
+									text += String.fromCodePoint(127900 + number);
+								} else {
+									text += String.fromCodePoint(128000 + number + 325);
+								}
+								keyIndex++;
+								if (keyIndex >= key.length) {
+									keyIndex = 0;
+								}
+							});
+							S.getId("encrypted2").value = text;
+						} else if (S.getId("encrypted2").value.trim() != "") {
+							let message = S.getId("encrypted2").value.trim();
+							S.forEach(message.length / 2, function (number) {
+								let codePoint = (message[message.length - number * 2] + message[message.length - number * 2 + 1]).codePointAt(0);
+								if (codePoint < 128512 || codePoint > 128580) {
+									codePoint -= 127900;
+								} else {
+									codePoint -= 128325;
+								}
+								codePoint -= key.codePointAt(keyIndex);
+								if (codePoint < 0) {
+									codePoint = 0;
+								}
+								text += String.fromCodePoint(codePoint);
+								keyIndex++;
+								if (keyIndex >= key.length) {
+									keyIndex = 0;
+								}
+							});
+							text = text.replace(/[A-Z]/g, function (capital) {
+								return " " + capital.toLowerCase();
+							});
+							text = text.replace(/  [a-z]/g, function (word) {
+								return " " + word[2].toUpperCase();
+							});
+							if (text[0] == " ") {
+								text = text.slice(1);
+							}
+							S.getId("decrypted2").value = text;
+						}
 					}
 				} else {
 					S.makeDialog("A password is required.");
@@ -1205,6 +1299,8 @@
 			<br>
 			<textarea id="decrypted2" placeholder="Decoded text"></textarea>
 			<textarea id="encrypted2" placeholder="Encoded text"></textarea>
+			<br>
+			<input type="checkbox" id="advancedEncryption"><label for="advancedEncryption">Use advanced encryption</label>
 			<br>
 			<button id="encode2">
 				Encode
