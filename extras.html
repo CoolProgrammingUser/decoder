@@ -310,6 +310,9 @@
 							if (message[0] != " ") {
 								message = " " + message;
 							}
+							message = message.replace(/(^|\W)([A-Z])/g, function (match, notLetter, capital) {
+								return notLetter + "  " + capital;
+							});
 							message = message.replace(/[A-Z]/g, function (capital) {
 								return " " + capital.toLowerCase();
 							});
@@ -385,6 +388,9 @@
 							text = text.replace(/[A-Z]/g, function (capital) {
 								return " " + capital.toLowerCase();
 							});
+							text = text.replace(/   [a-z]/g, function (word) {
+								return word[3].toUpperCase();
+							});
 							text = text.replace(/  [a-z]/g, function (word) {
 								return " " + word[2].toUpperCase();
 							});
@@ -403,6 +409,9 @@
 							if (message[0] != " ") {
 								message = " " + message;
 							}
+							message = message.replace(/(^|\W)([A-Z])/g, function (match, notLetter, capital) {
+								return notLetter + "  " + capital;
+							});
 							message = message.replace(/[A-Z]/g, function (capital) {
 								return " " + capital.toLowerCase();
 							});
@@ -443,6 +452,9 @@
 							});
 							text = text.replace(/[A-Z]/g, function (capital) {
 								return " " + capital.toLowerCase();
+							});
+							text = text.replace(/   [a-z]/g, function (word) {
+								return word[3].toUpperCase();
 							});
 							text = text.replace(/  [a-z]/g, function (word) {
 								return " " + word[2].toUpperCase();
