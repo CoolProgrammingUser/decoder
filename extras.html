@@ -195,7 +195,7 @@
 					telegraph.play(translation, { attack: 1, noteLength: 1000/S.getId("morseCodeSpeed").value, decay: 1 });
 				}
 			}
-			S.listen("morseCodeSpeed", "dblclick", function () {
+			S.listen("morseCodeSpeed", ["dblclick", "touchhold"], function () {
 				this.value = "";
 			});
 			S.listen("morseCodeSpeed", "change", function () {
@@ -215,6 +215,38 @@
 					text.value = "";
 				}
 			});
+
+
+			S.listen("substitutedText", ["dblclick", "touchhold"], function () {
+				this.value = "";
+			});
+			S.listen("fontSize", "change", function () {
+				S.getId("substitutedText").style.fontSize = this.value + "em";
+			});
+			function changeFont(fontID) {
+				switch (fontID) {
+					case "normalFont":
+						S.getId("substitutedText").style.fontFamily = "serif";
+						break;
+                    case "badDuckFont":
+                        S.getId("substitutedText").style.fontFamily = "Bad Duck";
+						break;
+                    default:
+                        S.getId("substitutedText").style.fontFamily = "serif";
+                }
+            }
+			S.listen("normalFont", "click", function () {
+				if (this.checked) {
+					changeFont(this.id);
+				}
+            });
+            S.listen("badDuckFont", "click", function () {
+				if (this.checked) {
+                    changeFont(this.id);
+                } else if (!S.getName("fonts", true)) {  // If none of the radio buttons are selected (function would return null)
+					changeFont();
+                }
+            });
 
 
 			S.listen("decrypted1", "dblclick", function () {
@@ -1228,30 +1260,14 @@
 			});
 
 
-			S.listen("Enter", "keydown", function () {
-				switch (document.activeElement) {
-					case S.getId("morseCodeText"):
-						toMorseCode();
-						break;
-					case S.getId("decrypted1"):
-						S.getId("encode1").click();
-						break;
-					case S.getId("encrypted1"):
-						S.getId("encode1").click();
-						break;
-					case S.getId("decrypted2"):
-						S.getId("encode2").click();
-						break;
-					case S.getId("encrypted2"):
-						S.getId("encode2").click();
-						break;
-					case S.getId("decrypted3"):
-						S.getId("encode3").click();
-						break;
-				}
-			});
 
-			S.onLoad(function () {
+            S.onLoad(function () {
+				S.listen(S.getId("morseCodeText"), "keydown", function (event) {
+                    if (event.key == "Enter") {
+                        toMorseCode();
+                    }
+				});
+
 				S.makeToneGenerator(true);
 			});
 		</script>
@@ -1260,6 +1276,10 @@
 			#morseCodeSpeed {
 				width: 2em;
 			}
+            #decrypted3 {
+                width: 15em;
+                height: 9em;
+            }
 			#encrypted3 {
 				border: .05em solid black;
 				padding: .5em;
@@ -1299,10 +1319,19 @@
 				Make a random message in Morse Code
 			</button>
 			<h2>
+				Code fonts
+			</h2>
+			<textarea id="substitutedText"></textarea>
+			<br>
+			Font size: <div style="background:#cccccc; border-radius:.25em"><input type="range" id="fontSize" min=".5" max="3" step=".1" value="1"></div>
+			<br>
+			<input type="radio" name="fonts" id="normalFont"><label for="normalFont">Normal</label>
+			<input type="radio" name="fonts" id="badDuckFont"><label for="badDuckFont">Bad Duck</label>
+			<h2>
 				Code generators
 			</h2>
 			<section>
-				The following sections can be used to convert text into various codes. In places where the encrypted section is editable, code can be put in, and decrypted text will be the output. Pressing "Enter" on a keyboard while having an input selected will function the same as pressing the "Encode" buttons. Double-clicking on an input will erase both the decrypted and encrypted text.
+				The following sections can be used to convert text into various codes. In places where the encrypted section is editable, code can be put in, and decrypted text will be the output. Double-clicking on an input will erase both the decrypted and encrypted text.
 			</section>
 			<h3>
 				Password-protected encryption
@@ -1320,11 +1349,12 @@
 			<h3>
 				Letter code
 			</h3>
-			<textarea id="decrypted1" placeholder="Encode"></textarea>
+			<textarea id="decrypted1" placeholder="Decoded text"></textarea>
+			<textarea id="encrypted1" placeholder="Encoded text"></textarea>
+			<br>
 			<button id="encode1">
 				Encode
 			</button>
-			<textarea id="encrypted1" placeholder="Decode"></textarea>
 			<h3>
 				Symbol code
 			</h3>
@@ -1332,12 +1362,13 @@
 				This can change text into seemingly random symbols. Pressing "Encode" multiple times will give different symbols. The symbols in the output are pictures and can be saved and used elsewhere. (Maximum symbol size is recommended if the pictures will ever be enlarged.) Alternatively, the "Open symbols in a new window" button will open a new tab or window with the symbols displayed, and a screenshot can be taken. Due to the extreme complexity of preventing such an occurrence, there will undoubtedly be times when parts of a symbol overlap with themselves or the symbol is awkwardly arranged; As a means of combating this, it's possible to click on the undesirable symbol to rearrange its parts. There are no decoding capabilities at present because no one has time for image-recognition software. Sometimes, the symbol area randomly disappears when changing individual symbols at a large symbol-size; This can be corrected by changing the symbol size (and changing it back).
 			</section>
 			<textarea id="decrypted3" placeholder="Text"></textarea>
-			<button id="encode3">
-				Encode
-			</button>
 			<div id="encrypted3"></div>
 			<br>
 			Symbol size: <div style="background:#cccccc; border-radius:.25em"><input type="range" id="symbolSize" min="6" max="90" step="6" value="24"></div>
+			<br>
+			<button id="encode3">
+				Encode
+			</button>
 			<br>
 			<button id="symbolWindow">Open symbols in<br>a new window</button>
 		</main>
