@@ -339,18 +339,18 @@
 						if (S.getId("decrypted2").value.trim() != "") {  // if encoding
 							message = S.getId("decrypted2").value.trim();
 							// reformats the message
-							if (message[0] != " ") {
-								message = " " + message;
-							}
-							message = message.replace(/(^|\W)([A-Z])/g, function (match, notLetter, capital) {
-								return notLetter + "  " + capital;
+							message = message.replace(/    /g, "\t");
+							message = message.replace(/ +/g, " ");
+							message = message.replace(/[A-Z]| [a-z]/g, function (match) {
+								if (match.length == 1) {  // if it's a capital letter
+									return " " + match;
+								} else {  // if it's an uncapitalized beginning of a word
+									return match[1].toUpperCase();
+                                }
 							});
-							message = message.replace(/[A-Z]/g, function (capital) {
-								return " " + capital.toLowerCase();
-							});
-							message = message.replace(/ [a-z]/g, function (word) {
-								return word[1].toUpperCase();
-							});
+							/// all words are no longer separated by spaces but start with a capital
+							/// words that started with a capital have their capital preceded by two spaces
+							/// capitals within words (such as acronyms) have their capital preceded by one space
 						} else if (S.getId("encrypted2").value.trim() != "") {  // if decoding
 							message = S.getId("encrypted2").value.trim();
 						}
@@ -417,18 +417,13 @@
 								}
 							});
 							// reformats the message
-							text = text.replace(/[A-Z]/g, function (capital) {
-								return " " + capital.toLowerCase();
+							text = text.replace(/ ?[A-Z]/g, function (match) {
+								if (match.length == 1) {  // if it's supposed to be an uncapitalized beginning of a word (if there's not a space before the capital)
+									return " " + match.toLowerCase();
+								} else {  // if it's supposed to be a capital letter (if there's a space before the capital)
+									return match[1];
+                                }
 							});
-							text = text.replace(/   [a-z]/g, function (word) {
-								return word[3].toUpperCase();
-							});
-							text = text.replace(/  [a-z]/g, function (word) {
-								return " " + word[2].toUpperCase();
-							});
-							if (text[0] == " ") {
-								text = text.slice(1);
-							}
 							// displays the decoded text
 							S.getId("decrypted2").value = text;
 						}
