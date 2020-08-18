@@ -231,6 +231,8 @@
                     case "badDuckFont":
                         S.getId("substitutedText").style.fontFamily = "Bad Duck";
 						break;
+                    case "kidtenuhfFont":
+                        S.getId("substitutedText").style.fontFamily = "KidtEnuhf";
                     default:
                         S.getId("substitutedText").style.fontFamily = "serif";
                 }
@@ -243,8 +245,11 @@
             S.listen("badDuckFont", "click", function () {
 				if (this.checked) {
                     changeFont(this.id);
-                } else if (!S.getName("fonts", true)) {  // If none of the radio buttons are selected (function would return null)
-					changeFont();
+                }
+            });
+            S.listen("kidtenuhfFont", "click", function () {
+                if (this.checked) {
+                    changeFont(this.id);
                 }
             });
 
@@ -1287,6 +1292,11 @@
 				display: inline;
 				margin: .25em .5em;
 			}
+
+            @font-face {
+                font-family: "KidtEnuhf";
+                src: url("fonts/KidtEnuhf.ttf") format("truetype");
+            }
 		</style>
 	</head>
 	<body>
@@ -1320,8 +1330,9 @@
 			<br>
 			Font size: <div style="background:#cccccc; border-radius:.25em"><input type="range" id="fontSize" min=".5" max="3" step=".1" value="1"></div>
 			<br>
-			<input type="radio" name="fonts" id="normalFont"><label for="normalFont">Normal</label>
+			<input type="radio" name="fonts" id="normalFont" checked><label for="normalFont">Normal</label>
 			<input type="radio" name="fonts" id="badDuckFont"><label for="badDuckFont">Bad Duck</label>
+			<input type="radio" name="fonts" id="kidtenuhfFont"><label for="kidtenuhfFont">KidtEnuhf</label>
 			<h2>
 				Code generators
 			</h2>
