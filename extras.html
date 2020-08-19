@@ -248,27 +248,46 @@
 			S.listen("normalFont", "click", function () {
 				if (this.checked) {
 					changeFont(this.id);
+					S.getId("substitutedText").placeholder = "Text";
 				}
             });
             S.listen("badDuckFont", "click", function () {
 				if (this.checked) {
                     changeFont(this.id);
+                    S.getId("substitutedText").placeholder = "text";
                 }
             });
             S.listen("kidtenuhfFont", "click", function () {
                 if (this.checked) {
                     changeFont(this.id);
+                    S.getId("substitutedText").placeholder = "tekst";
                 }
             });
+			S.listen("fontHelp", "focus", function () {
+				this.selectedIndex = 0;  // clears the old selection (could be set to -1)
+			});
+			S.listen("fontHelp", "change", function () {
+				switch (this.value) {
+					case "Bad Duck":
+                        S.getId("badDuckHelp").style.left = "60%";
+                        S.getId("kidtenuhfHelp").style.left = "100%";
+						break;
+                    case "KidtEnuhf":
+                        S.getId("kidtenuhfHelp").style.left = "60%";
+                        S.getId("badDuckHelp").style.left = "100%";
+						break;
+                    default:
+                        S.getId("badDuckHelp").style.left = "100%";
+                        S.getId("kidtenuhfHelp").style.left = "100%";
+                }
+			});
 
 
 			S.listen("decrypted1", "dblclick", function () {
 				this.value = "";
-				S.getId("encrypted1").value = "";
 			});
 			S.listen("encrypted1", "dblclick", function () {
 				this.value = "";
-				S.getId("decrypted1").value = "";
 			});
 			S.listen("encode1", "click", function () {
 				let alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
@@ -337,13 +356,14 @@
 			});
 
 
-			S.listen("decrypted2", "dblclick", function () {
+            S.listen("encryptionKey", ["dblclick", "touchhold"], function () {
+                this.value = "";
+            });
+            S.listen("decrypted2", ["dblclick", "touchhold"], function () {
 				this.value = "";
-				S.getId("encrypted2").value = "";
 			});
-			S.listen("encrypted2", "dblclick", function () {
+            S.listen("encrypted2", ["dblclick", "touchhold"], function () {
 				this.value = "";
-				S.getId("decrypted2").value = "";
 			});
 			S.listen("encode2", "click", function () {
 				if (S.getId("encryptionKey").value.trim() != "") {
@@ -1347,11 +1367,273 @@
 			Font size: <div style="background:#cccccc; border-radius:.25em"><input type="range" id="fontSize" min=".5" max="3" step=".1" value="1"></div>
 			<br>
 			<input type="checkbox" id="checkSpelling"><label for="checkSpelling">Check spelling</label>
+			<br>
+			Access help for
+			<select id="fontHelp">
+				<option value="" selected>None</option>
+				<option value="Bad Duck">Bad Duck</option>
+				<option value="KidtEnuhf">KidtEnuhf</option>
+			</select>
+			<aside id="badDuckHelp" data-heading="Bad Duck">
+				<table>
+					<tr>
+						<th>Letter</th>
+						<th>Symbol</th>
+						<th>Letter</th>
+						<th>Symbol</th>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</table>
+			</aside>
+			<aside id="kidtenuhfHelp" data-heading="KidtEnuhf">
+				<table>
+					<tr>
+						<th>Sound</th>
+						<th>Letter</th>
+						<th>Symbol</th>
+					</tr>
+					<tr>
+						<td>a</td>
+						<td>a</td>
+						<td style="font-family:KidtEnuhf">a</td>
+					</tr>
+					<tr>
+						<td>ae</td>
+						<td>I</td>
+						<td style="font-family:KidtEnuhf">I</td>
+					</tr>
+					<tr>
+						<td>ah</td>
+						<td>A</td>
+						<td style="font-family:KidtEnuhf">A</td>
+					</tr>
+					<tr>
+						<td>aw</td>
+						<td>W</td>
+						<td style="font-family:KidtEnuhf">W</td>
+					</tr>
+					<tr>
+						<td>ay</td>
+						<td>Y</td>
+						<td style="font-family:KidtEnuhf">Y</td>
+					</tr>
+					<tr>
+						<td>b</td>
+						<td>b</td>
+						<td style="font-family:KidtEnuhf">b</td>
+					</tr>
+					<tr>
+						<td>ch</td>
+						<td>c</td>
+						<td style="font-family:KidtEnuhf">c</td>
+					</tr>
+					<tr>
+						<td>d</td>
+						<td>d</td>
+						<td style="font-family:KidtEnuhf">d</td>
+					</tr>
+					<tr>
+						<td>dh</td>
+						<td>D</td>
+						<td style="font-family:KidtEnuhf">D</td>
+					</tr>
+					<tr>
+						<td>dt</td>
+						<td>q</td>
+						<td style="font-family:KidtEnuhf">q</td>
+					</tr>
+					<tr>
+						<td>e</td>
+						<td>e</td>
+						<td style="font-family:KidtEnuhf">e</td>
+					</tr>
+					<tr>
+						<td>ee</td>
+						<td>E</td>
+						<td style="font-family:KidtEnuhf">E</td>
+					</tr>
+					<tr>
+						<td>f</td>
+						<td>f</td>
+						<td style="font-family:KidtEnuhf">f</td>
+					</tr>
+					<tr>
+						<td>g</td>
+						<td>g</td>
+						<td style="font-family:KidtEnuhf">g</td>
+					</tr>
+					<tr>
+						<td>h</td>
+						<td>h</td>
+						<td style="font-family:KidtEnuhf">h</td>
+					</tr>
+					<tr>
+						<td>i</td>
+						<td>i</td>
+						<td style="font-family:KidtEnuhf">i</td>
+					</tr>
+					<tr>
+						<td>j</td>
+						<td>j</td>
+						<td style="font-family:KidtEnuhf">j</td>
+					</tr>
+					<tr>
+						<td>k</td>
+						<td>k</td>
+						<td style="font-family:KidtEnuhf">k</td>
+					</tr>
+					<tr>
+						<td>l</td>
+						<td>l</td>
+						<td style="font-family:KidtEnuhf">l</td>
+					</tr>
+					<tr>
+						<td>m</td>
+						<td>m</td>
+						<td style="font-family:KidtEnuhf">m</td>
+					</tr>
+					<tr>
+						<td>n</td>
+						<td>n</td>
+						<td style="font-family:KidtEnuhf">n</td>
+					</tr>
+					<tr>
+						<td>o</td>
+						<td>o</td>
+						<td style="font-family:KidtEnuhf">o</td>
+					</tr>
+					<tr>
+						<td>oo</td>
+						<td>O</td>
+						<td style="font-family:KidtEnuhf">O</td>
+					</tr>
+					<tr>
+						<td>p</td>
+						<td>p</td>
+						<td style="font-family:KidtEnuhf">p</td>
+					</tr>
+					<tr>
+						<td>r</td>
+						<td>r</td>
+						<td style="font-family:KidtEnuhf">r</td>
+					</tr>
+					<tr>
+						<td>rr</td>
+						<td>R</td>
+						<td style="font-family:KidtEnuhf">R</td>
+					</tr>
+					<tr>
+						<td>s</td>
+						<td>s</td>
+						<td style="font-family:KidtEnuhf">s</td>
+					</tr>
+					<tr>
+						<td>sh</td>
+						<td>S</td>
+						<td style="font-family:KidtEnuhf">S</td>
+					</tr>
+					<tr>
+						<td>t</td>
+						<td>t</td>
+						<td style="font-family:KidtEnuhf">t</td>
+					</tr>
+					<tr>
+						<td>th</td>
+						<td>T</td>
+						<td style="font-family:KidtEnuhf">T</td>
+					</tr>
+					<tr>
+						<td>u</td>
+						<td>u</td>
+						<td style="font-family:KidtEnuhf">u</td>
+					</tr>
+					<tr>
+						<td>uh</td>
+						<td>U</td>
+						<td style="font-family:KidtEnuhf">U</td>
+					</tr>
+					<tr>
+						<td>v</td>
+						<td>v</td>
+						<td style="font-family:KidtEnuhf">v</td>
+					</tr>
+					<tr>
+						<td>w</td>
+						<td>w</td>
+						<td style="font-family:KidtEnuhf">w</td>
+					</tr>
+					<tr>
+						<td>[None]</td>
+						<td>x</td>
+						<td style="font-family:KidtEnuhf">x</td>
+					</tr>
+					<tr>
+						<td>-</td>
+						<td>-</td>
+						<td style="font-family:KidtEnuhf">-</td>
+					</tr>
+					<tr>
+						<td>y</td>
+						<td>y</td>
+						<td style="font-family:KidtEnuhf">y</td>
+					</tr>
+					<tr>
+						<td>z</td>
+						<td>z</td>
+						<td style="font-family:KidtEnuhf">z</td>
+					</tr>
+					<tr>
+						<td>zh</td>
+						<td>Z</td>
+						<td style="font-family:KidtEnuhf">Z</td>
+					</tr>
+					<tr>
+						<td>ng</td>
+						<td>N</td>
+						<td style="font-family:KidtEnuhf">N</td>
+					</tr>
+					<tr>
+						<td>too</td>
+						<td>Q</td>
+						<td style="font-family:KidtEnuhf">Q</td>
+					</tr>
+					<tr>
+						<td>/</td>
+						<td>/</td>
+						<td style="font-family:KidtEnuhf">/</td>
+					</tr>
+					<tr>
+						<td>ol</td>
+						<td>L</td>
+						<td style="font-family:KidtEnuhf">L</td>
+					</tr>
+					<tr>
+						<td>az</td>
+						<td>X</td>
+						<td style="font-family:KidtEnuhf">X</td>
+					</tr>
+					<tr>
+						<td>me</td>
+						<td>M</td>
+						<td style="font-family:KidtEnuhf">M</td>
+					</tr>
+					<tr>
+						<td>[Bold]</td>
+						<td>B</td>
+						<td style="font-family:KidtEnuhf">B</td>
+					</tr>
+				</table>
+			</aside>
 			<h2>
 				Code generators
 			</h2>
 			<section>
-				The following sections can be used to convert text into various codes. In places where the encrypted section is editable, code can be put in, and decrypted text will be the output. Double-clicking on an input will erase both the decrypted and encrypted text.
+				The following sections can be used to convert text into various codes. In places where the encrypted section is editable, code can be put in, and decrypted text will be the output. If both inputs are filled, encoding the decrypted text wins out. Double-clicking or touching and holding on an input will erase its text.
 			</section>
 			<h3>
 				Password-protected encryption
