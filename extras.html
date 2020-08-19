@@ -219,7 +219,14 @@
 
 			S.listen("substitutedText", ["dblclick", "touchhold"], function () {
 				this.value = "";
-			});
+            });
+            S.listen("checkSpelling", "click", function () {
+				if (this.checked) {
+					S.getId("substitutedText").spellcheck = "true";
+                } else {
+                    S.getId("substitutedText").spellcheck = "false";
+                }
+            });
 			S.listen("fontSize", "change", function () {
 				S.getId("substitutedText").style.fontSize = this.value + "em";
 			});
@@ -231,8 +238,9 @@
                     case "badDuckFont":
                         S.getId("substitutedText").style.fontFamily = "Bad Duck";
 						break;
-                    case "kidtenuhfFont":
-                        S.getId("substitutedText").style.fontFamily = "KidtEnuhf";
+					case "kidtenuhfFont":
+						S.getId("substitutedText").style.fontFamily = "KidtEnuhf";
+						break;
                     default:
                         S.getId("substitutedText").style.fontFamily = "serif";
                 }
@@ -1294,8 +1302,12 @@
 			}
 
             @font-face {
+                font-family: "Bad Duck";
+                src: url("fonts/Bad Duck.ttf") format("truetype");
+            }
+            @font-face {
                 font-family: "KidtEnuhf";
-                src: url("https://coolprogramminguser.github.io/decoder/fonts/KidtEnuhf.ttf") format("truetype");
+                src: url("fonts/KidtEnuhf.ttf") format("truetype");
             }
 		</style>
 	</head>
@@ -1326,13 +1338,15 @@
 			<h2>
 				Code fonts
 			</h2>
-			<textarea id="substitutedText"></textarea>
-			<br>
-			Font size: <div style="background:#cccccc; border-radius:.25em"><input type="range" id="fontSize" min=".5" max="3" step=".1" value="1"></div>
+			<textarea id="substitutedText" placeholder="Text" spellcheck="false"></textarea>
 			<br>
 			<input type="radio" name="fonts" id="normalFont" checked><label for="normalFont">Normal</label>
 			<input type="radio" name="fonts" id="badDuckFont"><label for="badDuckFont">Bad Duck</label>
 			<input type="radio" name="fonts" id="kidtenuhfFont"><label for="kidtenuhfFont">KidtEnuhf</label>
+			<br>
+			Font size: <div style="background:#cccccc; border-radius:.25em"><input type="range" id="fontSize" min=".5" max="3" step=".1" value="1"></div>
+			<br>
+			<input type="checkbox" id="checkSpelling"><label for="checkSpelling">Check spelling</label>
 			<h2>
 				Code generators
 			</h2>
@@ -1345,7 +1359,7 @@
 			<input type="text" id="encryptionKey" placeholder="password">
 			<br>
 			<textarea id="decrypted2" placeholder="Decoded text"></textarea>
-			<textarea id="encrypted2" placeholder="Encoded text"></textarea>
+			<textarea id="encrypted2" placeholder="Encoded text" spellcheck="false"></textarea>
 			<br>
 			<input type="checkbox" id="advancedEncryption" checked><label for="advancedEncryption">Use advanced encryption</label>
 			<br>
@@ -1356,7 +1370,7 @@
 				Letter code
 			</h3>
 			<textarea id="decrypted1" placeholder="Decoded text"></textarea>
-			<textarea id="encrypted1" placeholder="Encoded text"></textarea>
+			<textarea id="encrypted1" placeholder="Encoded text" spellcheck="false"></textarea>
 			<br>
 			<button id="encode1">
 				Encode
