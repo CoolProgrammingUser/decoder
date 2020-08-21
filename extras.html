@@ -219,14 +219,14 @@
 
 			S.listen("substitutedText", ["dblclick", "touchhold"], function () {
 				this.value = "";
-            });
-            S.listen("checkSpelling", "click", function () {
+			});
+			S.listen("checkSpelling", "click", function () {
 				if (this.checked) {
 					S.getId("substitutedText").spellcheck = "true";
-                } else {
-                    S.getId("substitutedText").spellcheck = "false";
-                }
-            });
+				} else {
+					S.getId("substitutedText").spellcheck = "false";
+				}
+			});
 			S.listen("fontSize", "change", function () {
 				S.getId("substitutedText").style.fontSize = this.value + "em";
 			});
@@ -235,58 +235,81 @@
 					case "normalFont":
 						S.getId("substitutedText").style.fontFamily = "serif";
 						break;
-                    case "badDuckFont":
-                        S.getId("substitutedText").style.fontFamily = "Bad Duck";
+					case "badDuckFont":
+						S.getId("substitutedText").style.fontFamily = "Bad Duck";
 						break;
 					case "kidtenuhfFont":
 						S.getId("substitutedText").style.fontFamily = "KidtEnuhf";
 						break;
-                    default:
-                        S.getId("substitutedText").style.fontFamily = "serif";
-                }
-            }
+					default:
+						S.getId("substitutedText").style.fontFamily = "serif";
+				}
+			}
 			S.listen("normalFont", "click", function () {
 				if (this.checked) {
 					changeFont(this.id);
 					S.getId("substitutedText").placeholder = "Text";
 				}
-            });
-            S.listen("badDuckFont", "click", function () {
+			});
+			S.listen("badDuckFont", "click", function () {
 				if (this.checked) {
-                    changeFont(this.id);
-                    S.getId("substitutedText").placeholder = "text";
-                }
-            });
-            S.listen("kidtenuhfFont", "click", function () {
-                if (this.checked) {
-                    changeFont(this.id);
-                    S.getId("substitutedText").placeholder = "tekst";
-                }
-            });
+					changeFont(this.id);
+					S.getId("substitutedText").placeholder = "text";
+				}
+			});
+			S.listen("kidtenuhfFont", "click", function () {
+				if (this.checked) {
+					changeFont(this.id);
+					S.getId("substitutedText").placeholder = "tekst";
+				}
+			});
 			S.listen("fontHelp", "focus", function () {
 				this.selectedIndex = 0;  // clears the old selection (could be set to -1)
 			});
 			S.listen("fontHelp", "change", function () {
 				switch (this.value) {
 					case "Bad Duck":
-                        S.getId("badDuckHelp").style.left = "60%";
-                        S.getId("kidtenuhfHelp").style.left = "100%";
+						S.getId("badDuckHelp").style.left = "60%";
+						S.getId("kidtenuhfHelp").style.left = "100%";
 						break;
-                    case "KidtEnuhf":
-                        S.getId("kidtenuhfHelp").style.left = "60%";
-                        S.getId("badDuckHelp").style.left = "100%";
+					case "KidtEnuhf":
+						S.getId("kidtenuhfHelp").style.left = "60%";
+						S.getId("badDuckHelp").style.left = "100%";
 						break;
-                    default:
-                        S.getId("badDuckHelp").style.left = "100%";
-                        S.getId("kidtenuhfHelp").style.left = "100%";
-                }
+					default:
+						S.getId("badDuckHelp").style.left = "100%";
+						S.getId("kidtenuhfHelp").style.left = "100%";
+				}
+			});
+			S.listen("reprintText", "click", function () {
+				if (S.getId("substitutedText").value != "") {
+					let reprintWindow = window.open();
+					let text = reprintWindow.document.createElement("p");
+					switch (S.getName("fonts", true).id) {
+						case "normalFont":
+							text.style.fontFamily = "serif";
+							break;
+						case "badDuckFont":
+							text.style.fontFamily = "Bad Duck";
+							break;
+						case "kidtenuhfFont":
+							text.style.fontFamily = "KidtEnuhf";
+							break;
+						default:
+							text.style.fontFamily = "serif";
+					}
+					text.style.whiteSpace = "pre-line";
+                    text.style.fontSize = S.getId("fontSize").value + "em";
+					text.textContent = S.getId("substitutedText").value;
+					reprintWindow.document.body.appendChild(text);
+				}
 			});
 
 
-			S.listen("decrypted1", "dblclick", function () {
+			S.listen("decrypted1", ["dblclick", "touchhold"], function () {
 				this.value = "";
 			});
-			S.listen("encrypted1", "dblclick", function () {
+			S.listen("encrypted1", ["dblclick", "touchhold"], function () {
 				this.value = "";
 			});
 			S.listen("encode1", "click", function () {
@@ -356,13 +379,13 @@
 			});
 
 
-            S.listen("encryptionKey", ["dblclick", "touchhold"], function () {
-                this.value = "";
-            });
-            S.listen("decrypted2", ["dblclick", "touchhold"], function () {
+			S.listen("encryptionKey", ["dblclick", "touchhold"], function () {
 				this.value = "";
 			});
-            S.listen("encrypted2", ["dblclick", "touchhold"], function () {
+			S.listen("decrypted2", ["dblclick", "touchhold"], function () {
+				this.value = "";
+			});
+			S.listen("encrypted2", ["dblclick", "touchhold"], function () {
 				this.value = "";
 			});
 			S.listen("encode2", "click", function () {
@@ -379,7 +402,7 @@
 									return " " + match;
 								} else {  // if it's an uncapitalized beginning of a word
 									return match[1].toUpperCase();
-                                }
+								}
 							});
 							/// all words are no longer separated by spaces but start with a capital
 							/// words that started with a capital have their capital preceded by two spaces
@@ -455,7 +478,7 @@
 									return " " + match.toLowerCase();
 								} else {  // if it's supposed to be a capital letter (if there's a space before the capital)
 									return match[1];
-                                }
+								}
 							});
 							// displays the decoded text
 							S.getId("decrypted2").value = text;
@@ -1289,11 +1312,11 @@
 
 
 
-            S.onLoad(function () {
+			S.onLoad(function () {
 				S.listen(S.getId("morseCodeText"), "keydown", function (event) {
-                    if (event.key == "Enter") {
-                        toMorseCode();
-                    }
+					if (event.key == "Enter") {
+						toMorseCode();
+					}
 				});
 
 				S.makeToneGenerator(true);
@@ -1304,10 +1327,14 @@
 			#morseCodeSpeed {
 				width: 2em;
 			}
-            #decrypted3 {
-                width: 15em;
-                height: 9em;
-            }
+			#substitutedText {
+				width: 15rem;
+				height: 8rem;
+			}
+			#decrypted3 {
+				width: 15em;
+				height: 9em;
+			}
 			#encrypted3 {
 				border: .05em solid black;
 				padding: .5em;
@@ -1321,14 +1348,21 @@
 				margin: .25em .5em;
 			}
 
-            @font-face {
-                font-family: "Bad Duck";
-                src: url("fonts/Bad Duck.ttf") format("truetype");
-            }
-            @font-face {
-                font-family: "KidtEnuhf";
-                src: url("fonts/KidtEnuhf.ttf") format("truetype");
-            }
+			@font-face {
+				font-family: "Bad Duck";
+				src: url("fonts/Bad Duck.ttf") format("truetype");
+			}
+			@font-face {
+				font-family: "KidtEnuhf";
+				src: url("fonts/KidtEnuhf.ttf") format("truetype");
+			}
+
+			@media (max-width: 1000px) {
+				#substitutedText {
+					width: 45rem;
+					height: 24rem;
+				}
+			}
 		</style>
 	</head>
 	<body>
@@ -1911,6 +1945,11 @@
 					</tr>
 				</table>
 			</aside>
+			<br>
+			<button id="reprintText">
+				Open text in<br>
+				a new window
+			</button>
 			<h2>
 				Code generators
 			</h2>
