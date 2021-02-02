@@ -10,7 +10,7 @@
 			var S = Standards.general;
 
 			var telegraph = new S.Sound({ waveform: "square" });
-			S.listen("morseCodeText", "dblclick", function () {
+            S.listen("morseCodeText", ["dblclick", "touchhold"], function () {
 				this.value = "";
 			});
 			function toMorseCode() {
@@ -269,16 +269,16 @@
 			S.listen("fontHelp", "change", function () {
 				switch (this.value) {
 					case "Bad Duck":
-						S.getId("badDuckHelp").style.left = "60%";
-						S.getId("kidtenuhfHelp").style.left = "100%";
+						S.getId("badDuckHelp").className = "displayed";
+						S.getId("kidtenuhfHelp").className = "";
 						break;
 					case "KidtEnuhf":
-						S.getId("kidtenuhfHelp").style.left = "60%";
-						S.getId("badDuckHelp").style.left = "100%";
+						S.getId("kidtenuhfHelp").className = "displayed";
+						S.getId("badDuckHelp").className = "";
 						break;
 					default:
-						S.getId("badDuckHelp").style.left = "100%";
-						S.getId("kidtenuhfHelp").style.left = "100%";
+						S.getId("badDuckHelp").className = "";
+						S.getId("kidtenuhfHelp").className = "";
 				}
 			});
 			S.listen("reprintText", "click", function () {
