@@ -286,8 +286,8 @@
 					let reprintWindow = window.open();
 					let style = reprintWindow.document.createElement("style");
 					style.innerHTML =
-						"@font-face {font-family:'Bad Duck'; src:url('fonts/Bad Duck.ttf') format('truetype');}\n" +
-						"@font-face {font-family:'KidtEnuhf'; src:url('fonts/KidtEnuhf.ttf') format('truetype');}";
+						"@font-face {font-family:'Bad Duck'; src:url('https://coolprogramminguser.github.io/decoder/fonts/Bad Duck.ttf') format('truetype');}\n" +
+						"@font-face {font-family:'KidtEnuhf'; src:url('https://coolprogramminguser.github.io/decoder/fonts/KidtEnuhf.ttf') format('truetype');}";
 					reprintWindow.document.head.appendChild(style);
 					let text = reprintWindow.document.createElement("p");
 					switch (S.getName("fonts", true).id) {
