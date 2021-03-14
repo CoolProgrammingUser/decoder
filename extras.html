@@ -17,178 +17,186 @@
 				if (S.getId("morseCodeText").value.trim() != "") {
 					let translation = "";
 					let note = "a";
-					S.getId("morseCodeText").value.toLowerCase().split("").forEach(function (character) {
-						switch (character) {
-							case "a":
-								translation += ". -";
-								break;
-							case "b":
-								translation += "- . . .";
-								break;
-							case "c":
-								translation += "- . - .";
-								break;
-							case "d":
-								translation += "- . .";
-								break;
-							case "e":
-								translation += ".";
-								break;
-							case "f":
-								translation += ". . - .";
-								break;
-							case "g":
-								translation += "- - .";
-								break;
-							case "h":
-								translation += ". . . .";
-								break;
-							case "i":
-								translation += ". .";
-								break;
-							case "j":
-								translation += ". - - -";
-								break;
-							case "k":
-								translation += "- . -";
-								break;
-							case "l":
-								translation += ". - . .";
-								break;
-							case "m":
-								translation += "- -";
-								break;
-							case "n":
-								translation += "- .";
-								break;
-							case "o":
-								translation += "- - -";
-								break;
-							case "p":
-								translation += ". - - .";
-								break;
-							case "q":
-								translation += "- - . -";
-								break;
-							case "r":
-								translation += ". - .";
-								break;
-							case "s":
-								translation += ". . .";
-								break;
-							case "t":
-								translation += "-";
-								break;
-							case "u":
-								translation += ". . -";
-								break;
-							case "v":
-								translation += ". . . -";
-								break;
-							case "w":
-								translation += ". - -";
-								break;
-							case "x":
-								translation += "- . . -";
-								break;
-							case "y":
-								translation += "- . - -";
-								break;
-							case "z":
-								translation += "- - . .";
-								break;
-							case " ":
-								translation += "    ";
-								break;
-							case "0":
-								translation += "- - - - -";
-								break;
-							case "1":
-								translation += ". - - - -";
-								break;
-							case "2":
-								translation += ". . - - -";
-								break;
-							case "3":
-								translation += ". . . - -";
-								break;
-							case "4":
-								translation += ". . . . -";
-								break;
-							case "5":
-								translation += ". . . . .";
-								break;
-							case "6":
-								translation += "- . . . .";
-								break;
-							case "7":
-								translation += "- - . . .";
-								break;
-							case "8":
-								translation += "- - - . .";
-								break;
-							case "9":
-								translation += "- - - - .";
-								break;
-							case ".":
-								translation += ". - . - . -";
-								break;
-							case "?":
-								translation += ". . - - . .";
-								break;
-							case "!":
-								translation += ["- . - . - -", "- - - ."][Math.round(Math.random())];
-								break;
-							case ",":
-								translation += "- - . . - -";
-								break;
-							case "'":
-								translation += ". - - - - .";
-								break;
-							case "(":
-								translation += "- . - - .";
-								break;
-							case ")":
-								translation += "- . - - . -";
-								break;
-							case ":":
-								translation += "- - - . . .";
-								break;
-							case ";":
-								translation += "- . - . - .";
-								break;
-							case '"':
-								translation += ". - . . - .";
-								break;
-							case "/":
-								translation += "- . . - .";
-								break;
-							case "+":
-								translation += ". - . - .";
-								break;
-							case "-":
-								translation += "- . . . . -";
-								break;
-							case "=":
-								translation += "- . . . -";
-								break;
-							case "$":
-								translation += ". . . - . . -";
-								break;
-							case "@":
-								translation += ". - - . - .";
-								break;
-							case "_":
-								translation += ". . - - . -";
-								break;
-							case "ñ":
-								translation += "- - . - -";
-								break;
-							default:
-								translation += "*";
-						}
-						translation += "   ";
-					});
+					if (S.getId("morseCodeText").value.search(/^[.\-_ ]+$/) > -1) {  // if the message is written in Morse Code
+						translation = S.getId("morseCodeText").value.trim();
+						translation = translation.replace(/_/g, "-");
+						translation = translation.replace(/ /g, "    ");
+						translation = translation.replace(/(\.|-)/g, "$1 ");
+						translation = translation.trim();
+					} else {
+						S.getId("morseCodeText").value.trim().toLowerCase().split("").forEach(function (character) {
+							switch (character) {
+								case "a":
+									translation += ". -";
+									break;
+								case "b":
+									translation += "- . . .";
+									break;
+								case "c":
+									translation += "- . - .";
+									break;
+								case "d":
+									translation += "- . .";
+									break;
+								case "e":
+									translation += ".";
+									break;
+								case "f":
+									translation += ". . - .";
+									break;
+								case "g":
+									translation += "- - .";
+									break;
+								case "h":
+									translation += ". . . .";
+									break;
+								case "i":
+									translation += ". .";
+									break;
+								case "j":
+									translation += ". - - -";
+									break;
+								case "k":
+									translation += "- . -";
+									break;
+								case "l":
+									translation += ". - . .";
+									break;
+								case "m":
+									translation += "- -";
+									break;
+								case "n":
+									translation += "- .";
+									break;
+								case "o":
+									translation += "- - -";
+									break;
+								case "p":
+									translation += ". - - .";
+									break;
+								case "q":
+									translation += "- - . -";
+									break;
+								case "r":
+									translation += ". - .";
+									break;
+								case "s":
+									translation += ". . .";
+									break;
+								case "t":
+									translation += "-";
+									break;
+								case "u":
+									translation += ". . -";
+									break;
+								case "v":
+									translation += ". . . -";
+									break;
+								case "w":
+									translation += ". - -";
+									break;
+								case "x":
+									translation += "- . . -";
+									break;
+								case "y":
+									translation += "- . - -";
+									break;
+								case "z":
+									translation += "- - . .";
+									break;
+								case " ":
+									translation += "    ";
+									break;
+								case "0":
+									translation += "- - - - -";
+									break;
+								case "1":
+									translation += ". - - - -";
+									break;
+								case "2":
+									translation += ". . - - -";
+									break;
+								case "3":
+									translation += ". . . - -";
+									break;
+								case "4":
+									translation += ". . . . -";
+									break;
+								case "5":
+									translation += ". . . . .";
+									break;
+								case "6":
+									translation += "- . . . .";
+									break;
+								case "7":
+									translation += "- - . . .";
+									break;
+								case "8":
+									translation += "- - - . .";
+									break;
+								case "9":
+									translation += "- - - - .";
+									break;
+								case ".":
+									translation += ". - . - . -";
+									break;
+								case "?":
+									translation += ". . - - . .";
+									break;
+								case "!":
+									translation += ["- . - . - -", "- - - ."][Math.round(Math.random())];
+									break;
+								case ",":
+									translation += "- - . . - -";
+									break;
+								case "'":
+									translation += ". - - - - .";
+									break;
+								case "(":
+									translation += "- . - - .";
+									break;
+								case ")":
+									translation += "- . - - . -";
+									break;
+								case ":":
+									translation += "- - - . . .";
+									break;
+								case ";":
+									translation += "- . - . - .";
+									break;
+								case '"':
+									translation += ". - . . - .";
+									break;
+								case "/":
+									translation += "- . . - .";
+									break;
+								case "+":
+									translation += ". - . - .";
+									break;
+								case "-":
+									translation += "- . . . . -";
+									break;
+								case "=":
+									translation += "- . . . -";
+									break;
+								case "$":
+									translation += ". . . - . . -";
+									break;
+								case "@":
+									translation += ". - - . - .";
+									break;
+								case "_":
+									translation += ". . - - . -";
+									break;
+								case "ñ":
+									translation += "- - . - -";
+									break;
+								default:
+									translation += "*";
+							}
+							translation += "   ";
+						});
+					}
 					translation = translation.replace(/\./g, note).trim();
 					translation = translation.replace(/-/g, note + "--");
 					translation = translation.replace(/\*/g, "a5-");
@@ -1662,6 +1670,24 @@
 						<td style="font-family:Bad Duck">,</td>
 						<td></td>
 						<td style="font-family:Bad Duck"></td>
+					</tr>
+					<tr>
+						<td>:</td>
+						<td style="font-family:Bad Duck">:</td>
+						<td></td>
+						<td style="font-family:Bad Duck"></td>
+					</tr>
+					<tr>
+						<td>-</td>
+						<td style="font-family:Bad Duck">-</td>
+						<td></td>
+						<td style="font-family:Bad Duck"></td>
+					</tr>
+					<tr>
+						<td>/</td>
+						<td style="font-family:Bad Duck">/</td>
+						<td><</td>
+						<td style="font-family:Bad Duck"><</td>
 					</tr>
 					<tr>
 						<td>?</td>
