@@ -230,8 +230,8 @@ self.addEventListener("message", function (message) {
 		/// "codeWords" corresponding to the code words that contain the symbol (done earlier)
 		/// "possibilities" corresponding to a list of all the letters the symbol could be
 		//// "strikes" corresponding to a list of strikes made in the same order as the possibilities indicating the likelihood of a symbol being a certain letter
-		///
-		/// codeWords now only has words which contain letters that don't have too many strikes against them ////
+		////
+		//// codeWords now only has words which contain letters that don't have too many strikes against them ////
 
 		// determines whether there's any solution possible
 		S.forEach(values, function (properties, symbol) {

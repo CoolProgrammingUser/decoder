@@ -1646,7 +1646,6 @@
 			#encrypted3 {
 				border: .05em solid gray;
 				padding: .5em;
-				background: white;
 				width: 15em;
 				height: 9em;
 				text-align: left;
@@ -1659,7 +1658,6 @@
             #encrypted4 {
                 border: .05em solid gray;
                 padding: .5em;
-                background: white;
                 width: 15em;
                 height: 8em;
                 text-align: left;
@@ -1727,6 +1725,10 @@
 				<option value="KidtEnuhf">KidtEnuhf</option>
 			</select>
 			<aside id="badDuckHelp" data-heading="Bad Duck">
+				The first column is the letter you want to produce; the second column is the encoded letter produced by pressing that key; the third column is the letter you press to get the decoded symbol; and the fourth column is the decoded symbol you get after pressing the key in the third column. Some symbols don't have a decoded version, so they only fill the first two columns. Some keys don't produce the expected output when you press them (e.g. "!" produces "<span style="font-family:Bad Duck">!</span>" when pressed rather than the symbol for the exclamation point), so they have 3 filled columns: one for the letter/character you want, one for the key you have to press to get that letter/character, and one showing what the output is. <span class="elaborate">[Why does that happen?]</span> The "[cap. 1]" and the others like it refer to types of capitalization. When you want to capitalize the first letter of a word, use "[cap. 1]" just before that letter; when you want to capitalize a whole word, use "[cap. 2]" just before that word; when you want to capitalize things in any other way, use a "[cap. 3]" before the start of your capitalization, and use another "[cap. 3]" when you're finished capitalizing. Only proper names should be capitalized, not beginnings of sentences or "I". Also, spaces are only needed when there isn't punctuation. (e.g. Don't separate two sentences with a period <em>and</em> a space.)
+				<aside data-heading="Reasoning">
+					When I was making this font, I wanted the capital letters to be the decoded versions of the lowercase letters (technically, there are only lowercase letters and capitalization indicators), and that worked out great for all of the letters, and I was even able to extend it to the numbers (the symbol you would get when you hold [shift] and press a number key on a standard keyboard). The only problem is that the "capitals" of the numbers are actually different symbols you might want to use for something else, so I had to work around that. Some of you may think that I should've left the numbers out of my decoding by capitalization, and maybe I'll change it in the future, but I liked the concept, and since I'm not motivated to make Bad Duck symbols for every single weird character on the keyboard, there were keys for me to work with.
+				</aside>
 				<table>
 					<tr>
 						<th>Letter</th>
@@ -1975,6 +1977,12 @@
 						<td style="font-family:Bad Duck"></td>
 					</tr>
 					<tr>
+						<td>'</td>
+						<td style="font-family:Bad Duck">'</td>
+						<td></td>
+						<td style="font-family:Bad Duck"></td>
+					</tr>
+					<tr>
 						<td>:</td>
 						<td style="font-family:Bad Duck">:</td>
 						<td></td>
@@ -2049,6 +2057,7 @@
 				</table>
 			</aside>
 			<aside id="kidtenuhfHelp" data-heading="KidtEnuhf">
+				The first column is the sound you want to represent; the second column is the letter you press to represent that sound; and the third column is the symbol produced by pressing that letter.
 				<table>
 					<tr>
 						<th>Sound</th>
@@ -2347,7 +2356,7 @@
 			<label for="wordPi">pi</label>
 			<br>
 			<textarea id="decrypted4" placeholder="Decoded text"></textarea>
-			<div id="encrypted4" contenteditable><span style="color:gray">Encoded text</span></div>
+			<div class="generic-background" id="encrypted4" contenteditable><span style="color:gray">Encoded text</span></div>
 			<br>
 			<button id="encode4">
 				Encode
@@ -2359,7 +2368,7 @@
 				This can change text into seemingly random symbols. Pressing "Encode" multiple times will give different symbols. The symbols in the output are pictures and can be saved and used elsewhere. (Maximum symbol size is recommended if the pictures will ever be enlarged.) Alternatively, the "Open symbols in a new window" button will open a new tab or window with the symbols displayed, and a screenshot can be taken. Due to the extreme complexity of preventing such an occurrence, there will undoubtedly be times when parts of a symbol overlap with themselves or the symbol is awkwardly arranged; As a means of combating this, it's possible to click on the undesirable symbol to rearrange its parts. There are no decoding capabilities at present because no one has time for image-recognition software. Sometimes, the symbol area randomly disappears when changing individual symbols at a large symbol-size; This can be corrected by changing the symbol size (and changing it back).
 			</section>
 			<textarea id="decrypted3" placeholder="Text"></textarea>
-			<div id="encrypted3"></div>
+			<div class="generic-background" id="encrypted3"></div>
 			<br>
 			Symbol size: <div style="background:#cccccc; border-radius:.25em"><input type="range" id="symbolSize" min="6" max="90" step="6" value="24"></div>
 			<br>
