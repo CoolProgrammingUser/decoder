@@ -1,5 +1,86 @@
 var Standards = { general: { options: { automation: "none" } } };
-importScripts("https://epicenterprograms.github.io/standards/behavior/general.js");
+// importScripts("https://epicenterprograms.github.io/standards/behavior/general.js"); // This stopped working for some reason.
+Standards.general.forEach = function (list, doStuff, shouldCopy) {  // This is the only function I use from Standards, so I copied it over.
+	/**
+	does stuff for every item of an iterable list (or object)
+	arguments:
+		list = the iterable to go through
+		doStuff = a function to be run for every item in the list
+			arguments put in the function:
+				if an iterable list (Array, HTMLCollection, String, ...): item, index, list
+				if an object/dictionary: value, key, object, itemIndex
+				if a number: number-index, index, number
+			can return "break" to stop execution of the function
+		shouldCopy = a copy should be worked with
+			doesn't alter the original list
+	non-native functions = getType
+	*/
+	if (Standards.general.getType(doStuff) != "Function") {
+		throw "The second arument provided in Standards.general.forEach (" + doStuff + ") isn't a function.";
+	}
+	let index = 0;
+	let returnValue;
+	if (Standards.general.getType(list) == "Object") {
+		let associativeList,
+			keys = Object.keys(list);
+		shouldCopy = shouldCopy === undefined ? false : shouldCopy;
+		if (shouldCopy) {
+			associativeList = JSON.parse(JSON.stringify(list));
+		} else {
+			associativeList = list;
+		}
+		while (index < keys.length) {
+			returnValue = doStuff(associativeList[keys[index]], keys[index], associativeList, index);
+			if (returnValue == "break") {
+				break;
+			} else {
+				index++;
+			}
+		}
+		/// Using Object.keys() and a while loop is about 100 times faster than a for...in... loop.
+		/// That's not to mention the fact that this.propertyIsEnumerable() would also need to be used which is also slow.
+		/// This is still about 10 times slower than looping through things with number indicies, though.
+		/// (These time comparisons are based on usage outside of this function;
+		/// doing things by referencing a function makes things about 10 times longer.)
+	} else if (Standards.general.getType(list[Symbol.iterator]) == "Function" || list instanceof HTMLCollection) {
+		/// Microsoft Edge doesn't think HTMLCollections have Symbol.iterator
+		//// check this in Microsoft Edge again
+		let item;
+		if (shouldCopy) {
+			let items = [];
+			for (item of list) {
+				items.push(item);
+			}
+			for (item of items) {
+				returnValue = doStuff(item, index, items);
+				if (returnValue == "break") {
+					break;
+				}
+				index++;
+			}
+		} else {
+			for (item of list) {
+				returnValue = doStuff(item, index, list);
+				if (returnValue == "break") {
+					break;
+				}
+				index++;
+			}
+		}
+	} else if (Standards.general.getType(list) == "Number") {
+		while (index < list) {
+			returnValue = doStuff(list - index, index, list);
+			if (returnValue == "break") {
+				break;
+			} else {
+				index++;
+			}
+		}
+	} else {
+		throw "The item provided (" + list + ") isn't iterable.";
+	}
+	//// add a function type option
+};
 var S = Standards.general;
 
 var messenger = {};  // sends information back to the website
