@@ -1,5 +1,53 @@
 var Standards = { general: { options: { automation: "none" } } };
 // importScripts("https://epicenterprograms.github.io/standards/behavior/general.js"); // This stopped working for some reason.
+Standards.general.getType = function (item) {  // I needed this for Standards.general.forEach().
+	/**
+	finds the type of an item since it's unnecessarily complicated to be sure normally
+	extra arguments can be added to check against special types first
+		each argument must be a string representation of the constructor
+		checks are done with instanceof
+	non-native functions = none
+	*/
+	var extraTypes = Array.prototype.slice.call(arguments, 1);
+	var reverseIndex = extraTypes.length;
+	if (reverseIndex > 0) {
+		while (reverseIndex--) {
+			let type = extraTypes[reverseIndex];
+			if (type && type.constructor === String && type.search(/[^\w.()]/) === -1) {
+				try {
+					if (item instanceof eval(type)) {
+						return type;
+					}
+				} catch (error) {
+					console.warn('There was a problem evaluating the type of "' + type + '".');
+				}
+			}
+		}
+	}
+	if (item === undefined) {  // if it's undefined
+		/// undeclared variables won't make it to this function
+		/// typeof item === "undefined" checks whether a variable exists
+		return "undefined";
+	} else if (item === null) {  // if it's null
+		return "null";
+	} else if (item.constructor === Number && isNaN(item)) {  // if it's not a number
+		return "NaN";
+	} else if (item.constructor.toString().search(/function HTML\w*Element\(\) \{ \[native code\] \}/) > -1) {  // if it's an HTML element
+		return "HTMLElement";
+	} else if (item instanceof Error) {
+		return "Error";
+	} else {
+		let match = item.constructor.toString().match(/^function (\w+)\(\)/);
+		if (match === null) {
+			console.error(TypeError("The item has an unknown type."));
+			console.log(item.constructor.toString());
+			console.log(item.constructor);
+			return undefined;
+		} else {
+			return match[1];
+		}
+	}
+};
 Standards.general.forEach = function (list, doStuff, shouldCopy) {  // This is the only function I use from Standards, so I copied it over.
 	/**
 	does stuff for every item of an iterable list (or object)
@@ -83,6 +131,8 @@ Standards.general.forEach = function (list, doStuff, shouldCopy) {  // This is t
 };
 var S = Standards.general;
 
+
+
 var messenger = {};  // sends information back to the website
 
 var words = [[]];  // holds every English word in arrays in order of increasing word length
@@ -98,6 +148,8 @@ var solutions = [];  // holds all possible solutions
 var filtered = {};
 var hidden = [];
 var solutionIndex = 0;  // holds which solution is to be displayed
+
+
 
 function isolate(word) {
 	/**
@@ -116,6 +168,7 @@ function isolate(word) {
 	});
 	return newWord;
 }
+
 function standardize(word) {
 	/**
 	makes a word have a standard letter pattern
@@ -206,6 +259,8 @@ function checkSolution(solution) {
 	*/
 	return passes;
 }
+
+
 
 self.addEventListener("message", function (message) {
 	var time = performance.now();  //// tracks the performance of the decoder
@@ -345,6 +400,7 @@ self.addEventListener("message", function (message) {
 			console.info("Possibilities for word " + (number + 1) + " = " + codeWords[word].length);
 		});
 		console.info("Total possibilites = " + totalPossibilities);
+
 		function usageCheck(letters) {  //// This needs to allow for imperfect matches.
 			// makes sure a word doesn't conflict with the letters used in previous words
 			let falseTrue = true;
@@ -387,7 +443,7 @@ self.addEventListener("message", function (message) {
 			return falseTrue;
 		}
 		// determines which symbol decryptions work across words
-		while (trueFalse) {  // This is the most taxing part of the decoder.
+		while (trueFalse) {  // **** This is the most taxing part of the decoder. ****
 			if (currentIndexList[index] <= totalIndexList[index]) {
 				if (usageCheck(codeWords[codeText[index]][currentIndexList[index]])) {  // if the word doesn't conflict with the previously used letters
 					if (index < currentIndexList.length - 1) {  // if the index isn't at the end of the array (if every word hasn't been checked yet)
