@@ -9,6 +9,10 @@
 		<script>
 			var S = Standards.general;
 
+
+
+			// handles Morse Code stuff
+
 			var telegraph = new S.Sound({ waveform: "square" });
             S.listen("morseCodeText", ["dblclick", "touchhold"], function () {
 				this.value = "";
@@ -230,6 +234,9 @@
 			});
 
 
+
+			// handles code font stuff
+
 			S.listen("substitutedText", ["dblclick", "touchhold"], function () {
 				this.value = "";
 			});
@@ -299,10 +306,11 @@
 					let reprintWindow = window.open();
 					let style = reprintWindow.document.createElement("style");
 					style.innerHTML =
-                        "body {padding:" + S.getId("fontSize").value / 2 + "em;}\n" +
+						"body {padding:" + S.getId("fontSize").value / 2 + "em;}\n" +
 						"@font-face {font-family:'Bad Duck'; src:url('https://coolprogramminguser.github.io/decoder/fonts/Bad Duck.ttf') format('truetype');}\n" +
 						"@font-face {font-family:'KidtEnuhf'; src:url('https://coolprogramminguser.github.io/decoder/fonts/KidtEnuhf.ttf') format('truetype');}\n" +
-						"@media(max-width:1000px) {body{font-size:3rem;}}";
+						"@media(max-width:1000px) {body{font-size:3rem;}}" +
+                        "@media(prefers-color-scheme: dark) {body{background:black;color:white}}";  // if the dark theme is being used
 					reprintWindow.document.head.appendChild(style);
 					let text = reprintWindow.document.createElement("p");
 					switch (S.getName("fonts", true).id) {
@@ -325,6 +333,9 @@
 				}
 			});
 
+
+
+			// handles letter code stuff
 
 			S.listen("decrypted1", ["dblclick", "touchhold"], function () {
 				this.value = "";
@@ -398,6 +409,9 @@
 				}
 			});
 
+
+
+			// handles password-protected code stuff
 
 			S.listen("encryptionKey", ["dblclick", "touchhold"], function () {
 				this.value = "";
@@ -578,6 +592,9 @@
 				}
 			});
 
+
+
+			// handles symbol code stuff
 
 			var symbols = [];
 			var symbol = [];
@@ -767,6 +784,9 @@
 						c.beginPath();
 						c.lineWidth = 2 * hlw;
 						c.lineCap = "round";
+						if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {  // if the dark theme is being used
+							c.strokeStyle = "white";
+						}
 						S.forEach(currentSymbol, function (component) {
 							switch (component.type) {
 								case "gl":
@@ -1326,7 +1346,10 @@
 			});
 			S.listen("symbolWindow", "click", function () {
 				if (S.getId("encrypted3").innerHTML != "") {
-					let symbolWindow = window.open();
+                    let symbolWindow = window.open();
+                    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {  // if the dark theme is being used
+						symbolWindow.document.body.style = "background: black";
+                    }
 					S.forEach(S.getId("encrypted3").getElementsByTagName("img"), function (img) {
 						let newImg = img.cloneNode();
 						newImg.style.margin = Number(S.getId("symbolSize").value) / 2 + "px";
@@ -1335,6 +1358,9 @@
 				}
 			});
 
+
+
+			// handles math code stuff
 
             S.listen("decrypted4", ["dblclick", "touchhold"], function () {
                 this.value = "";
