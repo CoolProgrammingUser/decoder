@@ -14,14 +14,14 @@
 			// handles Morse Code stuff
 
 			var telegraph = new S.Sound({ waveform: "square" });
-            S.listen("morseCodeText", ["dblclick", "touchhold"], function () {
+			S.listen("morseCodeText", ["dblclick", "touchhold"], function () {
 				this.value = "";
-            });
-            S.listen("morseCodeText", "keyup", function (event) {
+			});
+			S.listen("morseCodeText", "keyup", function (event) {
 				if (event.key == "Enter") {
 					toMorseCode();
-                }
-            });
+				}
+			});
 			function toMorseCode() {
 				if (S.getId("morseCodeText").value.trim() != "") {
 					let translation = "";
@@ -310,7 +310,7 @@
 						"@font-face {font-family:'Bad Duck'; src:url('https://coolprogramminguser.github.io/decoder/fonts/Bad Duck.ttf') format('truetype');}\n" +
 						"@font-face {font-family:'KidtEnuhf'; src:url('https://coolprogramminguser.github.io/decoder/fonts/KidtEnuhf.ttf') format('truetype');}\n" +
 						"@media(max-width:1000px) {body{font-size:3rem;}}" +
-                        "@media(prefers-color-scheme: dark) {body{background:black;color:white}}";  // if the dark theme is being used
+						"@media(prefers-color-scheme: dark) {body{background:black;color:white}}";  // if the dark theme is being used
 					reprintWindow.document.head.appendChild(style);
 					let text = reprintWindow.document.createElement("p");
 					switch (S.getName("fonts", true).id) {
@@ -327,7 +327,7 @@
 							text.style.fontFamily = "serif";
 					}
 					text.style.whiteSpace = "pre-line";
-                    text.style.fontSize = S.getId("fontSize").value + "em";
+					text.style.fontSize = S.getId("fontSize").value + "em";
 					text.textContent = S.getId("substitutedText").value;
 					reprintWindow.document.body.appendChild(text);
 				}
@@ -1346,10 +1346,10 @@
 			});
 			S.listen("symbolWindow", "click", function () {
 				if (S.getId("encrypted3").innerHTML != "") {
-                    let symbolWindow = window.open();
-                    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {  // if the dark theme is being used
+					let symbolWindow = window.open();
+					if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {  // if the dark theme is being used
 						symbolWindow.document.body.style = "background: black";
-                    }
+					}
 					S.forEach(S.getId("encrypted3").getElementsByTagName("img"), function (img) {
 						let newImg = img.cloneNode();
 						newImg.style.margin = Number(S.getId("symbolSize").value) / 2 + "px";
@@ -1362,69 +1362,77 @@
 
 			// handles math code stuff
 
-            S.listen("decrypted4", ["dblclick", "touchhold"], function () {
-                this.value = "";
-            });
-            S.listen("encrypted4", ["dblclick", "touchhold"], function () {
-                this.value = "";
+			S.listen("decrypted4", ["dblclick", "touchhold"], function () {
+				this.value = "";
 			});
+			S.listen("encrypted4", ["dblclick", "touchhold"], function () {
+				this.value = "";
+			});
+			/*
 			S.listen("decrypted4", "keyup", function () {
 				if (this.value.trim() == "") {
 					S.getId("encrypted4").innerHTML = '<span style="color:gray">Encoded text</span>';
 				}
 			});
+			*/
 			S.listen("encrypted4", "focus", function () {
 				if (this.innerHTML.trim() == '<span style="color:gray">Encoded text</span>') {
 					/// Has to use "color:gray" in quotation marks (not apostrophies) or else  it will evaluate false
 					/// (Doesn't matter whether "color:gray" is in quotation marks or not in the HTML)
 					this.innerHTML = "";
 				}
-            });
+			});
 			S.listen("encrypted4", "blur", function () {
 				if (this.innerHTML.trim() == "") {
-                    this.innerHTML = '<span style="color:gray">Encoded text</span>';
+					this.innerHTML = '<span style="color:gray">Encoded text</span>';
 				}
 			});
 			S.listen("encode4", "click", function () {
-				if (S.getId("decrypted4").value.trim() != "") {
+				if (S.getId("decrypted4").value.trim() != "") {  // if encoding
+					// establishes which mathematical symbols to use
 					let times = "";
 					if (S.getName("multiplicationSign", true).id == "HTMLMultiply") {
 						times = "&times;";
 					} else {
 						times = "*";
-                    }
-                    let divide = "";
-                    if (S.getName("divisionSign", true).id == "HTMLDivide") {
-                        divide = "&divide;";
-                    } else {
-                        divide = "/";
-                    }
-                    let exponent = "";
-                    if (S.getName("exponentSign", true).id == "HTMLExponent") {
-                        exponent = "<sup>";
-                    } else {
-                        exponent = "^";
-                    }
-                    let pi = "";
-                    if (S.getName("piSign", true).id == "HTMLPi") {
-                        pi = "&pi;";
-                    } else {
-                        pi = "pi";
-                    }
+					}
+					let divide = "";
+					if (S.getName("divisionSign", true).id == "HTMLDivide") {
+						divide = "&divide;";
+					} else {
+						divide = "/";
+					}
+					let exponent = "";
+					if (S.getName("exponentSign", true).id == "HTMLExponent") {
+						exponent = "<sup>";
+					} else {
+						exponent = "^";
+					}
+					let pi = "";
+					if (S.getName("piSign", true).id == "HTMLPi") {
+						pi = "&pi;";
+					} else {
+						pi = "pi";
+					}
 
 					let text = S.getId("decrypted4").value;
+					// converts some things without code representations into things that can be encoded
 					text = text.replace(/&/g, "and");
 					text = text.replace(/%/g, " percent");
 					text = text.replace(/$(\d+(?:\.\d+)?)/g, "$1 dollars");
-					text = text.replace(/^[A-Z]/, function (match) { return match.toLowerCase(); });
-					text = text.replace(/  ([A-Z])/g, "$1");
-					text = text.replace(/  +/g, " ");
-					text = text.replace(/ I/g, " i");
-					text = text.replace(/([^a-zA-Z]) ([A-Z])/g, function (_, punctuation, capital) { return punctuation + capital.toLowerCase(); });
+					// preformats the text
+					text = text.replace(/^[A-Z]/, function (match) { return match.toLowerCase(); });  // gets rid of initial capitals
+					text = text.replace(/  ([A-Z])/g, "$1");  // capitals preceded by two spaces stay capital
+					text = text.replace(/  +/g, " ");  // any amount of spaces is condensed into one space
+					text = text.replace(/ I/g, " i");  // the word "I" isn't capitalized
+					text = text.replace(/, ([A-Z])/g, ",$1");  // preserves intended capitals after commas
+					text = text.replace(/(\W) ([a-zA-Z])/g, function (_, punctuation, capital) { return punctuation+capital.toLowerCase(); });
 					text = text.replace(/([a-z])([A-Z])/g, "$1 $2");  // makes sure intended capitals aren't mushed into other words
-					text = text.replace(/^t/, " t");
-					text = text.replace(/"(.+?)"/g, times + "($1)");
-					text = text.replace(/~/g, "-9.20+92+4+5~");
+					text = text.replace(/^t/, " t");  // makes it so the letter "t" is processed correctly at the beginning of the text
+					text = text.replace(/^([k-sK-S])/, " $1");  // makes sure the middle of the alphabet is processed correctly at the beginning
+					text = text.replace(/(\d),(\d)/g, "$1$2");  // gets rid of commas within large numbers
+					text = text.replace(/~/g, "-9.20+92+4+5~");  // encodes any tildes since they're used for processing elsewhere
+					// determines exactly how to represent a letter
 					function convertToNumber(letter, number) {
 						let replacement = number;
 						if (letter.includes(" ")) {  // if it begins a word
@@ -1441,11 +1449,12 @@
 						}
 						return replacement;
 					}
+					// replaces the input text with encoded text
 					text = text.replace(/\d+| [A-Za-z]|[a-z]|./g, function (match) {
 						let replacement = "";
-						if (match.search(/\d+/) > -1) {
-							replacement = "-0." + match;
-						} else if (match.search(/[A-Za-z]/) > -1) {
+						if (match.search(/\d+/) > -1) {  // if it's a number
+							replacement = "-8." + match;
+						} else if (match.search(/[A-Za-z]/) > -1) {  // if it's a letter (possibly preceded by a space)
 							switch (match.toLowerCase().trim()) {
 								case "a":
 									replacement = convertToNumber(match, "+1");
@@ -1512,57 +1521,69 @@
 									}
 									if (match.toLowerCase() != match) {
 										replacement += pi;
-                                    }
-                                    break;
-                                case "u":
-                                    replacement = convertToNumber(match, "-1");
-                                    break;
-                                case "v":
-                                    replacement = convertToNumber(match, "-2");
-                                    break;
-                                case "w":
-                                    replacement = convertToNumber(match, "-3");
-                                    break;
-                                case "x":
-                                    replacement = convertToNumber(match, "-4");
-                                    break;
-                                case "y":
-                                    replacement = convertToNumber(match, "-5");
-                                    break;
-                                case "z":
-                                    replacement = convertToNumber(match, "-6");
-                                    break;
-                            }
-						} else {
+									}
+									break;
+								case "u":
+									replacement = convertToNumber(match, "-1");
+									break;
+								case "v":
+									replacement = convertToNumber(match, "-2");
+									break;
+								case "w":
+									replacement = convertToNumber(match, "-3");
+									break;
+								case "x":
+									replacement = convertToNumber(match, "-4");
+									break;
+								case "y":
+									replacement = convertToNumber(match, "-5");
+									break;
+								case "z":
+									replacement = convertToNumber(match, "-6");
+									break;
+							}
+						} else {  // if it's punctuation
 							switch (match) {
 								case ",":
-									replacement = divide + "8";
-									break;
-								case "'":
-									replacement = divide + "9";
-									break;
-								case ".":
-									replacement = "-8.1";
-									break;
-								case "?":
-									replacement = "-8.2";
-									break;
-								case "!":
-									replacement = "-8.3";
-									break;
-								case "(":
 									if (exponent == "^") {
 										replacement = "^4";
 									} else {
 										replacement = "<sup>4</sup>";
 									}
 									break;
-								case ")":
+								case "'":
 									if (exponent == "^") {
 										replacement = "^5";
 									} else {
 										replacement = "<sup>5</sup>";
 									}
+									break;
+								case ".":
+									if (exponent == "^") {
+										replacement = "^6";
+									} else {
+										replacement = "<sup>6</sup>";
+									}
+									break;
+								case "?":
+									if (exponent == "^") {
+										replacement = "^7";
+									} else {
+										replacement = "<sup>7</sup>";
+									}
+									break;
+								case "!":
+									if (exponent == "^") {
+										replacement = "^8";
+									} else {
+										replacement = "<sup>8</sup>";
+									}
+									break;
+								case "(":
+									replacement = divide + "8";
+									break;
+								case ")":
+									replacement = divide + "9";
 									break;
 								case "-":
 									replacement = "-9.08-56+8+54~";
@@ -1575,6 +1596,9 @@
 									break;
 								case ";":
 									replacement = "-9.19+53+9+35254~";
+									break;
+								case '"':
+									replacement = "-9.17-150+1+954-9.13+181~";
 									break;
 								case "&":
 									replacement = "-9.0136+589+14+4~";
@@ -1626,28 +1650,237 @@
 									break;
 								default:
 									replacement = match;
-                            }
+							}
 						}
 						return replacement;
 					});
+					// catches any unexpected spaces
 					text = text.replace(/~\+/g, times);
 					text = text.replace(/~-/g, divide);
 					text = text.replace(/~(\d)/g, ".$1");
-                    // cleans up any irregularities
-                    text = text.replace(/^\+|~$/, "");
-					text = text.replace(/(\d+\.\d+)\./g, "$1+0.");
-					if (exponent == "^") {
-						text = text.replace(/-8\+8(?!\d|\.|^|<)/g, "-8^2");  //// This should extend to all numbers.
-                    } else {
-                        text = text.replace(/-8\+8(?!\d|\.|^|<)/g, "-8<sup>2</sup>");
-					}
-					text = text.replace(/-|\+/g, "<wbr>$&");
+					// condenses some of the math
+					text = text.replace(/\+\d-\d(?!\d|\.|^|<)|-\d\+\d(?!\d|\.|^|<)/g, function (match) {
+						let sign = match[0];
+						let number1 = match[1];
+						let number2 = match[3];
+						if (number1 == number2) {
+							if (exponent == "^") {
+								return sign + number1 + "^2";
+							} else {
+								return sign + number1 + "<sup>2</sup>";
+							}
+						} else {
+							return match;
+						}
+					});
+					// catches when the previous replacement partially overlapped with what should've been replaced
+					text = text.replace(/((?:\+|-)\d)(\+\d-\d(?!\d|\.|^|<)|-\d\+\d(?!\d|\.|^|<))/g, function (entirety, annoyance, match) {
+						let sign = match[0];
+						let number1 = match[1];
+						let number2 = match[3];
+						if (number1 == number2) {
+							if (exponent == "^") {
+								return annoyance + sign + number1 + "^2";
+							} else {
+								return annoyance + sign + number1 + "<sup>2</sup>";
+							}
+						} else {
+							return entirety;
+						}
+					});
+					// cleans up any other irregularities
+					text = text.replace(/^\+|~$/, "");  // gets rid of processing artefacts from the beginning and end of the text
+					text = text.replace(/~/g, "");  // gets rid of any lingering tildes (likely only remaining if there's an error)
+					text = text.replace(/^\./, "0.");  // makes sure the middle of the alphabet displays correctly at the beginning
+					text = text.replace(/(\^\d|<sup>\d)(<\/sup>)?(?:\^|<sup>)(\d)(?:<\/sup>)?/g, "$1$3$2");  // prevents back-to-back exponents
+					text = text.replace(/(\)|&pi;|pi|<\/sup>)(\d)/g, "$1-0.$2");  // prevents numbers from being mushed together in an unnatural way
+					text = text.replace(/(\D)\.(\d)/g, "$1+0.$2");  // makes sure the encoding doesn't put a decimal in an unnatural place
+					text = text.replace(/(\d+\.\d+)\./g, "$1+0.");  // makes sure no number has two decimals in it
+					text = text.replace(/ /g, "");  // gets rid of any spaces
+					text = text.replace(/-|\+/g, "<wbr>$&");  // makes sure new lines are started in sensible places
 					// displays the encrypted text
 					S.getId("encrypted4").innerHTML = text;
-				} else if (S.getId("encrypted4").innerHTML.trim() != "") {
-					S.makeDialog("Decoding isn't supported at this time.");
-					////
-                }
+
+				} else if (S.getId("encrypted4").innerHTML.trim() != "") {  // if decoding
+					let tokens = S.getId("encrypted4").innerHTML;
+					tokens = tokens.replace(/ /g, "");  // gets rid of all spaces
+					tokens = tokens.replace(/<sup>(\d+(?:\.\d+)?)<\/sup>/g, "^$1");  // turns superscript notation into caret notation
+					tokens = tokens.replace(/<wbr>/g, "");  // gets rid of any potential HTML word breaks
+					tokens = tokens.replace(/^([1-9])/, "+$1");  // makes sure the beginning of the alphabet is processed correctly at the beginning
+					tokens = tokens.replace(/^0./, "");  // makes sure the middle of the alphabet is processed correctly at the beginning
+					tokens = tokens.match(/&[^;]+?;|\D|\d/g);
+					let text = "";
+					let index = 0;
+					while (index < tokens.length) {
+						let token = tokens[index];
+						let next = tokens[index + 1];
+						let third = tokens[index + 2];
+						switch (token) {
+							case "+":
+								if (next == "0") {
+									index += 2;
+								} else {
+									if (third == "pi" || third == "&pi;" || third == "\u03C0") {
+										text += ["A", "B", "C", "D", "E", "F", "G", "H", "I"][Number(next) - 1];
+										index += 3;
+									} else {
+										text += ["a", "b", "c", "d", "e", "f", "g", "h", "i"][Number(next) - 1];
+										index += 2;
+									}
+								}
+								break;
+							case "-":
+								if (next == 0) {
+									index += 3;
+								} else if (next == "8") {
+									if (third == "pi" || third == "&pi;" || third == "\u03C0") {
+										text += " T";
+										index += 3;
+									} else if (third == ".") {  // if it's supposed to be a number
+										index += 3;
+										text += " ";
+										while (tokens[index] !== undefined && tokens[index].search(/^\d+$/) > -1) {
+											text += tokens[index];
+											index++;
+										}
+									} else {
+										text += " t";
+										index += 2;
+									}
+								} else if (next == "9") {  ////
+									index += 2;
+								} else {
+									if (third == "pi" || third == "&pi;" || third == "\u03C0") {
+										text += ["U", "V", "W", "X", "Y", "Z", "J"][Number(next) - 1];
+										index += 3;
+									} else {
+										text += ["u", "v", "w", "x", "y", "z", "j"][Number(next) - 1];
+										index += 2;
+									}
+								}
+								break;
+							case "*":
+							case "&times;":
+							case "\u00D7":
+								if (third == "pi" || third == "&pi;" || third == "\u03C0") {
+									text += " " + ["A", "B", "C", "D", "E", "F", "G", "H", "I"][Number(next) - 1];
+									index += 3;
+								} else {
+									text += " " + ["a", "b", "c", "d", "e", "f", "g", "h", "i"][Number(next) - 1];
+									index += 2;
+								}
+								break;
+							case "/":
+							case "&divide;":
+							case "\u00F7":
+								if (next == "8") {
+									text += " (";
+									index += 2;
+								} else if (next == "9") {
+									text += ") ";
+									index += 2;
+								} else {
+									if (third == "pi" || third == "&pi;" || third == "\u03C0") {
+										text += " " + ["U", "V", "W", "X", "Y", "Z", "J"][Number(next) - 1];
+										index += 3;
+									} else {
+										text += " " + ["u", "v", "w", "x", "y", "z", "j"][Number(next) - 1];
+										index += 2;
+									}
+								}
+								break;
+							case "^":
+								if (next != "5" && third && third.search(/^\d$/) > -1) {  // if there's more than one number in the exponent
+									tokens = tokens.slice(0, index + 2).concat("^", tokens.slice(index + 2));
+								}
+								switch (next) {
+									case "2":
+										tokens[index + 1] = tokens[index - 1];
+										if (tokens[index - 2] == "+") {
+											tokens[index] = "-";
+										} else if (tokens[index - 2] == "-") {
+											tokens[index] = "+";
+										} else {  // if something weird happened, and you just need to move on
+											index += 2;
+										}
+										/*
+										if (tokens[index - 2] == "*" || tokens[index - 2] == "&times;" || tokens[index - 2] == "\u00D7") {
+											tokens[index] = "*";
+										} else if (tokens[index - 2] == "/" || tokens[index - 2] == "&divide;" || tokens[index - 2] == "\u00F7") {
+											tokens[index] = "/";
+										} else {
+
+										}
+										*/
+										break;
+									case "3":  ////
+										index += 2;
+										break;
+									case "4":
+										text += ",";
+										index += 2;
+										break;
+									case "5":
+										text += "'";
+										index += 2;
+										break;
+									case "6":
+										text += ".";
+										index += 2;
+										break;
+									case "7":
+										text += "?";
+										index += 2;
+										break;
+									case "8":
+										text += "!";
+										index += 2;
+										break;
+									default:
+										index += 2;
+								}
+								break;
+							case "0":
+							case "1":
+							case "2":
+							case "3":
+							case "4":
+							case "5":
+							case "6":
+							case "7":
+							case "8":
+							case "9":
+								if (next == "pi" || next == "&pi;" || next == "\u03C0") {
+									text += ["T", "K", "L", "M", "N", "O", "P", "Q", "R", "S"][Number(token)];
+									index += 2;
+								} else {
+									text += ["t", "k", "l", "m", "n", "o", "p", "q", "r", "s"][Number(token)];
+									index++;
+								}
+								break;
+							case ".":
+								if (third == "pi" || third == "&pi;" || third == "\u03C0") {
+									text += " " + ["T", "K", "L", "M", "N", "O", "P", "Q", "R", "S"][Number(next)];
+									index += 3;
+								} else {
+									text += " " + ["t", "k", "l", "m", "n", "o", "p", "q", "r", "s"][Number(next)];
+									index += 2;
+								}
+								break;
+							default:
+								text += token;
+								index++;
+						}
+					}
+					text = text.trim();
+					text = text[0].toUpperCase() + text.slice(1);  // capitalizes the first letter of the first sentence
+					text = text.replace(/(?:\.|\?|!)\w/g, function (match) {  // makes sure new sentences start with a space and a capital
+						return match[0] + " " + match[1].toUpperCase();
+					});
+					text = text.replace(/(,|:|\)|;|")(\w)/g, "$1 $2");  // makes sure other punctuation has a space after it
+					text = text.replace(/(^| )i(\W|$)/g, "$1I$2");  // makes the word "I" capitalized
+					S.getId("decrypted4").value = text;
+				}
 			});
 
 
@@ -1681,14 +1914,14 @@
 				display: inline;
 				margin: .25em .5em;
 			}
-            #encrypted4 {
-                border: .05em solid gray;
-                padding: .5em;
-                width: 15em;
-                height: 8em;
-                text-align: left;
-                overflow: auto;
-            }
+			#encrypted4 {
+				border: .05em solid gray;
+				padding: .5em;
+				width: 15em;
+				height: 8em;
+				text-align: left;
+				overflow: auto;
+			}
 
 			@font-face {
 				font-family: "Bad Duck";
@@ -2359,7 +2592,7 @@
 				Math code
 			</h3>
 			<section>
-				This doesn't support decrypting yet.
+				This will turn your text into what looks like a mathematical expression. Encoding is a little better than decoding, but it works pretty well both ways.
 			</section>
 			<input type="radio" name="multiplicationSign" id="HTMLMultiply" checked>
 			<label for="HTMLMultiply">&times;</label>
