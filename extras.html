@@ -197,7 +197,7 @@
 								case "_":
 									translation += ". . - - . -";
 									break;
-								case "ñ":
+								case "Ã±":
 									translation += "- - . - -";
 									break;
 								default:
@@ -1704,6 +1704,7 @@
 				} else if (S.getId("encrypted4").innerHTML.trim() != "") {  // if decoding
 					let tokens = S.getId("encrypted4").innerHTML;
 					tokens = tokens.replace(/ /g, "");  // gets rid of all spaces
+                                        tokens = tokens.replace(/<br>/g, "\n\r");  // makes new lines display better
 					tokens = tokens.replace(/<sup>(\d+(?:\.\d+)?)<\/sup>/g, "^$1");  // turns superscript notation into caret notation
 					tokens = tokens.replace(/<wbr>/g, "");  // gets rid of any potential HTML word breaks
 					tokens = tokens.replace(/^([1-9])/, "+$1");  // makes sure the beginning of the alphabet is processed correctly at the beginning
