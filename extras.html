@@ -22,7 +22,7 @@
 					toMorseCode();
 				}
 			});
-			function toMorseCode() {
+			function toMorseCode(showTranscription) {
 				if (S.getId("morseCodeText").value.trim() != "") {
 					let translation = "";
 					let note = "a";
@@ -206,10 +206,14 @@
 							translation += "   ";
 						});
 					}
+					transcription = translation.trim().replace(/ (?! )/g, "").replace(/  (?! )/g, " ").replace(/        /g, "   ");
 					translation = translation.replace(/\./g, note).trim();
 					translation = translation.replace(/-/g, note + "--");
 					translation = translation.replace(/\*/g, "a5-");
-					telegraph.play(translation, { attack: 1, noteLength: 1000/S.getId("morseCodeSpeed").value, decay: 1 });
+					telegraph.play(translation, { attack: 1, noteLength: 1000 / S.getId("morseCodeSpeed").value, decay: 1 });
+					if (showTranscription) {
+						S.getId("morseCodeText").value = transcription;
+					}
 				}
 			}
 			S.listen("morseCodeSpeed", ["dblclick", "touchhold"], function () {
@@ -222,14 +226,16 @@
 				}
 			});
 			S.listen("randomMorseCode", "click", function () {
-				if (!telegraph.playing) {
+				if (telegraph.playing) {
+					telegraph.stop(0, true);
+					setTimeout(0, function () { S.getId("randomMorseCode").click(); });
+				} else {
 					let text = S.getId("morseCodeText");
 					text.value = "";
 					text.value += ["I am ", "You are ", "We are ", "Morse Code is ", "This website is "][Math.floor(Math.random() * 5)];
 					text.value += ["super ", "extremely ", "very ", "unmistakably ", "indisputably ", "most certainly ", "absolutely ", "without question ", "exceptionally "][Math.floor(Math.random() * 9)];
 					text.value += ["amazing.", "awesome.", "cool.", "spectacular.", "sublime.", "lame. (Just kidding.)"][Math.floor(Math.random() * 6)];
-					toMorseCode();
-					text.value = "";
+					toMorseCode(true);
 				}
 			});
 
