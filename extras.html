@@ -235,6 +235,95 @@
 
 
 
+			// handles Braille stuff
+
+			S.listen(["notBrailleShown", "brailleShown"], "change", function () {
+				if (S.getId("brailleText").value.trim() != "") {
+					let text = S.getId("brailleText");
+					let associations = [  // https://interglacial.com/~sburke/braille/table.html
+						["0", "\u283c\u281a"],
+						["1", "\u283c\u2801"],
+						["2", "\u283c\u2803"],
+						["3", "\u283c\u2809"],
+						["4", "\u283c\u2819"],
+						["5", "\u283c\u2811"],
+						["6", "\u283c\u280b"],
+						["7", "\u283c\u281b"],
+						["8", "\u283c\u2813"],
+						["9", "\u283c\u2814"],
+						["A", "\u2820\u2801"],
+						["B", "\u2820\u2803"],
+						["C", "\u2820\u2809"],
+						["D", "\u2820\u2819"],
+						["E", "\u2820\u2811"],
+						["F", "\u2820\u280b"],
+						["G", "\u2820\u281b"],
+						["H", "\u2820\u2813"],
+						["I", "\u2820\u280a"],
+						["J", "\u2820\u281a"],
+						["K", "\u2820\u2805"],
+						["L", "\u2820\u2807"],
+						["M", "\u2820\u280d"],
+						["N", "\u2820\u281d"],
+						["O", "\u2820\u2815"],
+						["P", "\u2820\u280f"],
+						["Q", "\u2820\u281f"],
+						["R", "\u2820\u2817"],
+						["S", "\u2820\u280e"],
+						["T", "\u2820\u281e"],
+						["U", "\u2820\u2825"],
+						["V", "\u2820\u2827"],
+						["W", "\u2820\u283a"],
+						["X", "\u2820\u282d"],
+						["Y", "\u2820\u283d"],
+						["Z", "\u2820\u2835"],
+						["a", "\u2801"],
+						["b", "\u2803"],
+						["c", "\u2809"],
+						["d", "\u2819"],
+						["e", "\u2811"],
+						["f", "\u280b"],
+						["g", "\u281b"],
+						["h", "\u2813"],
+						["i", "\u280a"],
+						["j", "\u281a"],
+						["k", "\u2805"],
+						["l", "\u2807"],
+						["m", "\u280d"],
+						["n", "\u281d"],
+						["o", "\u2815"],
+						["p", "\u280f"],
+						["q", "\u281f"],
+						["r", "\u2817"],
+						["s", "\u280e"],
+						["t", "\u281e"],
+						["u", "\u2825"],
+						["v", "\u2827"],
+						["w", "\u283a"],
+						["x", "\u282d"],
+						["y", "\u283d"],
+						["z", "\u2835"],
+						[" ", "\u2800"],
+						["\\.", "\u2832"],
+						["\\?", "\u2826"],
+						["!", "\u2816"],
+						[",", "\u2802"],
+						["'", "\u2804"]
+					];
+					if (S.getName("brailleDisplay", true).id == "brailleShown") {
+						associations.forEach(function (set) {
+							text.value = text.value.replace(new RegExp(set[0], "g"), set[1].split("").filter((x) => x !== "\\").join(""));
+						});
+					} else {
+						associations.forEach(function (set) {
+							text.value = text.value.replace(new RegExp(set[1], "g"), set[0].split("").filter((x) => x !== "\\").join(""));
+						});
+					}
+				}
+			});
+
+
+
 			// handles code font stuff
 
 			S.listen("substitutedText", ["dblclick", "touchhold"], function () {
@@ -1701,6 +1790,7 @@
 					// displays the encrypted text
 					S.getId("encrypted4").innerHTML = text;
 
+
 				} else if (S.getId("encrypted4").innerHTML.trim() != "") {  // if decoding
 					let tokens = S.getId("encrypted4").innerHTML;
 					tokens = tokens.replace(/ /g, "");  // gets rid of all spaces
@@ -1965,6 +2055,13 @@
 			<button id="randomMorseCode">
 				Make a random message in Morse Code
 			</button>
+			<h2>
+				Braille
+			</h2>
+			<textarea id="brailleText" placeholder="Text"></textarea>
+			<br>
+			<input type="radio" name="brailleDisplay" id="notBrailleShown" checked><label for="notBrailleShown">Normal</label>
+			<input type="radio" name="brailleDisplay" id="brailleShown"><label for="brailleShown">Braille</label>
 			<h2>
 				Code fonts
 			</h2>
@@ -2590,7 +2687,7 @@
 				Encode
 			</button>
 			<h3>
-				Math code
+				Sine Language
 			</h3>
 			<section>
 				This will turn your text into what looks like a mathematical expression. Encoding is a little better than decoding, but it works pretty well both ways.
