@@ -1519,7 +1519,7 @@
 					text = text.replace(/^[A-Z]/, function (match) { return match.toLowerCase(); });  // gets rid of initial capitals
 					text = text.replace(/  ([A-Z])/g, "$1");  // capitals preceded by two spaces stay capital
 					text = text.replace(/  +/g, " ");  // any amount of spaces is condensed into one space
-					text = text.replace(/ I/g, " i");  // the word "I" isn't capitalized
+					text = text.replace(/I /g, "i ");  // the word "I" isn't capitalized
 					text = text.replace(/, ([A-Z])/g, ",$1");  // preserves intended capitals after commas
 					text = text.replace(/(\W) ([a-zA-Z])/g, function (_, punctuation, capital) { return punctuation+capital.toLowerCase(); });
 					text = text.replace(/([a-z])([A-Z])/g, "$1 $2");  // makes sure intended capitals aren't mushed into other words
@@ -1787,7 +1787,10 @@
 					text = text.replace(/^\+|~$/, "");  // gets rid of processing artefacts from the beginning and end of the text
 					text = text.replace(/~/g, "");  // gets rid of any lingering tildes (likely only remaining if there's an error)
 					text = text.replace(/^\./, "0.");  // makes sure the middle of the alphabet displays correctly at the beginning
-					text = text.replace(/(\^\d|<sup>\d)(<\/sup>)?(?:\^|<sup>)(\d)(?:<\/sup>)?/g, "$1$3$2");  // prevents back-to-back exponents
+					text = text.replace(/<\/sup><sup>/g, ".");  // makes sure punctuation is grouped in the exponent
+					text = text.replace(/(\^\d|<sup>\d)(<\/sup>)?(?:\^|<sup>)(\d)(?:<\/sup>)?/g, "$1$2.$3");  // prevents back-to-back exponents
+					text = text.replace(/(\.\d)((?:\.\d+)+)(<\/sup>)/g, "$1$3-0$2");  // prevents multiple decimals or math in superscripts
+					text = text.replace(/(<\/sup>)(\d+)(?!\.)/g, "$2$1");  // attaches middle letters to the superscript
 					text = text.replace(/(\)|&pi;|pi|<\/sup>)(\d)/g, "$1-0.$2");  // prevents numbers from being mushed together in an unnatural way
 					text = text.replace(/(\D)\.(\d)/g, "$1+0.$2");  // makes sure the encoding doesn't put a decimal in an unnatural place
 					text = text.replace(/(\d+\.\d+)\./g, "$1+0.");  // makes sure no number has two decimals in it
@@ -1800,8 +1803,9 @@
 				} else if (S.getId("encrypted4").innerHTML.trim() != "") {  // if decoding
 					let tokens = S.getId("encrypted4").innerHTML;
 					tokens = tokens.replace(/ /g, "");  // gets rid of all spaces
-                                        tokens = tokens.replace(/<br>/g, "\n");  // makes new lines display better
+					tokens = tokens.replace(/<br>/g, "\n");  // makes new lines display better
 					tokens = tokens.replace(/<sup>(\d+(?:\.\d+)?)<\/sup>/g, "^$1");  // turns superscript notation into caret notation
+					//// tokens = tokens.replace(/(\^\d)(\d)/g, "$1.$2");
 					tokens = tokens.replace(/<wbr>/g, "");  // gets rid of any potential HTML word breaks
 					tokens = tokens.replace(/^([1-9])/, "+$1");  // makes sure the beginning of the alphabet is processed correctly at the beginning
 					tokens = tokens.replace(/^0./, "");  // makes sure the middle of the alphabet is processed correctly at the beginning
@@ -1887,8 +1891,13 @@
 								}
 								break;
 							case "^":
+								/*
 								if (next != "5" && third && third.search(/^\d$/) > -1) {  // if there's more than one number in the exponent
 									tokens = tokens.slice(0, index + 2).concat("^", tokens.slice(index + 2));
+								}
+								*/
+								if (third === ".") {  // if the punctuation is followed by more punctuation
+									tokens[index + 2] = "^";  // make sure the punctuation is actually processed as punctuation
 								}
 								switch (next) {
 									case "2":
