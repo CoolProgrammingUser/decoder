@@ -1519,7 +1519,7 @@
 					text = text.replace(/^[A-Z]/, function (match) { return match.toLowerCase(); });  // gets rid of initial capitals
 					text = text.replace(/  ([A-Z])/g, "$1");  // capitals preceded by two spaces stay capital
 					text = text.replace(/  +/g, " ");  // any amount of spaces is condensed into one space
-					text = text.replace(/I /g, "i ");  // the word "I" isn't capitalized
+					text = text.replace(/I(\W)/g, "i$1");  // the word "I" isn't capitalized
 					text = text.replace(/, ([A-Z])/g, ",$1");  // preserves intended capitals after commas
 					text = text.replace(/(\W) ([a-zA-Z])/g, function (_, punctuation, capital) { return punctuation+capital.toLowerCase(); });
 					text = text.replace(/([a-z])([A-Z])/g, "$1 $2");  // makes sure intended capitals aren't mushed into other words
