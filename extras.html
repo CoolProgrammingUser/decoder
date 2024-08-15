@@ -384,16 +384,11 @@
 			S.listen("fontHelp", "change", function () {
 				switch (this.value) {
 					case "Bad Duck":
-						S.getId("badDuckHelp").className = "displayed";
-						S.getId("kidtenuhfHelp").className = "";
+						S.getId("badDuckHelp").focus();
 						break;
 					case "KidtEnuhf":
-						S.getId("kidtenuhfHelp").className = "displayed";
-						S.getId("badDuckHelp").className = "";
+						S.getId("kidtenuhfHelp").focus();
 						break;
-					default:
-						S.getId("badDuckHelp").className = "";
-						S.getId("kidtenuhfHelp").className = "";
 				}
 			});
 			S.listen("reprintText", "click", function () {
