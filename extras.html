@@ -687,7 +687,10 @@
 			// handles symbol code stuff
 
 			var symbols = [];
-			var symbol = [];
+			var symbol = [];  // the components of the current symbol
+			var symbolWidth = 6;  // how many units wide a symbol can be
+			var symbolHeight = 4;  // how many units tall a symbol can be
+			var symbolMap = [];  // where parts of a symbol are found in a given symbol
 			var drawASymbol = function () { };
 			S.listen("decrypted3", "dblclick", function () {
 				symbols = [];
@@ -727,6 +730,7 @@
 					let odd = true;
 					let components = { gl: 0, dl: 0, va: 0, ha: 0, c: 0 };  // grid line, diagonal line, vertical arch, horizontal arch, circle
 					function getDimensions(type, size, variation) {
+						// determines the maximum bounding box coordinate of the symbol component if the start of the line counts as [0, 0]
 						switch (type) {
 							case "gl":
 								if (size == "biggest") {
@@ -1084,14 +1088,22 @@
 					}
 					drawASymbol = drawSymbol;
 					function createSubsymbol(character, symbolToReplace, indexToReplace) {
+						// decides how many of each type of compenent are in the symbol
 						components = { gl: 0, dl: 0, va: 0, ha: 0, c: 0 };
-						if (odd) {
+						if (odd) {  // if starting another 2-letter group
 							symbol = [];
+							symbolMap = [];
+							S.forEach(symbolWidth + 1, function () {
+								symbolMap.push([]);
+								S.forEach(symbolHeight + 1, function () {
+									symbolMap.at(-1).push([]);
+								});
+							});
 						}
 						if (character === null) {  // if a capital subsymbol should be made
 							components.gl = 1;
 							components.c = 2;
-						} else if (S.getType(character) == "String") {
+						} else if (S.getType(character) == "String") {  // if converting from a character in a message
 							switch (character) {
 								case " ":
 									components.gl = 1;
@@ -1281,7 +1293,7 @@
 								default:
 									components.gl = 5;
 							}
-						} else if (S.getType(character) == "Array") {
+						} else if (S.getType(character) == "Array") {  // if reshuffling a symbol?
 							if (odd) {
 								S.forEach(character, function (component) {
 									if (component.size != "small") {
@@ -1303,7 +1315,8 @@
 								S.forEach(amount, function () {
 									let component = {};
 									component.type = type;
-									if (odd) {
+									if (odd) {  // if the letter is the first of the pair
+										// randomly decides whether the bigger (first) part of the pair is as big as possible (50% chance)
 										if (Math.round(Math.random())) {
 											component.size = "big";
 										} else {
@@ -1312,7 +1325,7 @@
 									} else {
 										component.size = "small";
 									}
-									component.variation = Math.round(Math.random());
+									component.variation = Math.round(Math.random());  // decides which of 2 variations to use (0 or 1)
 									let dimensions = getDimensions(component.type, component.size, component.variation);
 									let width = dimensions[0];
 									let height = dimensions[1];
@@ -1322,78 +1335,178 @@
 									} else {
 										wr = 2;
 									}
-									if (width >= 0) {
-										if (height >= 0) {
-											component.coords = [
-												Math.round((9 - width) * Math.random()),
-												Math.round((4 - height) * Math.random())
-											];
-											if (component.coords[0] > 4 + wr - width) {
+									let failsafe = 1000;
+									let componentPlaced = false;
+									while (!componentPlaced && failsafe--) {
+										if (width >= 0) {  // if it's not a certain variety of horizontal arch
+											if (height >= 0) {
 												component.coords = [
-													Math.round((9 - width) * Math.random()),
-													Math.round((4 - height) * Math.random())
+													Math.round((symbolWidth - width) * Math.random()),
+													Math.round((symbolHeight - height) * Math.random())
 												];
-											}
-											if (component.coords[0] > 4 + wr + 1 - width) {
+												/*
+												if (component.coords[0] > 4 + wr - width) {
+													component.coords = [
+														Math.round((9 - width) * Math.random()),
+														Math.round((4 - height) * Math.random())
+													];
+												}
+												if (component.coords[0] > 4 + wr + 1 - width) {
+													component.coords = [
+														Math.round((9 - width) * Math.random()),
+														Math.round((4 - height) * Math.random())
+													];
+												}
+												*/
+											} else {
 												component.coords = [
-													Math.round((9 - width) * Math.random()),
-													Math.round((4 - height) * Math.random())
+													Math.round((symbolWidth - width) * Math.random()),
+													Math.round((symbolHeight + height) * Math.random() - height)
 												];
+												/*
+												if (component.coords[0] > 4 + wr - width) {
+													component.coords = [
+														Math.round((9 - width) * Math.random()),
+														Math.round((4 + height) * Math.random() - height)
+													];
+												}
+												if (component.coords[0] > 4 + wr + 1 - width) {
+													component.coords = [
+														Math.round((9 - width) * Math.random()),
+														Math.round((4 + height) * Math.random() - height)
+													];
+												}
+												*/
 											}
-										} else {
-											component.coords = [
-												Math.round((9 - width) * Math.random()),
-												Math.round((4 + height) * Math.random() - height)
-											];
-											if (component.coords[0] > 4 + wr - width) {
+										} else {  // if it is a certain variety horizontal arch
+											if (height >= 0) {  // handles remaining processing
 												component.coords = [
-													Math.round((9 - width) * Math.random()),
+													Math.round((symbolWidth + width) * Math.random() - width),
+													Math.round((symbolHeight - height) * Math.random())
+												];
+												/*
+												if (component.coords[0] > 4 + wr) {
+													component.coords = [
+														Math.round((9 + width) * Math.random() - width),
+														Math.round((4 - height) * Math.random())
+													];
+												}
+												if (component.coords[0] > 4 + wr + 1) {
+													component.coords = [
+														Math.round((9 + width) * Math.random() - width),
+														Math.round((4 - height) * Math.random())
+													];
+												}
+												*/
+											} else {  //// unused
+												component.coords = [
+													Math.round((9 + width) * Math.random() - width),
 													Math.round((4 + height) * Math.random() - height)
 												];
-											}
-											if (component.coords[0] > 4 + wr + 1 - width) {
-												component.coords = [
-													Math.round((9 - width) * Math.random()),
-													Math.round((4 + height) * Math.random() - height)
-												];
+												if (component.coords[0] > 4 + wr) {
+													component.coords = [
+														Math.round((9 + width) * Math.random() - width),
+														Math.round((4 + height) * Math.random() - height)
+													];
+												}
+												if (component.coords[0] > 4 + wr + 1) {
+													component.coords = [
+														Math.round((9 + width) * Math.random() - width),
+														Math.round((4 + height) * Math.random() - height)
+													];
+												}
 											}
 										}
-									} else {
-										if (height >= 0) {
-											component.coords = [
-												Math.round((9 + width) * Math.random() - width),
-												Math.round((4 - height) * Math.random())
-											];
-											if (component.coords[0] > 4 + wr) {
-												component.coords = [
-													Math.round((9 + width) * Math.random() - width),
-													Math.round((4 - height) * Math.random())
-												];
-											}
-											if (component.coords[0] > 4 + wr + 1) {
-												component.coords = [
-													Math.round((9 + width) * Math.random() - width),
-													Math.round((4 - height) * Math.random())
-												];
-											}
+										// if the component is in a good position
+										if (symbolMap[component.coords[0]][component.coords[1]].length == 0) {
+											componentPlaced = true;
 										} else {
-											component.coords = [
-												Math.round((9 + width) * Math.random() - width),
-												Math.round((4 + height) * Math.random() - height)
-											];
-											if (component.coords[0] > 4 + wr) {
-												component.coords = [
-													Math.round((9 + width) * Math.random() - width),
-													Math.round((4 + height) * Math.random() - height)
-												];
+											if (!symbolMap[component.coords[0]][component.coords[1]].some(function (comp) {
+												return JSON.stringify(comp) === JSON.stringify({ type: component.type, variation: component.variation });
+											})) {  // if the same component doesn't already exist at that location
+												componentPlaced = true;
 											}
-											if (component.coords[0] > 4 + wr + 1) {
-												component.coords = [
-													Math.round((9 + width) * Math.random() - width),
-													Math.round((4 + height) * Math.random() - height)
-												];
-											}
+											//// check other stuff
 										}
+									}
+									let appearance = { type: component.type, variation: component.variation };
+									switch (component.type) {
+										case "gl":
+											if (component.variation) {  // if it's a vertical grid line
+												if (component.size == "biggest") {
+													symbolMap[component.coords[0]][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0]][component.coords[1] + 1].push({ ...appearance });
+													symbolMap[component.coords[0]][component.coords[1] + 2].push({ ...appearance });
+													symbolMap[component.coords[0]][component.coords[1] + 3].push({ ...appearance });
+													symbolMap[component.coords[0]][component.coords[1] + 4].push({ ...appearance });
+												} else if (component.size == "big") {
+													symbolMap[component.coords[0]][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0]][component.coords[1] + 1].push({ ...appearance });
+													symbolMap[component.coords[0]][component.coords[1] + 2].push({ ...appearance });
+													symbolMap[component.coords[0]][component.coords[1] + 3].push({ ...appearance });
+												} else {
+													symbolMap[component.coords[0]][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0]][component.coords[1] + 1].push({ ...appearance });
+												}
+											} else {  // if it's a horizontal grid line
+												if (component.size == "biggest") {
+													symbolMap[component.coords[0]][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 1][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 2][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 3][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 4][component.coords[1]].push({ ...appearance });
+												} else if (component.size == "big") {
+													symbolMap[component.coords[0]][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 1][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 2][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 3][component.coords[1]].push({ ...appearance });
+												} else {
+													symbolMap[component.coords[0]][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 1][component.coords[1]].push({ ...appearance });
+												}
+											}
+											break;
+										case "dl":
+											if (component.variation) {  // if it's a diagonal line from the bottom left to the top right
+												if (component.size == "biggest") {
+													symbolMap[component.coords[0]][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 1][component.coords[1] - 1].push({ ...appearance });
+													symbolMap[component.coords[0] + 2][component.coords[1] - 2].push({ ...appearance });
+													symbolMap[component.coords[0] + 3][component.coords[1] - 3].push({ ...appearance });
+													symbolMap[component.coords[0] + 4][component.coords[1] - 4].push({ ...appearance });
+												} else if (component.size == "big") {
+													symbolMap[component.coords[0]][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 1][component.coords[1] - 1].push({ ...appearance });
+													symbolMap[component.coords[0] + 2][component.coords[1] - 2].push({ ...appearance });
+													symbolMap[component.coords[0] + 3][component.coords[1] - 3].push({ ...appearance });
+												} else {
+													symbolMap[component.coords[0]][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 1][component.coords[1] - 1].push({ ...appearance });
+												}
+											} else {  // if it's a diagonal line from the top left to the bottom right
+												if (component.size == "biggest") {
+													symbolMap[component.coords[0]][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 1][component.coords[1] + 1].push({ ...appearance });
+													symbolMap[component.coords[0] + 2][component.coords[1] + 2].push({ ...appearance });
+													symbolMap[component.coords[0] + 3][component.coords[1] + 3].push({ ...appearance });
+													symbolMap[component.coords[0] + 4][component.coords[1] + 4].push({ ...appearance });
+												} else if (component.size == "big") {
+													symbolMap[component.coords[0]][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 1][component.coords[1] + 1].push({ ...appearance });
+													symbolMap[component.coords[0] + 2][component.coords[1] + 2].push({ ...appearance });
+													symbolMap[component.coords[0] + 3][component.coords[1] + 3].push({ ...appearance });
+												} else {
+													symbolMap[component.coords[0]][component.coords[1]].push({ ...appearance });
+													symbolMap[component.coords[0] + 1][component.coords[1] + 1].push({ ...appearance });
+												}
+											}
+											break;
+										case "va":
+											break;
+										case "ha":
+											break;
+										case "c":
+											break;
 									}
 									symbol.push(component);
 								});
@@ -1410,10 +1523,11 @@
 						} else if (S.getType(character) == "Array") {
 							odd = !odd;
 							createSubsymbol(character, symbolToReplace, indexToReplace);
-						} else {
+						} else {  // if only half of the symbol has been created so far
 							odd = !odd;
 						}
 					}
+					// creates a subsymbol for every character in the message
 					S.forEach(message, function (character) {
 						if (character.search(/[A-Z]/) > -1) {  // if it's a capital
 							createSubsymbol(null);
@@ -1422,6 +1536,7 @@
 							createSubsymbol(character);
 						}
 					});
+					// draws the last symbol if the message didn't create an even number of subsymbols
 					if (!odd) {
 						symbols.push(symbol);
 						drawSymbol();
