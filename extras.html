@@ -1430,6 +1430,8 @@
 										}
 									}
 									let appearance = { type: component.type, variation: component.variation };
+									/// { ...appearance } shallow copies the object
+									/// structuredClone(obj) could copy deeply
 									switch (component.type) {
 										case "gl":
 											if (component.variation) {  // if it's a vertical grid line
@@ -2167,7 +2169,7 @@
 			<section>
 				Maybe you've come here in a desperate attempt to find a way of getting around the short-comings of the main decoder or maybe you were just curious after the decoder did its job; regardless, this is primarily just a place for random code-related fun. Feel free to explore.
 			</section>
-			<h2>
+			<h2 id="morseCodeSection">
 				Morse Code
 			</h2>
 			<input type="text" id="morseCodeText">
@@ -2180,14 +2182,14 @@
 			<button id="randomMorseCode">
 				Make a random message in Morse Code
 			</button>
-			<h2>
+			<h2 id="brailleSection">
 				Braille
 			</h2>
 			<textarea id="brailleText" placeholder="Text"></textarea>
 			<br>
 			<input type="radio" name="brailleDisplay" id="notBrailleShown" checked><label for="notBrailleShown">Normal</label>
 			<input type="radio" name="brailleDisplay" id="brailleShown"><label for="brailleShown">Braille</label>
-			<h2>
+			<h2 id="codeFontSection">
 				Code fonts
 			</h2>
 			<textarea id="substitutedText" placeholder="Text" spellcheck="false"></textarea>
@@ -2795,7 +2797,7 @@
 			<section>
 				The following sections can be used to convert text into various codes. In places where the encrypted section is editable, code can be put in, and decrypted text will be the output. If both inputs are filled, encoding the decrypted text wins out. Double-clicking or touching and holding on an input will erase its text.
 			</section>
-			<h3>
+			<h3 id="emojiCodeSection">
 				Password-protected encryption
 			</h3>
 			<input type="text" id="encryptionKey" placeholder="password">
@@ -2808,7 +2810,7 @@
 			<button id="encode2">
 				Encode
 			</button>
-			<h3>
+			<h3 id="letterCodeSection">
 				Letter code
 			</h3>
 			<textarea id="decrypted1" placeholder="Decoded text"></textarea>
@@ -2817,7 +2819,7 @@
 			<button id="encode1">
 				Encode
 			</button>
-			<h3>
+			<h3 id="sineLanguageSection">
 				Sine Language
 			</h3>
 			<section>
@@ -2849,7 +2851,7 @@
 			<button id="encode4">
 				Encode
 			</button>
-			<h3>
+			<h3 id="symbolCodeSection">
 				Symbol code
 			</h3>
 			<section>

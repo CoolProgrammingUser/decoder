@@ -157,7 +157,7 @@ function isolate(word) {
 	*/
 	var newWord = "";
 	S.forEach(word, function (character, index) {
-		if (character.toLowerCase() != character.toUpperCase()/*|| character=="'"*/) {  // if the character is a letter
+		if (character.toLowerCase() != character.toUpperCase()/*|| character=="'"*/) {  // if the character is a letter  //// should support contractions
 			newWord += character;
 		} else if (character == "{" && word.indexOf("}", index) > -1) {
 			newWord += word.slice(index, word.indexOf("}", index) + 1);
@@ -180,55 +180,42 @@ function standardize(word) {
 		qxf{32}xb --> abcdbe
 	*/
 	var uniqueLetters = {};
-	S.forEach(word, function (letter, index, word) {
-		if (letter.toLowerCase() != letter.toUpperCase()) {
-			if (uniqueLetters[letter]) {
-				uniqueLetters[letter].push(index);
-			} else {
-				uniqueLetters[letter] = [index];
+	word.match(/\w|\{\d+\}/g).forEach(function (letter, index) {
+		if (letter.toLowerCase() != letter.toUpperCase()) {  // if it's a letter
+			if (uniqueLetters[letter]) {  // if the letter is already present
+				uniqueLetters[letter].push(index);  // add another index to the unique letter array
+			} else {  // if the letter is unique
+				uniqueLetters[letter] = [index];  // add the letter's index to uniqueLetters in an array
 			}
-		} else if (letter == "{") {
-			if (uniqueLetters["~" + word.slice(index + 1, word.indexOf("}", index))]) {
-				uniqueLetters["~" + word.slice(index + 1, word.indexOf("}", index))].push(index);
-			} else {
-				uniqueLetters["~" + word.slice(index + 1, word.indexOf("}", index))] = [index];
+		} else {  // if it's a number surrounded by curly braces
+			if (uniqueLetters["~" + letter.slice(1, -1)]) {  // if the character signifier is already present
+				uniqueLetters["~" + letter.slice(1, -1)].push(index);  // add another index to the unique letter array
+			} else {  // if it's a new "letter"
+				uniqueLetters["~" + letter.slice(1, -1)] = [index];  // add the letter's index to uniqueLetters in an array
 			}
-		}/* else {
-			// do nothing
-			// (skips the number between any {}s)
-		} */
+		}
 	});
-	var letters = word.split("");
+	var letters = word.match(/\w|\{\d+\}/g);
 	var index = 0;
-	var shift = 0;
-	var oldShift;
-	S.forEach(uniqueLetters, function (numbers) {  // This could likely be done with a search-and-replace method. (although going straight to the index is probably faster than a searching method)
-		numbers.forEach(function (number) {
-			if (letters[number + shift].toLowerCase() != letters[number + shift].toUpperCase()) {
-				if (index < 26) {
-					letters.splice(number + shift, 1, ALPHABET[index]);
+	Object.keys(uniqueLetters).forEach(function (key) {  // This could likely be done with a search-and-replace method. (although going straight to the index is probably faster than a searching method)
+		uniqueLetters[key].forEach(function (number) {  // for every occurence of the unique letter
+			if (letters[number].toLowerCase() != letters[number].toUpperCase()) {  // if the character at the current index is a letter
+				if (index < 26) {  // if there are letters available
+					letters[number] = ALPHABET[index];
 				} else {  // This should never happen.
-					oldShift = shift;
-					shift += ("{" + "{0}").format(index - 26).length;  // two braces can't be back-to-back without doing weird stuff
-					letters.splice(number + oldShift, 1, "{" + (index - 26) + "}");
+					letters[number] = "{" + (index - 25) + "}";
 				}
-			} else if (letters[number + shift] == "{") {
-				oldShift = shift;
-				if (index < 26) {
-					shift -= letters.indexOf("}", number + shift) - (number + shift);  // This needs to happen first or else the splice changes things.
-					letters.splice(number + oldShift, letters.indexOf("}", number + oldShift) - (number + oldShift) + 1, ALPHABET[index]);
-				} else {
-					shift += ("{" + "{0}").format(index - 26).length - letters.indexOf("}", number + shift) + (number + shift);
-					letters.splice(number + oldShift, letters.indexOf("}", number + oldShift) - (number + oldShift) + 1, "{" + (index - 26) + "}");
+			} else {  // if it's a number surrounded by curly braces
+				if (index < 26) {  // if there are letters available
+					letters[number] = ALPHABET[index];  // convert the notation into a single letter
+				} else {  // if there aren't any unused letters left
+					letters[number] = "{" + (index - 25) + "}";  // use curly braces notation
 				}
 			}
 		});
 		index++;
 	});
-	word = "";
-	letters.forEach(function (letter) {
-		word += letter;
-	});
+	word = letters.join("");
 	return word;
 }
 
@@ -401,6 +388,7 @@ self.addEventListener("message", function (message) {
 		});
 		console.info("Total possibilites = " + totalPossibilities);
 
+		//*  //// primary decoding toggle
 		function usageCheck(letters) {  //// This needs to allow for imperfect matches.
 			// makes sure a word doesn't conflict with the letters used in previous words
 			let falseTrue = true;
@@ -476,6 +464,25 @@ self.addEventListener("message", function (message) {
 				}
 			}
 		}
+		/*/
+		let encodedMessage = message.data.text;
+		let shouldContinue = true;
+		let wordIndex = 0;
+		while (shouldContinue) {
+			if (currentIndexList[wordIndex] <= totalIndexList[wordIndex]) {  // if there's more possibilities
+
+			} else if (wordIndex > 0) {
+				currentIndexList[wordIndex] = 0;
+				wordIndex = 0;
+				currentIndexList[wordIndex]++;
+				Object.keys(codeKeys).forEach(function (key) {
+					codeKeys[key] = undefined;
+				});
+			} else {
+				shouldContinue = false;
+            }
+		}
+		//*/
 		resolve();
 	}).catch(function (error) {
 		console.error(error);
